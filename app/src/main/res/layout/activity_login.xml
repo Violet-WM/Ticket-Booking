@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    tools:context=".login">
+
+    <TextView
+        android:id="@+id/txthead"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="10dp"
+        android:text="Welcome, please Sign in."
+        android:textColor="#03A9F4"
+        android:textSize="30dp"
+        android:textStyle="bold" />
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txthead"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:cardCornerRadius="15dp">
+
+        <RelativeLayout
+            android:id="@+id/cardRelLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFFFFF">
+
+            <EditText
+                android:id="@+id/txtemail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="40dp"
+                android:backgroundTint="#000000"
+                android:ems="13"
+                android:hint="Please Enter email"
+                android:inputType="text"
+                android:textColorHint="#AAA4A4"
+                android:textSize="18sp" />
+
+
+            <EditText
+                android:id="@+id/txtPass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtemail"
+                android:layout_centerHorizontal="true"
+                android:backgroundTint="#000000"
+                android:ems="13"
+                android:hint="Please Enter Password"
+                android:inputType="textPassword"
+                android:textColorHint="#AAA4A4" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/lgnBtn"
+                android:layout_width="130dp"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/txtPass"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="6dp"
+                android:backgroundTint="#277ee4"
+                android:text="Log in"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/alreadyAccount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lgnBtn"
+                android:layout_marginLeft="65dp"
+                android:layout_marginBottom="6dp"
+                android:text="Don't have an account?"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/signUpBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lgnBtn"
+                android:layout_marginLeft="6dp"
+                android:layout_toRightOf="@id/alreadyAccount"
+                android:clickable="true"
+                android:text="Create one"
+                android:textColor="#277ee4"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/forgotPass"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/alreadyAccount"
+                android:layout_marginLeft="80dp"
+                android:layout_marginBottom="20dp"
+                android:text="Forgot Password??"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/forgotPasswordBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/alreadyAccount"
+                android:layout_marginLeft="6dp"
+                android:layout_toRightOf="@id/forgotPass"
+                android:clickable="true"
+                android:text="Click here"
+                android:textColor="#277ee4"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+
+    <!-- This navigation bar will remain constant -->
+
+
+</RelativeLayout>
