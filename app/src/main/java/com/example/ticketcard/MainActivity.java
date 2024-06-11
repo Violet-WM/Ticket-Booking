@@ -41,14 +41,14 @@ public class MainActivity extends AppCompatActivity {
                 Chip chipVIP = view1.findViewById(R.id.chipVIPSeats);
 
                 ArrayList<String> arrayList = new ArrayList<>();
-                arrayList.add("AA1 huj");
-                arrayList.add("AA2 jujn");
-                arrayList.add("BB1 jnjn");
-                arrayList.add("BA2 jjij");
-                arrayList.add("CC1 iji");
-                arrayList.add("CD2 ddfd");
-                arrayList.add("DC1 cxxc");
-                arrayList.add("DD2 jji");
+                arrayList.add("AA1");
+                arrayList.add("AA2");
+                arrayList.add("BB1");
+                arrayList.add("BA2");
+                arrayList.add("CC1");
+                arrayList.add("CD2");
+                arrayList.add("DC1");
+                arrayList.add("DD2");
 
                 Random random = new Random();
 
@@ -57,11 +57,13 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         if(chipAll.isChecked()){
                             //Code for filtering based on chip selected
+                            chipGroup.removeAllViews();
                             for(String s: arrayList) {
                                 Chip chip = (Chip) LayoutInflater.from(MainActivity.this).inflate(R.layout.standalone_chip, null);
                                 chip.setText(s);
                                 chip.setId(random.nextInt());
                                 chipGroup.addView(chip);
+
                             }
                         }
                     }
@@ -72,11 +74,12 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         if(chipRegular.isChecked()){
                             //Code for filtering based on chip selected
+                            chipGroup.removeAllViews();
                             for(String s: arrayList) {
+                                if(s.indexOf('A') != -1) {
                                 Chip chip = (Chip) LayoutInflater.from(MainActivity.this).inflate(R.layout.standalone_chip, null);
                                 chip.setText(s);
                                 chip.setId(random.nextInt());
-                                if(arrayList.contains("AA")) {
                                     chipGroup.addView(chip);
                                 }
                             }
@@ -89,11 +92,13 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         if(chipVIP.isChecked()){
                             //Code for filtering based on chip selected
+                            chipGroup.removeAllViews();
                             for(String s: arrayList) {
+                                if(s.indexOf('C') != -1) {
                                 Chip chip = (Chip) LayoutInflater.from(MainActivity.this).inflate(R.layout.standalone_chip, null);
                                 chip.setText(s);
                                 chip.setId(random.nextInt());
-                                if(arrayList.contains("CC")) {
+
                                     chipGroup.addView(chip);
                                 }
                             }
