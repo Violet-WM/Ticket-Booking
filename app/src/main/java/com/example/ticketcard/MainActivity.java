@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -25,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Button bookYourSeat = findViewById(R.id.bookYourSeat);
+        double VIPPrice = 90.00;
+        double regularPrice = 60.00;
 
         bookYourSeat.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,6 +42,9 @@ public class MainActivity extends AppCompatActivity {
                 Chip chipAll = view1.findViewById(R.id.chipAllSeats);
                 Chip chipRegular = view1.findViewById(R.id.chipRegularSeats);
                 Chip chipVIP = view1.findViewById(R.id.chipVIPSeats);
+                TextView textViewVIPPrice = view1.findViewById(R.id.textViewVIPPrice);
+                TextView textViewRegularPrice = view1.findViewById(R.id.textViewRegularPrice);
+                TextView textViewTotalPrice = view1.findViewById(R.id.textViewTotalPrice);
 
                 ArrayList<String> arrayList = new ArrayList<>();
                 arrayList.add("AA1");
@@ -112,9 +118,32 @@ public class MainActivity extends AppCompatActivity {
                         if(checkedIds.isEmpty()){
                             Toast.makeText(MainActivity.this, "No Seat selected", Toast.LENGTH_SHORT).show();
                         } else {
+                            double addedRegularPrice = 0.00;
+                            double addedVIPPrice = 0.00;
+                            double totalPrice = 0.00;
                             for(int i : checkedIds) {
                                 Chip chip = view1.findViewById(i);
-                                Toast.makeText(MainActivity.this, chip.getText().toString() + " selected", Toast.LENGTH_SHORT).show();
+                                if(chip.getText().toString().indexOf('A') != -1){
+                                    Toast.makeText(MainActivity.this, "Regular Seat: " + chip.getText().toString() + " selected", Toast.LENGTH_SHORT).show();
+                                    addedRegularPrice = regularPrice + addedRegularPrice;
+                                    textViewRegularPrice.setText("Ksh. " + addedRegularPrice);
+                                    if(!chip.isChecked()){
+                                        addedRegularPrice = addedRegularPrice - regularPrice;
+                                        textViewRegularPrice.setText("Ksh. " + addedRegularPrice);
+                                    }
+                                } else if (chip.getText().toString().indexOf('C') != -1) {
+                                    Toast.makeText(MainActivity.this, "VIP Seat: " + chip.getText().toString() + " selected", Toast.LENGTH_SHORT).show();
+                                    addedVIPPrice = VIPPrice + addedVIPPrice;
+                                    textViewVIPPrice.setText("Ksh. " + addedVIPPrice);
+                                    if(!chip.isChecked()){
+                                        addedVIPPrice = addedVIPPrice - VIPPrice;
+                                        textViewVIPPrice.setText("Ksh. " + addedVIPPrice);
+                                    }
+                                } else {
+                                    Toast.makeText(MainActivity.this, chip.getText().toString() + " selected", Toast.LENGTH_SHORT).show();
+                                }
+                                totalPrice = addedRegularPrice + addedVIPPrice;
+                                textViewTotalPrice.setText("Total Ksh. " + totalPrice);
                             }
                         }
                     }
