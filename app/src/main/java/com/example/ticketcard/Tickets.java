@@ -1,5 +1,29 @@
 package com.example.ticketcard;
 
+import android.os.Bundle;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
+public class Tickets extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_tickets);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            return insets;
+        });
+    }
+}
+/*package com.example.ticketbooking;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
@@ -8,12 +32,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import com.example.ticketcard.R;
-import com.example.ticketcard.databinding.ActivityMainBinding;
+import com.example.ticketbooking.R;
+import com.example.ticketbooking.databinding.ActivityMainBinding;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
-    ActivityMainBinding binding;
+    private BottomNavigationView bottomNav;
+    private HomeFragment homeFragment = new HomeFragment();
+    private TransactionsFragment transactionsFragment = new TransactionsFragment();
+    private TicketsFragment ticketsFragment = new TicketsFragment();
+    private SettingsFragment settingsFragment = new SettingsFragment();
+    private static final String TAG_FRAGMENT_HOME = "tag_frag_home";
+    private static final String TAG_FRAGMENT_REGISTER = "tag_frag_register";
+    private static final String TAG_FRAGMENT_REPORT = "tag_frag_report";
+    private static final String TAG_FRAGMENT_SETTINGS = "tag_frag_settings";
+
     private Button button;
 
     @Override
@@ -61,3 +95,4 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 }
+*/
