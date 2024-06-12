@@ -1,63 +1,46 @@
 package com.example.ticketcard;
 
+// Import statements
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import com.example.ticketcard.R;
-import com.example.ticketcard.databinding.ActivityMainBinding;
+//import com.example.ticketcard.databinding.ActivityMainBinding; // Note: this import seems unused in the current code
+import androidx.appcompat.widget.Toolbar;
 
+// MainActivity class definition
 public class MainActivity extends AppCompatActivity {
-
-    ActivityMainBinding binding;
+    // Declare a Button variable
     private Button button;
 
+    // onCreate method is the entry point for the activity lifecycle
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-
-        setContentView(binding.getRoot());
-
-        binding.bottomNavigationView.setOnItemSelectedListener (item -> {
-            int itemId = item.getItemId();
-            if (itemId == R.id.home) {
-                replaceFragment(new HomeFragment());
-            } else if (itemId == R.id.ticko) {
-                replaceFragment(new TransactionsFragment());
-            } else if (itemId == R.id.trans) {
-                replaceFragment(new TicketsFragment());
-            } else if (itemId == R.id.settings) {
-                replaceFragment(new SettingsFragment());
-            }
-            return true;
-        });
-
-        // Find the Button with id "button" from the layout
+        // Initialize the button by finding it from the layout
         button = findViewById(R.id.btn);
 
-        // Set a click listener on the button
+        // Set an OnClickListener to the button to handle click events
         button.setOnClickListener(v -> {
-            // Create an Intent to navigate to the login activity
+            // Create an Intent to navigate from MainActivity to login activity
             Intent intent = new Intent(MainActivity.this, login.class);
 
-            // Start the login activity with the created intent
+            // Start the login activity
             startActivity(intent);
+
+            // Show a Toast message to the user
             Toast.makeText(MainActivity.this, "Welcome, please Sign in.", Toast.LENGTH_SHORT).show();
+
+            // Finish the current activity to prevent the user from returning to it
             finish();
         });
     }
 
-    private void replaceFragment(Fragment fragment) {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.frame_layout, fragment);
-
-        fragmentTransaction.commit();
-    }
+    // Inner class stanleyClass (currently empty, you might want to add functionality or remove it)
+   /* class stanley {
+    }*/
 }
