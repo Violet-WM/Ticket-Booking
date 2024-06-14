@@ -7,14 +7,7 @@
     android:background="#F8FAFB"
     tools:context=".MainActivity">
 
-    <FrameLayout
-        android:id="@+id/frame_layout"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
+    <!-- Title TextView -->
     <TextView
         android:id="@+id/txtCreateAccount"
         android:layout_width="wrap_content"
@@ -25,32 +18,35 @@
         android:layout_marginBottom="10dp"
         android:fontFamily="cursive"
         android:gravity="center_horizontal"
-        android:text="STADIUM TICKET BOOKING"
+        android:text="STADIUM TICKET BOOKING APPLICATION"
         android:textColor="#03A9F4"
-        android:textSize="30dp"
+        android:textSize="27dp"
         android:textStyle="bold" />
 
+    <!-- Image View -->
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="320dp"
-        android:layout_height="330dp"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:layout_marginTop="-53dp"
-        android:layout_marginEnd="46dp"
+        android:layout_width="300dp"
+        android:layout_height="320dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="50dp"
+        android:paddingTop="1dp"
         app:srcCompat="@drawable/fkf"
         android:layout_below="@+id/txtCreateAccount"/>
 
+    <!-- Welcome TextView -->
+
+    <!-- Description TextView -->
 
     <TextView
         android:id="@+id/txt1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/imageView2"
-        android:layout_centerHorizontal="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="-52dp"
-        android:layout_marginBottom="10dp"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="-35dp"
         android:fontFamily="cursive"
         android:gravity="center"
         android:text="Welcome to our Stadium Ticket Booking System!"
@@ -64,40 +60,30 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/txt1"
         android:layout_centerHorizontal="true"
-        android:layout_gravity="start"
         android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
         android:layout_marginTop="20dp"
-        android:layout_marginBottom="10dp"
         android:fontFamily="cursive"
         android:text="Book tickets online for sports matches and events at our stadium. Easy booking, interactive seat maps, secure payments, instant confirmation, 24/7 customer support."
-        android:textAlignment="textStart"
         android:textColor="@color/black"
-        android:textSize="25dp" />
+        android:textSize="25dp"
+        android:textAlignment="textStart" />
 
+    <!-- Get Started -->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn"
-        android:layout_width="wrap_content"
+        android:layout_width="136dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
+        android:layout_alignStart="@+id/txt"
+        android:layout_alignEnd="@+id/txt"
+        android:layout_alignBottom="@+id/txt"
         android:layout_alignParentBottom="true"
-        android:layout_marginEnd="156dp"
-        android:layout_marginBottom="96dp"
+        android:layout_marginStart="120dp"
+        android:layout_marginEnd="115dp"
+        android:layout_marginBottom="40dp"
         android:backgroundTint="#277ee4"
-        android:text="Book Now"
-        android:textColor="@color/white"
         android:gravity="center"
-        />
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
-        android:layout_width="match_parent"
-        android:layout_height="65dp"
-        android:layout_alignParentBottom="true"
-        android:background="?android:attr/windowBackground"
-        android:elevation="8dp"
-        app:labelVisibilityMode="labeled"
-        app:itemIconSize="24dp"
-        app:itemTextColor="@color/black"
-        app:menu="@menu/bottom_menu"/>
+        android:text="Get Started"
+        android:textColor="@color/white" />
 
 </RelativeLayout>
