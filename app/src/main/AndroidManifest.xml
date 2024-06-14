@@ -13,6 +13,9 @@
         android:theme="@style/Theme.TicketCard"
         tools:targetApi="31">
         <activity
+            android:name=".FkfPremierLeague"
+            android:exported="false" />
+        <activity
             android:name=".TicketCardClicked"
             android:exported="false" />
         <activity
