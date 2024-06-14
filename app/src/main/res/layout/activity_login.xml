@@ -35,7 +35,7 @@
             android:background="#FFFFFF">
 
             <EditText
-                android:id="@+id/txtemail"
+                android:id="@+id/emailEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -49,10 +49,10 @@
 
 
             <EditText
-                android:id="@+id/txtPass"
+                android:id="@+id/passwordEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/txtemail"
+                android:layout_below="@id/emailEditText"
                 android:layout_centerHorizontal="true"
                 android:backgroundTint="#000000"
                 android:ems="13"
@@ -64,7 +64,7 @@
                 android:id="@+id/lgnBtn"
                 android:layout_width="130dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/txtPass"
+                android:layout_below="@id/passwordEditText"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="6dp"
                 android:backgroundTint="#277ee4"
