@@ -13,7 +13,7 @@
         android:theme="@style/Theme.TicketCard"
         tools:targetApi="31">
         <activity
-            android:name=".FkfPremierLeague"
+            android:name=".SignUpActivity"
             android:exported="false" />
         <activity
             android:name=".TicketCardClicked"
@@ -32,9 +32,6 @@
             android:exported="false" />
         <activity
             android:name=".football_categories"
-            android:exported="false" />
-        <activity
-            android:name=".Team"
             android:exported="false" />
         <activity
             android:name=".Team"
