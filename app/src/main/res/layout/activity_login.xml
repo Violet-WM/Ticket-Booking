@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5"
+    android:background="#ffffff"
     tools:context=".login">
 
-    <!-- Title TextView -->
     <TextView
         android:id="@+id/txthead"
         android:layout_width="wrap_content"
@@ -21,9 +19,7 @@
         android:textSize="30dp"
         android:textStyle="bold" />
 
-    <!-- CardView for Login -->
     <androidx.cardview.widget.CardView
-        android:id="@+id/logincardview"
         android:layout_width="350dp"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txthead"
@@ -38,13 +34,8 @@
             android:layout_height="match_parent"
             android:background="#FFFFFF">
 
-            <!-- Email EditText -->
             <EditText
-
-                android:id="@+id/txtemail_login"
-
                 android:id="@+id/emailEditText"
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -56,19 +47,12 @@
                 android:textColorHint="#AAA4A4"
                 android:textSize="18sp" />
 
-            <!-- Password EditText -->
+
             <EditText
-
-                android:id="@+id/txtPass_login"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/txtemail_login"
-
                 android:id="@+id/passwordEditText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/emailEditText"
-
                 android:layout_centerHorizontal="true"
                 android:backgroundTint="#000000"
                 android:ems="13"
@@ -76,16 +60,11 @@
                 android:inputType="textPassword"
                 android:textColorHint="#AAA4A4" />
 
-            <!-- Login Button -->
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/login_Btn"
+                android:id="@+id/lgnBtn"
                 android:layout_width="130dp"
                 android:layout_height="wrap_content"
-
-                android:layout_below="@id/txtPass_login"
-
                 android:layout_below="@id/passwordEditText"
-
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="6dp"
                 android:backgroundTint="#277ee4"
@@ -93,33 +72,22 @@
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
-            <!-- Progress bar to show login progress -->
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/txtPass_login"
-                android:layout_marginStart="250dp"
-                android:visibility="invisible" />
-
-            <!-- "Don't have an account?" Text -->
             <TextView
                 android:id="@+id/alreadyAccount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/login_Btn"
+                android:layout_below="@id/lgnBtn"
                 android:layout_marginLeft="65dp"
                 android:layout_marginBottom="6dp"
                 android:text="Don't have an account?"
                 android:textColor="#000000"
                 android:textStyle="bold" />
 
-            <!-- "Create one" TextView -->
             <TextView
                 android:id="@+id/signUpBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/login_Btn"
+                android:layout_below="@id/lgnBtn"
                 android:layout_marginLeft="6dp"
                 android:layout_toRightOf="@id/alreadyAccount"
                 android:clickable="true"
@@ -127,7 +95,6 @@
                 android:textColor="#277ee4"
                 android:textStyle="bold" />
 
-            <!-- "Forgot Password?" Text -->
             <TextView
                 android:id="@+id/forgotPass"
                 android:layout_width="wrap_content"
@@ -139,7 +106,6 @@
                 android:textColor="#000000"
                 android:textStyle="bold" />
 
-            <!-- "Click here" TextView for Forgot Password -->
             <TextView
                 android:id="@+id/forgotPasswordBtn"
                 android:layout_width="wrap_content"
@@ -154,5 +120,8 @@
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>
+
+    <!-- This navigation bar will remain constant -->
+
 
 </RelativeLayout>
