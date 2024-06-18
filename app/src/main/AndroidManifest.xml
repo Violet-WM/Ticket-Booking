@@ -14,6 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TicketCard"
         tools:targetApi="31">
+
+        <activity
+            android:name=".Buyticket"
+            android:exported="false" />
         <activity
             android:name=".AddStatisticsActivity"
             android:exported="false" />
@@ -42,6 +46,9 @@
             android:name=".AdminFragment"
             android:exported="false" />
         <activity
+            android:name=".FkfPremierLeague"
+            android:exported="false" />
+        <activity
             android:name=".SettingsFragment"
             android:exported="false" />
         <activity
@@ -58,6 +65,9 @@
             android:exported="false" />
         <activity
             android:name=".Team"
+            android:exported="false" />
+        <activity
+            android:name=".FkfPremierLeague"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
