@@ -22,6 +22,7 @@ import com.example.ticketcard.model.Event;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -84,36 +85,45 @@ public class AdminFragment extends Fragment {
 
     // Method to save the selected image to Firebase Storage
     private void saveImageToStorage() {
-        String uid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
-        // Create a reference to the storage location
-        StorageReference storageRef = storage.getReference();
-        StorageReference imageRef = storageRef.child("IMAGES_FOLDER/" + System.currentTimeMillis());
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        // Upload the image
-        imageRef.putFile(selectedImageUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        // Image uploaded successfully, get the download URL
-                        imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri downloadUrl) {
-                                // Store the download URL in Firebase Realtime Database
-                                imageUrlToSaveInDatabase = downloadUrl.toString();
-                                uploadEventDetails();
-                            }
-                        });
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        // Handle the error
-                        progressBar.setVisibility(View.INVISIBLE); // Hide progress bar
-                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
+        if(currentUser != null) {
+            String uid = currentUser.getUid();
+
+            // Create a reference to the storage location
+            StorageReference storageRef = storage.getReference();
+            StorageReference imageRef = storageRef.child("IMAGES_FOLDER/" + System.currentTimeMillis());
+
+            // Upload the image
+            imageRef.putFile(selectedImageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // Image uploaded successfully, get the download URL
+                            imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri downloadUrl) {
+                                    // Store the download URL in Firebase Realtime Database
+                                    imageUrlToSaveInDatabase = downloadUrl.toString();
+                                    uploadEventDetails();
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // Handle the error
+                            progressBar.setVisibility(View.INVISIBLE); // Hide progress bar
+                            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        } else {
+            //Handle the case when the user is not authenticated
+            progressBar.setVisibility((View.INVISIBLE)); //hide progress bar
+            Toast.makeText(getActivity(), "User not authenticated", Toast.LENGTH_SHORT).show();
+        }
     }
 
     // Method to upload event details to Firebase Realtime Database
