@@ -2,13 +2,12 @@ package com.example.ticketcard;
 
 // Import statements
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.ticketcard.R;
-//import com.example.ticketcard.databinding.ActivityMainBinding; // Note: this import seems unused in the current code
-import androidx.appcompat.widget.Toolbar;
+
 
 // MainActivity class definition
 public class MainActivity extends AppCompatActivity {
@@ -26,17 +25,31 @@ public class MainActivity extends AppCompatActivity {
 
         // Set an OnClickListener to the button to handle click events
         button.setOnClickListener(v -> {
-            // Create an Intent to navigate from MainActivity to login activity
-            Intent intent = new Intent(MainActivity.this, login.class);
 
-            // Start the login activity
-            startActivity(intent);
+            SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+            boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
 
-            // Show a Toast message to the user
-            Toast.makeText(MainActivity.this, "Welcome, please Sign in.", Toast.LENGTH_SHORT).show();
+            if (isLoggedIn) {
+                // User is logged in, redirect to Home activity
+                Intent intent = new Intent(getApplicationContext(), Home.class);
+                startActivity(intent);
+            }
+            else
+            {
+                // call Login Activity
+                // Create an Intent to navigate from MainActivity to login activity
+                Intent intent = new Intent(MainActivity.this, login.class);
 
-            // Finish the current activity to prevent the user from returning to it
-            finish();
+                // Start the login activity
+                startActivity(intent);
+
+                // Show a Toast message to the user
+                Toast.makeText(MainActivity.this, "Welcome, please Sign in.", Toast.LENGTH_SHORT).show();
+
+                // Finish the current activity to prevent the user from returning to it
+                finish();
+            }
+
         });
     }
 

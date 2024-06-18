@@ -13,6 +13,9 @@
         android:theme="@style/Theme.TicketCard"
         tools:targetApi="31">
         <activity
+            android:name=".Home"
+            android:exported="false" />
+        <activity
             android:name=".SignUpActivity"
             android:exported="false" />
         <activity
@@ -25,7 +28,16 @@
             android:name=".HomeFragment"
             android:exported="false" />
         <activity
-            android:name=".Home"
+            android:name=".AdminFragment"
+            android:exported="false" />
+        <activity
+            android:name=".SettingsFragment"
+            android:exported="false" />
+        <activity
+            android:name=".TicketsFragment"
+            android:exported="false" />
+        <activity
+            android:name=".TransactionsFragment"
             android:exported="false" />
         <activity
             android:name=".ForgotPassword"
