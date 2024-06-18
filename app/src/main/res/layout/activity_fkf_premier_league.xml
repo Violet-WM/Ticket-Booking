@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".FkfPremierLeague">
+
+    <!-- Back Arrow ImageView -->
+    <ImageView
+        android:id="@+id/back_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_back_24"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="27dp"/>
+
+    <!-- Title TextView -->
+    <TextView
+        android:id="@+id/Premiertextview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="25dp"
+        android:layout_marginEnd="98dp"
+        android:text="FKF Premier League"
+        android:textSize="20dp"
+        android:textStyle="bold"/>
+
+    <!-- Main Image ImageView -->
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="wrap_content"
+        android:layout_height="150dp"
+        android:layout_below="@id/Premiertextview"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/fkf"
+        android:paddingStart="20dp"
+        android:layout_marginTop="20dp"
+        android:paddingEnd="20dp" />
+
+    <!-- Teams TextView -->
+    <TextView
+        android:id="@+id/teams"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/image"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Teams"
+        android:textColor="#333333"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- Shadowed Horizontal Line -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/teams"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="4dp"
+        android:elevation="2dp"/>
+
+    <!-- Gormahia LinearLayout -->
+    <LinearLayout
+        android:id="@+id/gormahiaLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/teams"
+        android:padding="16dp">
+
+        <!-- FKF Premier League RelativeLayout -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:background="?attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/Gormahialogo"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/gormahialogo" />
+
+            <TextView
+                android:id="@+id/Gormahiatext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/Gormahialogo"
+                android:layout_marginStart="16dp"
+                android:layout_centerVertical="true"
+                android:text="Gormahia"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/checkmatch1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Check matches"
+                android:layout_marginStart="40dp"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                android:layout_toEndOf="@id/Gormahiatext"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <!-- Shadowed Horizontal Line -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/gormahiaLinearLayout"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="8dp"
+        android:elevation="2dp"/>
+
+    <!-- Ulinzi Stars LinearLayout -->
+    <LinearLayout
+        android:id="@+id/UlinziLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/gormahiaLinearLayout"
+        android:padding="16dp">
+
+        <!-- FKF Premier League RelativeLayout -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:background="?attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/image1"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ulinzistarslogo" />
+
+            <TextView
+                android:id="@+id/Ulinzitext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/image1"
+                android:layout_marginStart="16dp"
+                android:layout_centerVertical="true"
+                android:text="Ulinzi Stars"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/checkmatch2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Check matches"
+                android:layout_marginStart="28dp"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                android:layout_toEndOf="@id/Ulinzitext"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+    </LinearLayout>
+
+    <!-- Shadowed Horizontal Line -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_below="@id/UlinziLinearLayout"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="8dp"
+        android:elevation="2dp"/>
+
+    <!-- Muranga Seal Fc LinearLayout -->
+    <LinearLayout
+        android:id="@+id/murangafcLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/UlinziLinearLayout"
+        android:padding="16dp">
+
+        <!-- FKF Premier League RelativeLayout -->
+        <RelativeLayout
+            android:id="@+id/muranga"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:background="?attr/selectableItemBackground">
+
+            <ImageView
+                android:id="@+id/murangafclogo"
+                android:layout_width="100dp"
+                android:layout_height="60dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/murangafclogo" />
+
+            <TextView
+                android:id="@+id/murangafctext"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/murangafclogo"
+                android:layout_marginStart="14dp"
+                android:layout_centerVertical="true"
+                android:text="Muranga Fc"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/checkmatch3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Check matches"
+                android:layout_marginStart="28dp"
+                android:textStyle="bold"
+                android:textSize="16dp"
+                android:layout_toEndOf="@id/murangafctext"
+                android:layout_centerVertical="true"/>
+        </RelativeLayout>
+
+        <!-- Shadowed Horizontal Line -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_below="@id/muranga"
+            android:background="@android:color/darker_gray"
+            android:layout_marginTop="8dp"
+            android:elevation="2dp"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
