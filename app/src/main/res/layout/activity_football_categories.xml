@@ -37,7 +37,7 @@
         android:layout_height="150dp"
         android:layout_below="@id/hd"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_clock"
+        android:src="@drawable/fkf"
         android:layout_centerHorizontal="true"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
@@ -77,7 +77,7 @@
                 android:layout_width="100dp"
                 android:layout_height="60dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_clock" />
+                android:src="@drawable/fkf" />
 
             <TextView
                 android:id="@+id/text1"
@@ -103,7 +103,7 @@
                 android:layout_width="100dp"
                 android:layout_height="60dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_clock" />
+                android:src="@drawable/fkf" />
 
             <TextView
                 android:id="@+id/text2"
@@ -129,7 +129,7 @@
                 android:layout_width="100dp"
                 android:layout_height="60dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_clock" />
+                android:src="@drawable/fkf" />
 
             <TextView
                 android:id="@+id/text3"
@@ -155,7 +155,7 @@
                 android:layout_width="100dp"
                 android:layout_height="60dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_clock" />
+                android:src="@drawable/fkf" />
 
             <TextView
                 android:id="@+id/text4"
@@ -181,7 +181,7 @@
                 android:layout_width="100dp"
                 android:layout_height="60dp"
                 android:scaleType="centerCrop"
-                android:src="@drawable/ic_clock" />
+                android:src="@drawable/fkf" />
 
             <TextView
                 android:id="@+id/text5"

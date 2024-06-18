@@ -23,25 +23,30 @@
             android:layout_centerHorizontal="true"/>
 
         <!-- Container LinearLayout for image upload section -->
+
+        <!-- Title TextView displaying "Event 2" -->
+
+        <!-- Title TextView displaying "Popular Events" -->
+
         <LinearLayout
             android:id="@+id/popularEventslayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="15dp"
             android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
             android:layout_marginEnd="15dp"
-            android:padding="20dp"
             android:layout_marginBottom="40dp"
-            android:background="#D8D8D8">
+            android:background="#D8D8D8"
+            android:orientation="vertical"
+            android:padding="20dp">
 
             <!-- ImageView for displaying the selected image -->
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
-                android:layout_marginTop="40dp"
                 android:layout_below="@id/popularEventstitle"
+                android:layout_marginTop="40dp"
                 android:scaleType="fitXY"
                 android:src="@drawable/imageuploadicon" />
 
@@ -51,17 +56,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/uploadButton"
-                android:layout_margin="16dp"
-                android:layout_gravity="center"
                 android:layout_centerHorizontal="true"
+                android:layout_gravity="center"
+                android:layout_margin="16dp"
                 android:visibility="invisible" />
 
             <!-- LinearLayout for caption input and upload button -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="20dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:padding="20dp">
 
                 <!-- EditText for adding a caption -->
                 <EditText
@@ -87,9 +92,6 @@
 
         </LinearLayout>
 
-        <!-- Title TextView displaying "Event 2" -->
-
-        <!-- Title TextView displaying "Popular Events" -->
         <TextView
             android:id="@+id/ousvariteamsdetails"
             android:layout_width="match_parent"

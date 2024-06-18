@@ -22,8 +22,8 @@ import com.example.ticketcard.model.Event;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -38,12 +38,12 @@ public class AdminFragment extends Fragment {
     private ProgressBar progressBar;
 
     // Firebase instances
-    private FirebaseFirestore firebaseFirestore;
+    private FirebaseDatabase firebaseDatabase;
     private FirebaseStorage storage;
 
-    // URI for selected image and URL for storing in Firestore
+    // URI for selected image and URL for storing in Firebase Realtime Database
     private Uri selectedImageUri;
-    private String imageUrlToSaveInFirestore;
+    private String imageUrlToSaveInDatabase;
 
     // Called to create and return the view hierarchy associated with the fragment
     @Nullable
@@ -51,8 +51,8 @@ public class AdminFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_admin, container, false);
 
-        // Initialize Firebase Firestore and Firebase Storage
-        firebaseFirestore = FirebaseFirestore.getInstance();
+        // Initialize Firebase Realtime Database and Firebase Storage
+        firebaseDatabase = FirebaseDatabase.getInstance();
         storage = FirebaseStorage.getInstance();
 
         // Initialize UI elements
@@ -90,8 +90,6 @@ public class AdminFragment extends Fragment {
         StorageReference storageRef = storage.getReference();
         StorageReference imageRef = storageRef.child("IMAGES_FOLDER/" + System.currentTimeMillis());
 
-        //StorageReference imageRef = storageRef.child("IMAGES_FOLDER").child(uid + "/" + System.currentTimeMillis());
-
         // Upload the image
         imageRef.putFile(selectedImageUri)
                 .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -101,8 +99,8 @@ public class AdminFragment extends Fragment {
                         imageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri downloadUrl) {
-                                // Store the download URL in Firestore
-                                imageUrlToSaveInFirestore = downloadUrl.toString();
+                                // Store the download URL in Firebase Realtime Database
+                                imageUrlToSaveInDatabase = downloadUrl.toString();
                                 uploadEventDetails();
                             }
                         });
@@ -112,31 +110,33 @@ public class AdminFragment extends Fragment {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         // Handle the error
-                        String errorMessage = e.getMessage();
                         progressBar.setVisibility(View.INVISIBLE); // Hide progress bar
-                        Toast.makeText(getActivity(), errorMessage, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    // Method to upload event details to Firestore
+    // Method to upload event details to Firebase Realtime Database
     private void uploadEventDetails() {
         String title = "Popular Events";
         String description = uploadCaption.getText().toString();
 
         // Create an Event object
-        Event event = new Event(title, description, imageUrlToSaveInFirestore);
+        Event event = new Event(title, description, imageUrlToSaveInDatabase);
 
-        // Add the event to Firestore
-        firebaseFirestore.collection("events")
-                .add(event)
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+        // Get a reference to the "events" node in Firebase Realtime Database
+        DatabaseReference eventsRef = firebaseDatabase.getReference("events");
+
+        // Add the event to Firebase Realtime Database
+        eventsRef.push().setValue(event)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
-                    public void onSuccess(DocumentReference documentReference) {
+                    public void onSuccess(Void aVoid) {
                         progressBar.setVisibility(View.INVISIBLE); // Hide progress bar
                         Toast.makeText(getActivity(), "Uploaded Successfully to the database", Toast.LENGTH_SHORT).show();
                     }
-                }).addOnFailureListener(new OnFailureListener() {
+                })
+                .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         progressBar.setVisibility(View.INVISIBLE); // Hide progress bar

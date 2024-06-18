@@ -29,8 +29,8 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:hint="Search events"
-        android:drawableLeft="@drawable/ic_settings"
-        android:drawableRight="@drawable/ic_home"
+        android:drawableLeft="@drawable/baseline_search_24"
+        android:drawableRight="@drawable/menusrch"
         android:padding="10dp"
         android:background="@android:drawable/edit_text" />
 
