@@ -1,4 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Home item -->
+    <item
+        android:id="@+id/home"
+        android:title="Home"
+        android:enabled="true"
+        android:icon="@drawable/baseline_home_24" />
 
+    <!-- Tickets item -->
+    <item
+        android:id="@+id/ticko"
+        android:title="Tickets"
+        android:enabled="true"
+        android:icon="@drawable/baseline_ticket_24" />
+
+    <!-- Transactions item -->
+    <item
+        android:id="@+id/trans"
+        android:title="Transactions"
+        android:enabled="true"
+        android:icon="@drawable/baseline_local_transactions_24" />
+
+    <!-- Settings item -->
+    <item
+        android:id="@+id/settings"
+        android:title="Settings"
+        android:enabled="true"
+        android:icon="@drawable/baseline_settings_24" />
+
+    <!-- Admin item -->
+    <item
+        android:id="@+id/Admin"
+        android:title="Admin"
+        android:enabled="true"
+        android:icon="@drawable/baseline_person_24" />
 </menu>
