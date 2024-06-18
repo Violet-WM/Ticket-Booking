@@ -17,6 +17,105 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ticketcard.model.Event;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class HomeFragment extends Fragment {
+
+    TextView testName;
+    // Define the RecyclerView and the adapter
+    private RecyclerView eventsRecyclerView;
+    EventsAdapter eventsAdapter;
+
+    public HomeFragment() {
+        // Required empty public constructor
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        testName = view.findViewById(R.id.txtCreateAccount);
+
+        // Retrieve the user name from SharedPreferences
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
+        String userName = sharedPreferences.getString("userName", "user"); // "User" is the default value if "userName" is not found
+
+        testName.setText(userName);
+        // Initialize the RecyclerView
+        eventsRecyclerView = view.findViewById(R.id.popular_events_recycler_view);
+        // Set layout manager for horizontal scrolling
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        eventsRecyclerView.setLayoutManager(layoutManager);
+
+        // Fetch data for the events
+        List<Event> events = fetchEvents();
+        // Initialize the adapter with the fetched events
+        eventsAdapter = new EventsAdapter(events);
+        eventsRecyclerView.setAdapter(eventsAdapter);
+
+        CardView footballct = view.findViewById(R.id.ftcategiries);
+        footballct.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), football_categories.class);
+            startActivity(intent);
+        });
+
+        return view;
+    }
+
+    private List<Event> fetchEvents() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference eventsRef = database.getReference("events");
+
+        eventsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Event> eventsList = new ArrayList<>();
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Event event = snapshot.getValue(Event.class);
+                    eventsList.add(event);
+                }
+                // Update the adapter with the fetched events
+                eventsAdapter.setEvents(eventsList);
+                eventsAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("Firebase Error", "Failed to read value.", databaseError.toException());
+            }
+        });
+        return null;
+    }
+}
+
+
+/*
+package com.example.ticketcard;
+
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.ticketcard.model.Event;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -91,3 +190,4 @@ public class HomeFragment extends Fragment {
                 });
         return null;
     }}
+*/
