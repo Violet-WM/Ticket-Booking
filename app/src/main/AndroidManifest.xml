@@ -15,6 +15,10 @@
         android:theme="@style/Theme.TicketCard"
         tools:replace="android:icon"
         tools:targetApi="31">
+
+        <activity
+            android:name=".Buyticket"
+            android:exported="false" />
         <activity
             android:name=".TicketGeneration"
             android:exported="false" />
@@ -89,6 +93,9 @@
             android:exported="false" />
         <activity
             android:name=".Team"
+            android:exported="false" />
+        <activity
+            android:name=".FkfPremierLeague"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
