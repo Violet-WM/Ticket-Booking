@@ -1,18 +1,211 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!-- Main layout container -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    android:padding="16dp"
     tools:context=".TicketsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white"
-        android:text="Tickets"
-        android:gravity="center"
-        android:textColor="#03A9F4"
-        android:textSize="50dp"/>
+    <!-- Back Arrow ImageView -->
+    <ImageView
+        android:id="@+id/back_arrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/baseline_back_24"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="0dp"/>
 
-</FrameLayout>
+    <!-- Title TextView -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:id="@+id/tt"
+        android:layout_height="wrap_content"
+        android:text="Tickets Available"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:layout_gravity="center"
+        android:textColor="#000000"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Button Group for different leagues -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginBottom="16dp">
+
+        <!-- FKF Premier League Button -->
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="FKF Premier League"
+            android:textColor="#000000"
+            android:layout_weight="1"
+            android:layout_marginRight="8dp" />
+
+        <!-- FKF National Super League Button -->
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="FKF National Super League"
+            android:textColor="#000000"
+            android:layout_weight="1"
+            android:layout_marginRight="8dp" />
+
+        <!-- Mozzart Bet Cup Button -->
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Mozzart Bet Cup"
+            android:textColor="#000000"
+            android:layout_weight="1" />
+    </LinearLayout>
+
+    <!-- ScrollView for listing matches -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- First Match Section -->
+            <LinearLayout
+                android:id="@+id/GorAFC"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="8dp">
+
+                <!-- Match Image -->
+                <ImageView
+                    android:id="@+id/GorMahia"
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:src="@drawable/fkf"
+                    android:scaleType="centerCrop"/>
+
+                <!-- Match Description -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Gor Mahia vs AFC Leopards"
+                    android:textSize="16sp"
+                    android:textColor="#FFFFFF"
+                    android:background="#80000000"
+                    android:padding="8dp"/>
+            </LinearLayout>
+
+            <!-- Repeat the layout for other matches -->
+            <!-- Second Match Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="8dp">
+
+                <!-- Match Image -->
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:src="@drawable/kib"
+                    android:scaleType="centerCrop"/>
+
+                <!-- Match Description -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Kibera Black Stars vs Dimba Patriots"
+                    android:textSize="16sp"
+                    android:textColor="#FFFFFF"
+                    android:background="#80000000"
+                    android:padding="8dp"/>
+            </LinearLayout>
+
+            <!-- Additional Matches -->
+            <!-- Third Match Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="8dp">
+
+                <!-- Match Image -->
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:src="@drawable/kib"
+                    android:scaleType="centerCrop"/>
+
+                <!-- Match Description -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Kibera Black Stars vs Dimba Patriots"
+                    android:textSize="16sp"
+                    android:textColor="#FFFFFF"
+                    android:background="#80000000"
+                    android:padding="8dp"/>
+            </LinearLayout>
+
+            <!-- Fourth Match Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="8dp">
+
+                <!-- Match Image -->
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:src="@drawable/dimb"
+                    android:scaleType="centerCrop"/>
+
+                <!-- Match Description -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Kibera Black Stars vs Dimba Patriots"
+                    android:textSize="16sp"
+                    android:textColor="#FFFFFF"
+                    android:background="#80000000"
+                    android:padding="8dp"/>
+            </LinearLayout>
+
+            <!-- Fifth Match Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="8dp">
+
+                <!-- Match Image -->
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="150dp"
+                    android:src="@drawable/kdf"
+                    android:scaleType="centerCrop"/>
+
+                <!-- Match Description -->
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Kibera Black Stars vs Dimba Patriots"
+                    android:textSize="16sp"
+                    android:textColor="#FFFFFF"
+                    android:background="#80000000"
+                    android:padding="8dp"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

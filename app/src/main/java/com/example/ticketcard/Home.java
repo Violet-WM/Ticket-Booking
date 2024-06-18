@@ -35,9 +35,9 @@ public class Home extends AppCompatActivity {
                 if (item.getItemId() == R.id.home) {
                     replaceFragment(new HomeFragment());
                 } else if (item.getItemId() == R.id.tickets) {
-                    replaceFragment(new TransactionsFragment());
-                } else if (item.getItemId() == R.id.transactions) {
                     replaceFragment(new TicketsFragment());
+                } else if (item.getItemId() == R.id.transactions) {
+                    replaceFragment(new TransactionsFragment());
                 } else if (item.getItemId() == R.id.settings) {
                     replaceFragment(new SettingsFragment());
                 } else if (item.getItemId() == R.id.admin) {
