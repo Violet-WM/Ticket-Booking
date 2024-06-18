@@ -40,7 +40,11 @@
 
             <!-- Email EditText -->
             <EditText
+
                 android:id="@+id/txtemail_login"
+
+                android:id="@+id/emailEditText"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
@@ -54,10 +58,17 @@
 
             <!-- Password EditText -->
             <EditText
+
                 android:id="@+id/txtPass_login"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/txtemail_login"
+
+                android:id="@+id/passwordEditText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/emailEditText"
+
                 android:layout_centerHorizontal="true"
                 android:backgroundTint="#000000"
                 android:ems="13"
@@ -70,7 +81,11 @@
                 android:id="@+id/login_Btn"
                 android:layout_width="130dp"
                 android:layout_height="wrap_content"
+
                 android:layout_below="@id/txtPass_login"
+
+                android:layout_below="@id/passwordEditText"
+
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="6dp"
                 android:backgroundTint="#277ee4"

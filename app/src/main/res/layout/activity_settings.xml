@@ -27,7 +27,7 @@
             android:id="@+id/profile_picture"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@drawable/baseline_settings_24"
+            android:src="@drawable/ic_clock"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
             android:layout_marginStart="8dp"
@@ -41,7 +41,7 @@
         android:layout_height="wrap_content"
         android:hint="Search settings"
         android:padding="8dp"
-        android:drawableStart="@drawable/baseline_search_24"
+        android:drawableStart="@drawable/ic_clock"
         android:layout_below="@id/settings_heading"
         android:layout_marginTop="8dp"
         tools:ignore="NotSibling" />
@@ -76,7 +76,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_lock_24" />
+                    android:src="@drawable/ic_clock" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -104,7 +104,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_notifications_24" />
+                    android:src="@drawable/ic_clock" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -132,7 +132,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_ticket_24" />
+                    android:src="@drawable/ic_clock" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -179,7 +179,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_back_24" />
+                    android:src="@drawable/ic_clock" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -207,7 +207,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_person_24" />
+                    android:src="@drawable/ic_clock" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -226,7 +226,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_settings_24" />
+                    android:src="@drawable/ic_clock" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -254,7 +254,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_notifications_24" />
+                    android:src="@drawable/ic_clock" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -273,7 +273,7 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/baseline_delete_24" />
+                    android:src="@drawable/ic_clock" />
 
                 <TextView
                     android:layout_width="wrap_content"
