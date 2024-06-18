@@ -51,9 +51,5 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-    }
+    }}
 
-    // Inner class stanleyClass (currently empty, you might want to add functionality or remove it)
-   /* class stanley {
-    }*/
-}
