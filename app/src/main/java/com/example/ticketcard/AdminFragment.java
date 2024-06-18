@@ -115,6 +115,7 @@ public class AdminFragment extends Fragment {
                         @Override
                         public void onFailure(@NonNull Exception e) {
                             // Handle the error
+                            String errorMessage = e.getMessage();
                             progressBar.setVisibility(View.INVISIBLE); // Hide progress bar
                             Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
