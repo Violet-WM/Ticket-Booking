@@ -28,7 +28,7 @@ import java.util.List;
 
 public class HomeFragment extends Fragment {
 
-    TextView testName;
+    TextView welcomeText;
     // Define the RecyclerView and the adapter
     private RecyclerView eventsRecyclerView;
     EventsAdapter eventsAdapter;
@@ -41,13 +41,13 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        testName = view.findViewById(R.id.txtCreateAccount);
+        welcomeText = view.findViewById(R.id.welcomeText);
 
         // Retrieve the user name from SharedPreferences
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         String userName = sharedPreferences.getString("userName", "user"); // "User" is the default value if "userName" is not found
 
-        testName.setText(userName);
+        welcomeText.setText("Welcome, " + userName + "\uD83D\uDC4B");
         // Initialize the RecyclerView
         eventsRecyclerView = view.findViewById(R.id.popular_events_recycler_view);
         // Set layout manager for horizontal scrolling
