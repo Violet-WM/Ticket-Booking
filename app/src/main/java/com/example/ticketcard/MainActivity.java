@@ -29,13 +29,7 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
             boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
 
-            if (isLoggedIn) {
-                // User is logged in, redirect to Home activity
-                Intent intent = new Intent(getApplicationContext(), Home.class);
-                startActivity(intent);
-            }
-            else
-            {
+
                 // call Login Activity
                 // Create an Intent to navigate from MainActivity to login activity
                 Intent intent = new Intent(MainActivity.this, login.class);
@@ -48,7 +42,6 @@ public class MainActivity extends AppCompatActivity {
 
                 // Finish the current activity to prevent the user from returning to it
                 finish();
-            }
 
         });
     }}
