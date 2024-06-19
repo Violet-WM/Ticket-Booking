@@ -169,8 +169,8 @@ public class Buyticket extends AppCompatActivity {
                 if (document.exists()) {
                     userEmail = document.getString("userEmail");
                     userName = document.getString("firstName");
-                    lastName = document.getString("lastName");
-                    phoneNumber = document.getLong("phoneNumber").intValue();
+                    //lastName = document.getString("lastName");
+                    //phoneNumber = document.getLong("phoneNumber").intValue();
                     // Optional: Update UI with fetched details if needed
                 } else {
                     Toast.makeText(this, "User details not found. Please complete your profile.", Toast.LENGTH_SHORT).show();
@@ -194,9 +194,9 @@ public class Buyticket extends AppCompatActivity {
             Map<String, Object> seatData = new HashMap<>();
             seatData.put("reserved", true);
             seatData.put("userEmail", userEmail);
-            seatData.put("firstName", userName);
-            seatData.put("lastName", lastName);
-            seatData.put("phoneNumber", phoneNumber);
+            seatData.put("UserName", userName);
+            //seatData.put("lastName", lastName);
+            //seatData.put("phoneNumber", phoneNumber);
 
             db.collection("seats").document(seatId).set(seatData).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
