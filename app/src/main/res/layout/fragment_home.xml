@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".HomeFragment">
 
     <!-- Title TextView -->
@@ -32,7 +33,7 @@
         android:drawableLeft="@drawable/baseline_search_24"
         android:drawableRight="@drawable/menusrch"
         android:padding="10dp"
-        android:background="@android:drawable/edit_text" />
+        android:background="@drawable/edittext_radius" />
 
     <!-- Welcome Card RelativeLayout -->
     <RelativeLayout
@@ -46,7 +47,7 @@
         android:layout_marginBottom="5dp"
         android:padding="10dp"
         android:paddingBottom="50dp"
-        android:background="@drawable/seat_background">
+        style="@style/CardGradient.">
 
         <!-- Welcome Text TextView -->
         <TextView

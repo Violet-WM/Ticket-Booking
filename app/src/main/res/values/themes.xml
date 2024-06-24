@@ -6,4 +6,8 @@
     </style>
 
     <style name="Theme.TicketCard" parent="Base.Theme.TicketCard" />
+
+    <style name="CardGradient." parent="CardView">
+        <item name="android:background">@drawable/card_gradient</item>
+    </style>
 </resources>
