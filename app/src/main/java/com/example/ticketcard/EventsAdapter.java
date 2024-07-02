@@ -1,15 +1,15 @@
 package com.example.ticketcard;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import com.squareup.picasso.Picasso;
-
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.ticketcard.model.Event;
 
 import java.util.ArrayList;
@@ -18,9 +18,12 @@ import java.util.List;
 class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
 
     private List<Event> events;
+    Context context;
+    OnItemClickListener onItemClickListener;
 
-    EventsAdapter(List<Event> events) {
+    public EventsAdapter(Context context, List<Event> events) {
         this.events = events != null ? events : new ArrayList<>();
+        this.context = context;
 
         /*  this.events = events;*/
     }
@@ -35,37 +38,44 @@ class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
     public void onBindViewHolder(ViewHolder holder, int position) {
         Event event = events.get(position);
 
-        // Use Picasso to load the image from the internet
-        Picasso.get()
-                .load(event.getImageUrl())
-//              .placeholder(R.drawable.image2) // Optional: a placeholder image
-                /*.error(R.drawable.error)*/ // Optional: an error image if the URL fails to load
-                .into(holder.imageView); // Load the image into the ImageView
+        Glide.with(context).load(event.getImageUrl()).into(holder.imageView);
+       // holder.textView.setText(event.getDescription());
 
-        holder.textView.setText(event.getDescription());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onItemClickListener.onClick(holder.imageView, event.getImageUrl());
+            }
+        });
     }
-
 
     @Override
     public int getItemCount() {
         return events != null ? events.size() : 0;
-        /*return events.size();*/
     }
 
     public void setEvents(List<Event> eventsList) {
         events.clear();
         events.addAll(eventsList);
-        notifyDataSetChanged();  //
+        notifyDataSetChanged();
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
         TextView textView;
 
         ViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.image2);
-            textView = itemView.findViewById(R.id.text2);
+            //textView = itemView.findViewById(R.id.text2);
         }
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
+
+    public interface OnItemClickListener {
+        void onClick(ImageView imageView, String imageUrl);
     }
 }

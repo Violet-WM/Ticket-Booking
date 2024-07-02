@@ -14,10 +14,11 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="7dp"
         android:layout_marginBottom="10dp"
+        android:fontFamily="@font/inter_bold"
         android:gravity="center_horizontal"
-        android:text="Stadium Ticket Booking"
-        android:textColor="@android:color/white"
-        android:textSize="24dp"
+        android:text="Ticket Booking"
+        android:textColor="@android:color/black"
+        android:textSize="14dp"
         android:textStyle="bold" />
 
     <!-- Search Events EditText -->
@@ -26,20 +27,23 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtCreateAccount"
-        android:layout_marginTop="5dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginEnd="10dp"
-        android:hint="Search events"
+        android:background="@drawable/edittext_radius"
         android:drawableLeft="@drawable/baseline_search_24"
         android:drawableRight="@drawable/menusrch"
+        android:fontFamily="@font/inter_extralight"
+        android:hint="Search events"
         android:padding="10dp"
-        android:background="@drawable/edittext_radius" />
+        android:textColor="@color/black"
+        android:textSize="14dp" />
 
     <!-- Welcome Card RelativeLayout -->
     <RelativeLayout
         android:id="@+id/welcomeCard"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/searchEvents"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
@@ -53,11 +57,12 @@
         <TextView
             android:id="@+id/welcomeText"
             android:layout_width="wrap_content"
-            android:layout_marginStart="10dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/inter_bold"
             android:text="Welcome, John👋"
             android:textColor="@android:color/white"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <!-- Welcome SubText TextView -->
@@ -65,11 +70,25 @@
             android:id="@+id/welcomeSubText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
             android:layout_below="@id/welcomeText"
+            android:layout_marginStart="10dp"
             android:text="We have a lot of events for you"
             android:textColor="@android:color/white"
-            android:textSize="14sp" />
+            android:textSize="15sp" />
+
+        <Button
+            android:id="@+id/elevatedButton"
+            style="@style/Widget.Material3.Button.ElevatedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_below="@id/welcomeSubText"
+            android:backgroundTint="@color/white"
+            android:text="View all"
+            android:textSize="12dp"
+            android:textColor="#051D5F"
+            android:drawableRight="@drawable/ic_right_nav"
+            android:drawableTint="#051D5F"/>
 
     </RelativeLayout>
 
@@ -92,7 +111,7 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/popular_events_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="200dp"
         android:orientation="horizontal"
         android:layout_below="@id/popularEvents"
         android:layout_marginTop="10dp"
@@ -146,105 +165,5 @@
             android:textStyle="bold" />
     </androidx.cardview.widget.CardView>
 
-    <!-- Basketball cardView -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/basketballcategiries"
-        android:layout_below="@+id/ftcategiries"
-        android:layout_width="390dp"
-        android:layout_marginEnd="15dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="15dp">
 
-        <!--BasketBall Image-->
-        <ImageView
-            android:layout_width="90dp"
-            android:layout_height="60dp"
-            android:src="@drawable/basketball"
-            android:background="#FF3333"
-            android:layout_marginEnd="350dp"/>
-
-        <!--Basketball TextView-->
-        <TextView
-            android:id="@+id/basketball"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/categories"
-            android:layout_marginStart="110dp"
-            android:layout_marginTop="18dp"
-            android:layout_marginEnd="150dp"
-            android:layout_marginBottom="9dp"
-            android:text="Basketball"
-            android:textColor="@android:color/black"
-            android:textSize="15dp"
-            android:textStyle="bold" />
-    </androidx.cardview.widget.CardView>
-
-    <!-- Mic cardView -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/Concertcategiries"
-        android:layout_below="@+id/basketballcategiries"
-        android:layout_width="390dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginTop="15dp">
-
-        <!--Mic Image-->
-        <ImageView
-            android:layout_width="90dp"
-            android:layout_height="60dp"
-            android:src="@drawable/mic"
-            android:background="#FFFF00"
-            android:layout_marginEnd="350dp"/>
-
-        <!--Concerts TextView-->
-        <TextView
-            android:id="@+id/microphone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/categories"
-            android:layout_marginStart="110dp"
-            android:layout_marginTop="13dp"
-            android:layout_marginEnd="150dp"
-            android:layout_marginBottom="9dp"
-            android:text="Concerts"
-            android:textColor="@android:color/black"
-            android:textSize="15dp"
-            android:textStyle="bold" />
-    </androidx.cardview.widget.CardView>
-
-    <!-- Public Holidays cardView -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/PublicHolidayscategiries"
-        android:layout_below="@+id/Concertcategiries"
-        android:layout_width="390dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginTop="15dp">
-
-        <!--Flag Image-->
-        <ImageView
-            android:layout_width="90dp"
-            android:layout_height="60dp"
-            android:src="@drawable/ic_ticket"
-            android:background="#800080"
-            android:layout_marginEnd="350dp"/>
-
-        <!--Public Holidays TextView-->
-        <TextView
-            android:id="@+id/flag"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/categories"
-            android:layout_marginStart="110dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="150dp"
-            android:layout_marginBottom="9dp"
-            android:text="public Holidays"
-            android:textColor="@android:color/black"
-            android:textSize="15dp"
-            android:textStyle="bold" />
-    </androidx.cardview.widget.CardView>
 </RelativeLayout>
