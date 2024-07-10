@@ -29,11 +29,12 @@ public class TicketCardClicked extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_card_clicked);
-        
+
 
         arrow = findViewById(R.id.ticketcardbackarrow);
         arrow.setOnClickListener(v -> {
             Intent intent = new Intent(this, FkfPremierLeague.class);
+            startActivity(intent);
                 });
 
         bookYourSeat = findViewById(R.id.bookYourSeat);
