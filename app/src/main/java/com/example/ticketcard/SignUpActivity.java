@@ -72,7 +72,6 @@ public class SignUpActivity extends AppCompatActivity {
         });
 
     }
-
     public Boolean validateName() {
         String val = nameEditText.getText().toString();
         if(val.isEmpty()) {
@@ -83,7 +82,6 @@ public class SignUpActivity extends AppCompatActivity {
             return true;
         }
     }
-
     public Boolean validatePassword() {
         String val = passwordEditText.getText().toString();
         if(val.isEmpty()) {
@@ -130,6 +128,7 @@ public class SignUpActivity extends AppCompatActivity {
                     emailEditText.requestFocus();
 
                 } else {
+
                     emailExists = false;
 
                     checkForExistingNumber();
@@ -175,13 +174,10 @@ public class SignUpActivity extends AppCompatActivity {
                     startActivity(intent);
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
     }
-
-
 }
