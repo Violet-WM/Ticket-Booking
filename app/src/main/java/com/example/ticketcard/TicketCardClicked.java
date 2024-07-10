@@ -63,6 +63,7 @@ public class TicketCardClicked extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_card_clicked);
+        
 
         String imageUrl = getIntent().getStringExtra("imageURL");
         String imageDescription = getIntent().getStringExtra("imageDescription");
