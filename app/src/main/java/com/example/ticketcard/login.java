@@ -49,9 +49,8 @@ public class login extends AppCompatActivity {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (validateEmail() && validatePassword()) {
-                    checkEmailExists();
-                }
+                    startActivity(new Intent(getApplicationContext(), Home.class));
+                    finish();
             }
         });
 
