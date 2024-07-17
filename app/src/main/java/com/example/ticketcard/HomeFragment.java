@@ -62,9 +62,10 @@ public class HomeFragment extends Fragment {
 
         eventsAdapter.setOnItemClickListener(new EventsAdapter.OnItemClickListener() {
             @Override
-            public void onClick(ImageView imageView, String imageUrl) {
+            public void onClick(ImageView imageView, String imageUrl, String imageDescription) {
                 Intent intent = new Intent(getActivity(), TicketCardClicked.class);
-
+                intent.putExtra("imageURL", imageUrl);
+                intent.putExtra("imageDescription", imageDescription);
                 startActivity(intent);
             }
         });

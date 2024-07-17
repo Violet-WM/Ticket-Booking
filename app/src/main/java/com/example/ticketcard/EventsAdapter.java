@@ -44,7 +44,7 @@ class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onItemClickListener.onClick(holder.imageView, event.getImageUrl());
+                onItemClickListener.onClick(holder.imageView, event.getImageUrl(), event.getDescription());
             }
         });
     }
@@ -76,6 +76,6 @@ class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
     }
 
     public interface OnItemClickListener {
-        void onClick(ImageView imageView, String imageUrl);
+        void onClick(ImageView imageView, String imageUrl, String imageDescription);
     }
 }
