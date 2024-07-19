@@ -1,6 +1,7 @@
 package com.example.ticketcard;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -10,12 +11,14 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -23,6 +26,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.ticketcard.model.Players;
 import com.example.ticketcard.model.Teams;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,8 +34,6 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -49,6 +51,7 @@ public class AddTeamsActivity extends AppCompatActivity {
     private FloatingActionButton uploadButton;
     private ProgressBar progressBar;
     private Spinner leaguesSpinner;
+    private Spinner teamRolesSpinner;
     private TextInputEditText dynamicChipEditText;
     private ChipGroup chipGroup;
 
@@ -59,6 +62,10 @@ public class AddTeamsActivity extends AppCompatActivity {
     // URI for selected image and URL for storing in Firebase Realtime Database
     private Uri selectedImageUri;
     private String imageUrlToSaveInDatabase;
+    private String teamKey;
+    private String playerChipName;
+    private String playerAge;
+    private String selectedRole;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +84,7 @@ public class AddTeamsActivity extends AppCompatActivity {
 
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //Not used
+                // Not used
             }
 
             @Override
@@ -102,7 +109,7 @@ public class AddTeamsActivity extends AppCompatActivity {
                     dynamicChipEditText.setText(capitalizedInput);
                     dynamicChipEditText.setSelection(capitalizedInput.length());
                 }
-                isProcessing = false;//not used
+                isProcessing = false;
             }
 
             private String capitalizeWords(String str) {
@@ -124,8 +131,8 @@ public class AddTeamsActivity extends AppCompatActivity {
         });
 
         leaguesSpinner = findViewById(R.id.leaguesSpinner);
-        ArrayAdapter spinnerAdapter = new ArrayAdapter(this, android.R.layout.simple_spinner_item, leagues);
-        spinnerAdapter.setDropDownViewResource( android.R.layout.simple_spinner_dropdown_item);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, leagues);
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         leaguesSpinner.setAdapter(spinnerAdapter);
 
         // Initialize Firebase Realtime Database and Firebase Storage
@@ -135,13 +142,8 @@ public class AddTeamsActivity extends AppCompatActivity {
         // Initialize UI elements
         uploadTeamName = findViewById(R.id.teamEditText);
         imageView = findViewById(R.id.imageView);
-
         uploadButton = findViewById(R.id.uploadButton);
         progressBar = findViewById(R.id.progressBar);
-
-        // Events fragment tab
-
-        //Team details tab
 
         // Set onClick listener for choosing an image
         imageView.setOnClickListener(onClick -> {
@@ -154,7 +156,6 @@ public class AddTeamsActivity extends AppCompatActivity {
             public void onClick(View v) {
                 // Check if all required fields are filled
                 String teamName = uploadTeamName.getText().toString().trim();
-                String playerNames = dynamicChipEditText.getText().toString().trim();
                 String selectedLeague = leaguesSpinner.getSelectedItem().toString();
 
                 if (teamName.isEmpty()) {
@@ -185,13 +186,10 @@ public class AddTeamsActivity extends AppCompatActivity {
 
     // Method to save the selected image to Firebase Storage
     private void saveImageToStorage() {
-
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
         boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
 
-        if(isLoggedIn) {
+        if (isLoggedIn) {
             // Create a reference to the storage location
             StorageReference storageRef = storage.getReference();
             StorageReference imageRef = storageRef.child("IMAGES_FOLDER/" + System.currentTimeMillis());
@@ -207,7 +205,7 @@ public class AddTeamsActivity extends AppCompatActivity {
                                 public void onSuccess(Uri downloadUrl) {
                                     // Store the download URL in Firebase Realtime Database
                                     imageUrlToSaveInDatabase = downloadUrl.toString();
-                                    uploadTeamDetails();
+                                    uploadTeamDetails(); // After uploading image, proceed to upload team details
                                 }
                             });
                         }
@@ -222,13 +220,13 @@ public class AddTeamsActivity extends AppCompatActivity {
                         }
                     });
         } else {
-            //Handle the case when the user is not authenticated
-            progressBar.setVisibility((View.INVISIBLE)); //hide progress bar
+            // Handle the case when the user is not authenticated
+            progressBar.setVisibility(View.INVISIBLE); // Hide progress bar
             Toast.makeText(getApplicationContext(), "User not authenticated", Toast.LENGTH_SHORT).show();
         }
     }
 
-    // Method to upload event details to Firebase Realtime Database
+    // Method to upload team details to Firebase Realtime Database
     private void uploadTeamDetails() {
         String teamName = uploadTeamName.getText().toString();
         String teamLeague = leaguesSpinner.getSelectedItem().toString();
@@ -237,14 +235,20 @@ public class AddTeamsActivity extends AppCompatActivity {
         // Create a Teams object
         Teams teams = new Teams(imageUrlToSaveInDatabase, teamName, teamLeague, playerNames);
 
-        // Get a reference to the "events" node in Firebase Realtime Database
+        // Get a reference to the "teams" node in Firebase Realtime Database
         DatabaseReference teamsRef = firebaseDatabase.getReference("teams");
 
-        // Add the event to Firebase Realtime Database
-        teamsRef.push().setValue(teams)
+        // Add the team to Firebase Realtime Database
+        DatabaseReference newTeamRef = teamsRef.push();
+        teamKey = newTeamRef.getKey();
+        newTeamRef.setValue(teams)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        // Save player details for each player
+                        for (String playerName : playerNames) {
+                            savePlayerDetails(playerName, "Role not specified", "Age not specified");
+                        }
                         progressBar.setVisibility(View.INVISIBLE); // Hide progress bar
                         Toast.makeText(getApplicationContext(), "Uploaded Successfully to the database", Toast.LENGTH_SHORT).show();
                         clearAllInputs();
@@ -300,7 +304,68 @@ public class AddTeamsActivity extends AppCompatActivity {
         chip.setTextColor(Color.WHITE);
         chip.setCloseIconTint(ColorStateList.valueOf(Color.WHITE));
         chip.setOnCloseIconClickListener(v -> chipGroup.removeView(chip));
+        chip.setOnClickListener(view -> showPlayerCard(name)); // Call card to add details
         chipGroup.addView(chip);
-        Toast.makeText(this, "Added: " + name, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showPlayerCard(String playerName) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.chip_card_layout, null);
+        builder.setView(dialogView);
+
+        // Initialize views
+        TextView playerNameTextView = dialogView.findViewById(R.id.playerNameTextView);
+        playerNameTextView.setText(playerName);
+        Spinner teamRolesSpinner = dialogView.findViewById(R.id.teamRolesSpinner);
+        TextInputEditText playerAgeChipEditText = dialogView.findViewById(R.id.playerAgeChipEditText);
+
+        // Set up spinner
+        String[] roles = {"N/A", "Goalkeeper", "Defender", "Midfielder", "Forward", "Winger"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, roles);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        teamRolesSpinner.setAdapter(adapter);
+
+        // Create and show the dialog
+        builder.setPositiveButton("Save", (dialog, which) -> {
+            // Retrieve data from views
+            playerChipName = playerNameTextView.getText().toString();
+            playerAge = playerAgeChipEditText.getText().toString();
+            selectedRole = (String) teamRolesSpinner.getSelectedItem();
+
+            // Update chip text
+            playerNameTextView.setText(playerChipName + " (" + selectedRole + ")");
+
+            // Add chip with role as tag
+            // Save the details to Firebase structure
+            savePlayerDetails(playerChipName, selectedRole, playerAge);
+        });
+
+        // Show the dialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    private void savePlayerDetails(String playerName, String playerRole, String playerAge) {
+        if (teamKey == null) {
+            Toast.makeText(getApplicationContext(), "Error: Team key is null", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Save to Firebase Realtime Database
+        DatabaseReference teamsRef = firebaseDatabase.getReference("teams");
+        teamsRef.child(teamKey).child("players").child(playerName).setValue(new Players(playerName, playerRole, playerAge))
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getApplicationContext(), "Player details saved successfully", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getApplicationContext(), "Failed to save player details", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 }

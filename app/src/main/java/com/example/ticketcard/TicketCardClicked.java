@@ -190,13 +190,13 @@ public class TicketCardClicked extends AppCompatActivity {
     }
 
     private List<Players> fetchPlayers() {
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference("players");
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("teams");
         db.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 playersList = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Players players = snapshot.getValue(Players.class);
+                    Players players = snapshot.child("playerNames").getValue(Players.class);
                     if (players != null) {
                         playersList.add(players);
                     }
