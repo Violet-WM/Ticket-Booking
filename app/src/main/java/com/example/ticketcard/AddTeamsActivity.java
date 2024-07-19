@@ -205,7 +205,10 @@ public class AddTeamsActivity extends AppCompatActivity {
                                 public void onSuccess(Uri downloadUrl) {
                                     // Store the download URL in Firebase Realtime Database
                                     imageUrlToSaveInDatabase = downloadUrl.toString();
+                                    // Add chip with role as tag
+                                    // Save the details to Firebase structure
                                     uploadTeamDetails(); // After uploading image, proceed to upload team details
+                                    savePlayerDetails(playerChipName, selectedRole, playerAge);
                                 }
                             });
                         }
@@ -246,9 +249,9 @@ public class AddTeamsActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         // Save player details for each player
-                        for (String playerName : playerNames) {
-                            savePlayerDetails(playerName, "Role not specified", "Age not specified");
-                        }
+//                        for (String playerName : playerNames) {
+//                            savePlayerDetails(playerName, "Role not specified", "Age not specified");
+//                        }
                         progressBar.setVisibility(View.INVISIBLE); // Hide progress bar
                         Toast.makeText(getApplicationContext(), "Uploaded Successfully to the database", Toast.LENGTH_SHORT).show();
                         clearAllInputs();
@@ -333,12 +336,8 @@ public class AddTeamsActivity extends AppCompatActivity {
             playerAge = playerAgeChipEditText.getText().toString();
             selectedRole = (String) teamRolesSpinner.getSelectedItem();
 
-            // Update chip text
-            playerNameTextView.setText(playerChipName + " (" + selectedRole + ")");
-
-            // Add chip with role as tag
-            // Save the details to Firebase structure
-            savePlayerDetails(playerChipName, selectedRole, playerAge);
+//            // Update chip text
+//            playerNameTextView.setText(playerChipName + " (" + selectedRole + ")");
         });
 
         // Show the dialog
