@@ -34,6 +34,7 @@
         android:layout_marginTop="48dp"
         android:layout_marginEnd="344dp"
         android:fontFamily="@font/poppins_italic"
+        android:textColor="@color/black"
         android:text="Age: 28"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
