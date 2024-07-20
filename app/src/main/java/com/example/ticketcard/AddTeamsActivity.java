@@ -41,7 +41,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AddTeamsActivity extends AppCompatActivity {
 
@@ -63,9 +65,9 @@ public class AddTeamsActivity extends AppCompatActivity {
     private Uri selectedImageUri;
     private String imageUrlToSaveInDatabase;
     private String teamKey;
-    private String playerChipName;
-    private String playerAge;
-    private String selectedRole;
+
+    // HashMap to store player details
+    private Map<String, Players> playerDetailsMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,10 +207,8 @@ public class AddTeamsActivity extends AppCompatActivity {
                                 public void onSuccess(Uri downloadUrl) {
                                     // Store the download URL in Firebase Realtime Database
                                     imageUrlToSaveInDatabase = downloadUrl.toString();
-                                    // Add chip with role as tag
                                     // Save the details to Firebase structure
                                     uploadTeamDetails(); // After uploading image, proceed to upload team details
-                                    savePlayerDetails(playerChipName, selectedRole, playerAge);
                                 }
                             });
                         }
@@ -249,32 +249,71 @@ public class AddTeamsActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Void aVoid) {
                         // Save player details for each player
-//                        for (String playerName : playerNames) {
-//                            savePlayerDetails(playerName, "Role not specified", "Age not specified");
-//                        }
-                        progressBar.setVisibility(View.INVISIBLE); // Hide progress bar
-                        Toast.makeText(getApplicationContext(), "Uploaded Successfully to the database", Toast.LENGTH_SHORT).show();
-                        clearAllInputs();
+                        for (Map.Entry<String, Players> entry : playerDetailsMap.entrySet()) {
+                            String playerName = entry.getKey();
+                            Players playerDetails = entry.getValue();
+                            newTeamRef.child("players").child(playerName).setValue(playerDetails)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            // Successfully uploaded player details
+                                            progressBar.setVisibility(View.INVISIBLE); // Hide progress bar
+                                            Toast.makeText(getApplicationContext(), "Team uploaded successfully", Toast.LENGTH_SHORT).show();
+                                            // Clear the fields after successful upload
+                                            clearFields();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            // Handle failure to upload player details
+                                            progressBar.setVisibility(View.INVISIBLE); // Hide progress bar
+                                            Toast.makeText(getApplicationContext(), "Failed to upload player details", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        // Handle the error
+                        String errorMessage = e.getMessage();
                         progressBar.setVisibility(View.INVISIBLE); // Hide progress bar
-                        Toast.makeText(getApplicationContext(), "Failed to upload, Kindly repeat uploading", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), errorMessage, Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    // Method to clear all chips and reset input fields
-    private void clearAllInputs() {
-        chipGroup.removeAllViews(); // Clear all chips
-        dynamicChipEditText.setText(""); // Clear the input text field
-        uploadTeamName.setText(""); // Clear the team name field
-        leaguesSpinner.setSelection(0);// Reset the spinner selection
-        imageView.setImageResource(R.drawable.imageuploadicon);// Reset the imageView to default image
+    // Method to add a chip for a player
+    private void addChip(String playerName) {
+        final Chip chip = new Chip(this);
+        chip.setText(playerName);
+        chip.setCloseIconVisible(true);
+        chip.setChipBackgroundColor(ColorStateList.valueOf(Color.GRAY));
+        chip.setTextColor(Color.BLACK);
+        chip.setCloseIconTint(ColorStateList.valueOf(Color.RED));
+        chip.setOnCloseIconClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                chipGroup.removeView(chip);
+                playerDetailsMap.remove(playerName); // Remove player from HashMap
+            }
+        });
+
+        chip.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showEditPlayerDialog(playerName);
+            }
+        });
+
+        chipGroup.addView(chip);
+        // Prompt user to enter player details after adding a chip
+        showEditPlayerDialog(playerName);
     }
 
+    // Method to get names of players from chips
     private List<String> getChipNames() {
         List<String> names = new ArrayList<>();
         for (int i = 0; i < chipGroup.getChildCount(); i++) {
@@ -284,87 +323,74 @@ public class AddTeamsActivity extends AppCompatActivity {
         return names;
     }
 
-    // Launcher for the activity result of choosing an image
+    // Method to show dialog for editing player details
+    private void showEditPlayerDialog(String playerName) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Edit Player Details");
+
+        View viewInflated = LayoutInflater.from(this).inflate(R.layout.chip_card_layout, null);
+        builder.setView(viewInflated);
+
+        final TextView inputName = viewInflated.findViewById(R.id.playerNameTextView);
+        final EditText inputAge = viewInflated.findViewById(R.id.playerAgeChipEditText);
+        final Spinner roleSpinner = viewInflated.findViewById(R.id.teamRolesSpinner);
+
+        // Initialize spinner with roles
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, new String[]{"Forward", "Midfielder", "Defender", "Goalkeeper"});
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        roleSpinner.setAdapter(spinnerAdapter);
+
+        // If player details exist, populate the fields
+        Players existingPlayer = playerDetailsMap.get(playerName);
+        if (existingPlayer != null) {
+            inputName.setText(existingPlayer.getName());
+            inputAge.setText(existingPlayer.getAge());
+            int spinnerPosition = spinnerAdapter.getPosition(existingPlayer.getRole());
+            roleSpinner.setSelection(spinnerPosition);
+        } else {
+            inputName.setText(playerName);
+        }
+
+        builder.setPositiveButton("Save", (dialog, which) -> {
+            dialog.dismiss();
+            String name = inputName.getText().toString().trim();
+            String age = inputAge.getText().toString().trim();
+            String role = roleSpinner.getSelectedItem().toString();
+
+            if (!name.isEmpty() && !age.isEmpty() && !role.isEmpty()) {
+                Players player = new Players(name, age, role);
+                playerDetailsMap.put(name, player);
+                Toast.makeText(AddTeamsActivity.this, "Player details saved in chip!", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(AddTeamsActivity.this, "Please fill out all fields", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.cancel());
+
+        builder.show();
+    }
+
+    // Method to clear fields after successful upload
+    private void clearFields() {
+        uploadTeamName.setText("");
+        imageView.setImageURI(null);
+        selectedImageUri = null;
+        chipGroup.removeAllViews();
+        playerDetailsMap.clear();
+    }
+
+    // Method to handle image selection
     private final ActivityResultLauncher<Intent> chooseEventImageLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
                 if (result.getResultCode() == Activity.RESULT_OK) {
-                    // Handle the result, e.g., get the selected image URI
                     Intent data = result.getData();
-                    if (data != null && data.getData() != null) {
+                    if (data != null) {
                         selectedImageUri = data.getData();
                         imageView.setImageURI(selectedImageUri);
                     }
                 }
-            }
-    );
+            });
 
-    private void addChip(String name) {
-        Chip chip = new Chip(this);
-        chip.setText(name);
-        chip.setCloseIconVisible(true);
-        chip.setChipBackgroundColorResource(R.color.black);
-        chip.setTextColor(Color.WHITE);
-        chip.setCloseIconTint(ColorStateList.valueOf(Color.WHITE));
-        chip.setOnCloseIconClickListener(v -> chipGroup.removeView(chip));
-        chip.setOnClickListener(view -> showPlayerCard(name)); // Call card to add details
-        chipGroup.addView(chip);
-    }
-
-    private void showPlayerCard(String playerName) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.chip_card_layout, null);
-        builder.setView(dialogView);
-
-        // Initialize views
-        TextView playerNameTextView = dialogView.findViewById(R.id.playerNameTextView);
-        playerNameTextView.setText(playerName);
-        Spinner teamRolesSpinner = dialogView.findViewById(R.id.teamRolesSpinner);
-        TextInputEditText playerAgeChipEditText = dialogView.findViewById(R.id.playerAgeChipEditText);
-
-        // Set up spinner
-        String[] roles = {"N/A", "Goalkeeper", "Defender", "Midfielder", "Forward", "Winger"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, roles);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        teamRolesSpinner.setAdapter(adapter);
-
-        // Create and show the dialog
-        builder.setPositiveButton("Save", (dialog, which) -> {
-            // Retrieve data from views
-            playerChipName = playerNameTextView.getText().toString();
-            playerAge = playerAgeChipEditText.getText().toString();
-            selectedRole = (String) teamRolesSpinner.getSelectedItem();
-
-//            // Update chip text
-//            playerNameTextView.setText(playerChipName + " (" + selectedRole + ")");
-        });
-
-        // Show the dialog
-        AlertDialog alertDialog = builder.create();
-        alertDialog.show();
-    }
-
-    private void savePlayerDetails(String playerName, String playerRole, String playerAge) {
-        if (teamKey == null) {
-            Toast.makeText(getApplicationContext(), "Error: Team key is null", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        // Save to Firebase Realtime Database
-        DatabaseReference teamsRef = firebaseDatabase.getReference("teams");
-        teamsRef.child(teamKey).child("players").child(playerName).setValue(new Players(playerName, playerRole, playerAge))
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        Toast.makeText(getApplicationContext(), "Player details saved successfully", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(), "Failed to save player details", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
 }
