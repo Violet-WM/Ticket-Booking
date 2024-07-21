@@ -16,6 +16,9 @@
         tools:replace="android:icon"
         tools:targetApi="31">
         <activity
+            android:name=".Utils"
+            android:exported="false" />
+        <activity
             android:name=".Constants"
             android:exported="false" />
         <activity
