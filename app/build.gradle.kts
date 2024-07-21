@@ -25,6 +25,18 @@ android {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+
+        // Applying consumer keys to all build types using forEach
+        forEach { buildType ->
+            buildType.buildConfigField("String", "CONSUMER_KEY", "\"$darajaConsumerKey\"")
+            buildType.buildConfigField("String", "CONSUMER_SECRET", "\"$darajaConsumerSecret\"")
+        }
+    }
+
+    defaultConfig {
+        buildConfigField("String", "CONSUMER_KEY", "\"y1gBdlmMm1eMnY0xWcG0tvOAA1ADq0xAd4u9bx2mzP0GsYzg\"")
+        buildConfigField ("String", "CONSUMER_SECRET", "\"7BReXdLAvzXlin221Ug9zZtSmyLpMXrtrNJtrorrPBy8SU5FbyGwWSmz4vNYCBaA\"")
+        multiDexEnabled = true
     }
 
     buildFeatures{
