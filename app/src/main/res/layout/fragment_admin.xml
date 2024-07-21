@@ -1,490 +1,243 @@
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
     tools:context=".AdminFragment">
 
+        <TextView
+            android:id="@+id/adminTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/inter_extrabold"
+            android:text="Admin"
+            android:textColor="@color/black"
+            android:textSize="18dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
+        <TextView
+            android:id="@+id/eventsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/inter_bold"
+            android:text="Events"
+            android:textColor="#B5B2B2"
+            android:textSize="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.022"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/adminTextView" />
+
+        <ImageView
+            android:id="@+id/accountIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.041"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/eventsTextView"
+            app:srcCompat="@drawable/icons8_account_48" />
+
+        <TextView
+            android:id="@+id/addEventsTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/inter_bold"
+            android:text="Generate Events"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/eventsTextView"
+            app:layout_constraintTop_toBottomOf="@+id/eventsTextView" />
+
+    <Button
+        android:id="@+id/addEventsButton"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="104dp"
+        android:layout_marginTop="4dp"
+        android:text="Generate"
+        app:layout_constraintStart_toEndOf="@+id/addEventsTextView"
+        app:layout_constraintTop_toBottomOf="@+id/eventsTextView" />
+
+    <TextView
+            android:id="@+id/textView15"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/inter_light"
+            android:text="Add events to the database"
+            android:textColor="#B5B2B2"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/eventsTextView"
+            app:layout_constraintTop_toBottomOf="@+id/addEventsTextView" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/dividerEvents"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <!-- Title TextView displaying "Popular Events" -->
-        <TextView
-            android:id="@+id/popularEventstitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Popular Events"
-            android:textSize="30dp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginTop="30dp"
-            android:textColor="@color/black"
-            android:layout_centerHorizontal="true"/>
-
-        <!-- Container LinearLayout for image upload section -->
-
-        <!-- Title TextView displaying "Event 2" -->
-
-        <!-- Title TextView displaying "Popular Events" -->
-
-        <LinearLayout
-            android:id="@+id/popularEventslayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="15dp"
-            android:layout_marginBottom="40dp"
-            android:background="#D8D8D8"
-            android:orientation="vertical"
-            android:padding="20dp">
-
-            <!-- ImageView for displaying the selected image -->
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_below="@id/popularEventstitle"
-                android:layout_marginTop="40dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/imageuploadicon" />
-
-            <!-- Progress bar to show upload progress -->
-            <ProgressBar
-                android:id="@+id/progressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/uploadButton"
-                android:layout_centerHorizontal="true"
-                android:layout_gravity="center"
-                android:layout_margin="16dp"
-                android:visibility="invisible" />
-
-            <!-- LinearLayout for caption input and upload button -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="20dp">
-
-                <!-- EditText for adding a caption -->
-                <EditText
-                    android:id="@+id/uploadcaption"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_weight="0.6"
-                    android:background="@color/white"
-                    android:hint="Add a caption......"
-                    android:padding="4dp" />
-
-                <!-- FloatingActionButton for uploading the image -->
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/uploadButton"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:backgroundTint="@color/white"
-                    android:padding="20dp"
-                    android:src="@drawable/forwardarrow" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/ousvariteamsdetails"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text=" Teams Details"
-            android:textSize="25dp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginBottom="30dp"
-            android:textColor="@color/black"
-            android:layout_centerHorizontal="true"/>
-
-        <!-- EditText for adding title caption -->
-        <EditText
-            android:id="@+id/event2matchtitle"
-            android:layout_width="200dp"
-            android:layout_height="60dp"
-            android:layout_weight="0.6"
-            android:background="@color/white"
-            android:hint="Add match caption......"
-            android:padding="4dp"
-            android:gravity="center"
-            android:layout_marginStart="110dp"
-            android:layout_below="@+id/popularEventslayout"
-            android:layout_centerHorizontal="true"/>
-
-        <!-- Container LinearLayout for image upload section -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="15dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
-            android:padding="20dp"
-            android:layout_marginBottom="20dp"
-            android:background="#D8D8D8">
+        android:layout_marginTop="12dp"
+        app:dividerInsetEnd="16dp"
+        app:dividerInsetStart="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView15"
+        tools:layout_editor_absoluteX="0dp" />
 
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/detailscardview"
-                android:layout_width="250dp"
-                android:layout_height="120dp"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:layout_gravity="center_horizontal"
-                android:backgroundTint="#F5F5F5"
-                android:layout_marginTop="40dp"
-                app:cardCornerRadius="16dp">
+    <TextView
+        android:id="@+id/teamsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/inter_bold"
+        android:text="Teams"
+        android:textColor="#B5B2B2"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.022"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dividerEvents" />
 
-                <LinearLayout
-                    android:id="@+id/date"
-                    android:layout_width="match_parent"
-                    android:layout_height="23dp"
-                    android:gravity="center"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="15dp">
+    <ImageView
+        android:id="@+id/teamsIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.041"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/teamsTextView"
+        app:srcCompat="@drawable/icons8_account_48" />
 
-                    <ImageView
-                        android:id="@+id/dateImageView"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/date"
-                        android:layout_marginStart="10dp"/>
+    <TextView
+        android:id="@+id/addTeamsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/inter_bold"
+        android:text="Add Teams"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/teamsTextView"
+        app:layout_constraintTop_toBottomOf="@+id/teamsTextView" />
 
-                    <EditText
-                        android:id="@+id/dateTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="16dp"
-                        android:hint="Add Date caption."
-                        android:background="@color/white"
-                        android:padding="1.5dp"/>
+    <Button
+        android:id="@+id/addTeamsButton"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="8dp"
+        android:text="Add"
+        app:layout_constraintStart_toEndOf="@+id/addTeamsTextView"
+        app:layout_constraintTop_toBottomOf="@+id/teamsTextView" />
 
-                </LinearLayout>
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/inter_light"
+        android:text="Add statistics to the database"
+        android:textColor="#B5B2B2"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/statisticsTextView"
+        app:layout_constraintTop_toBottomOf="@+id/addStatisticsTextView" />
 
-                <LinearLayout
-                    android:id="@+id/location"
-                    android:layout_width="match_parent"
-                    android:layout_height="23dp"
-                    android:gravity="center"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="45dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_below="@+id/date">
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/dividerPlayers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        app:dividerInsetEnd="16dp"
+        app:dividerInsetStart="16dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView16"
+        tools:layout_editor_absoluteX="0dp" />
 
-                    <ImageView
-                        android:id="@+id/locationImageView"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/location" />
+    <!-- Team statistics -->
 
-                    <EditText
-                        android:id="@+id/locationTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:hint="Add Venue caption."
-                        android:background="@color/white"
-                        android:padding="1.5dp"/>
+    <TextView
+        android:id="@+id/statisticsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/inter_bold"
+        android:text="Statistics"
+        android:textColor="#B5B2B2"
+        android:textSize="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.022"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dividerPlayers" />
 
+    <ImageView
+        android:id="@+id/statisticsIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.041"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/statisticsTextView"
+        app:srcCompat="@drawable/icons8_account_48" />
 
-                </LinearLayout>
+    <TextView
+        android:id="@+id/addStatisticsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/inter_bold"
+        android:text="Add Statistics"
+        android:textColor="@color/black"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/statisticsTextView"
+        app:layout_constraintTop_toBottomOf="@+id/statisticsTextView" />
 
-                <LinearLayout
-                    android:id="@+id/time"
-                    android:layout_width="match_parent"
-                    android:gravity="center"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_height="23dp"
-                    android:layout_marginTop="75dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_below="@+id/location">
+    <Button
+        android:id="@+id/addStatisticsButton"
+        style="?attr/materialButtonOutlinedStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="116dp"
+        android:layout_marginTop="8dp"
+        android:text="Add"
+        app:layout_constraintStart_toEndOf="@+id/addStatisticsTextView"
+        app:layout_constraintTop_toBottomOf="@+id/statisticsTextView" />
 
-                    <ImageView
-                        android:id="@+id/timeImageView"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:layout_marginStart="20dp"
-                        android:src="@drawable/time" />
-
-                    <EditText
-                        android:id="@+id/timeTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="28dp"
-                        android:hint="Add Time caption."
-                        android:background="@color/white"
-                        android:padding="1.5dp"/>
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
-
-            <!-- ImageView for displaying the selected image -->
-            <ImageView
-                android:id="@+id/imageView2"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_marginTop="40dp"
-                android:layout_below="@id/event2matchtitle"
-                android:scaleType="fitXY"
-                android:src="@drawable/imageuploadicon" />
-
-            <RelativeLayout
-                android:id="@+id/matcheslayout"
-                android:layout_width="340dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="25dp"
-                android:orientation="horizontal">
-
-                <!-- ImageView for displaying the selected team logo image -->
-                <ImageView
-                    android:id="@+id/teamlogo1"
-                    android:layout_width="90dp"
-                    android:layout_height="100dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/imageuploadicon" />
-
-                <!-- EditText for adding a caption -->
-                <EditText
-                    android:id="@+id/uploadcaptionvs"
-                    android:layout_width="50dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="0.6"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginBottom="30dp"
-                    android:layout_marginStart="140dp"
-                    android:background="@color/white"
-                    android:hint="Add a caption......"
-                    android:padding="4dp" />
-
-                <!-- ImageView for displaying the selected team logo  image -->
-                <ImageView
-                    android:id="@+id/teamlogo2"
-                    android:layout_width="90dp"
-                    android:layout_height="100dp"
-                    android:layout_marginStart="240dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/imageuploadicon" />
-
-            </RelativeLayout>
-
-            <!--team statistics title-->
-            <TextView
-                android:id="@+id/teamstatisticstitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Teams Statistics"
-                android:textSize="30dp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:layout_marginTop="30dp"
-                android:textColor="@color/black"
-                android:layout_centerHorizontal="true"/>
-
-            <!--team statistics -->
-            <RelativeLayout
-                android:id="@+id/teamsstatistics"
-                android:layout_width="340dp"
-                android:layout_height="100dp"
-                android:layout_below="@id/matcheslayout"
-                android:layout_marginTop="25dp"
-                android:orientation="horizontal">
-
-                <!-- Team Name -->
-                <EditText
-                    android:id="@+id/teamtexts"
-                    android:background="@color/white"
-                    android:layout_width="150dp"
-                    android:layout_height="50dp"
-                    android:padding="5dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:hint="Team Name......"
-                    android:layout_marginBottom="20dp"
-                    android:scaleType="fitXY"/>
-
-                <!-- Team statistics -->
-                <EditText
-                    android:id="@+id/statistics"
-                    android:layout_width="150dp"
-                    android:padding="5dp"
-                    android:layout_height="50dp"
-                    android:hint="Team statistics......"
-                    android:background="@color/white"
-                    android:layout_marginStart="180dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:scaleType="fitXY"/>
-
-            </RelativeLayout>
-
-            <!--Players-->
-            <TextView
-                android:id="@+id/Playerstitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Players "
-                android:textSize="30dp"
-                android:textStyle="bold"
-                android:gravity="center"
-                android:layout_marginTop="30dp"
-                android:textColor="@color/black"
-                android:layout_centerHorizontal="true"/>
-
-            <!--team players -->
-            <RelativeLayout
-                android:id="@+id/teamsplayersstatistics"
-                android:layout_width="340dp"
-                android:layout_height="100dp"
-                android:layout_below="@id/matcheslayout"
-                android:layout_marginTop="25dp"
-                android:orientation="horizontal">
-
-                <!-- Team Name -->
-                <EditText
-                    android:id="@+id/teamplayerstexts"
-                    android:background="@color/white"
-                    android:layout_width="150dp"
-                    android:layout_height="50dp"
-                    android:padding="5dp"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="20dp"
-                    android:hint="Team Name......"
-                    android:layout_marginBottom="20dp"
-                    android:scaleType="fitXY"/>
-
-                <!-- Players Names -->
-                <EditText
-                    android:id="@+id/lineup"
-                    android:layout_width="150dp"
-                    android:padding="5dp"
-                    android:layout_height="50dp"
-                    android:hint="Players Names......"
-                    android:background="@color/white"
-                    android:layout_marginStart="180dp"
-                    android:layout_marginTop="20dp"
-                    android:layout_marginBottom="20dp"
-                    android:scaleType="fitXY" />
-
-            </RelativeLayout>
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:fontFamily="@font/inter_light"
+        android:text="Add teams to the database"
+        android:textColor="#B5B2B2"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/teamsTextView"
+        app:layout_constraintTop_toBottomOf="@+id/addTeamsTextView" />
 
 
-            <!-- Progress bar to show upload progress -->
-            <ProgressBar
-                android:id="@+id/progressBar2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/uploadButton2"
-                android:layout_margin="16dp"
-                android:layout_gravity="center"
-                android:layout_centerHorizontal="true"
-                android:visibility="invisible" />
 
-        </LinearLayout>
-
-        <!-- FloatingActionButton for uploading Teams Details -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/uploadButton2"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="170dp"
-            android:padding="20dp"
-            android:backgroundTint="@color/design_default_color_secondary"
-            android:layout_marginBottom="5dp"
-            android:src="@drawable/forwardarrow" />
-
-
-        <!-- Title TextView displaying "Event 3" -->
-        <TextView
-            android:id="@+id/event3title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Event 3"
-            android:textSize="30dp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginTop="30dp"
-            android:textColor="@color/black"
-            android:layout_centerHorizontal="true"/>
-
-        <!-- Container LinearLayout for image upload section -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="15dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginEnd="15dp"
-            android:padding="20dp"
-            android:layout_marginBottom="40dp"
-            android:background="#D8D8D8">
-
-            <!-- ImageView for displaying the selected image -->
-            <ImageView
-                android:id="@+id/imageView3"
-                android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_marginTop="40dp"
-                android:layout_below="@id/event3title"
-                android:scaleType="fitXY"
-                android:src="@drawable/imageuploadicon" />
-
-            <!-- Progress bar to show upload progress -->
-            <ProgressBar
-                android:id="@+id/progressBar3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/uploadButton3"
-                android:layout_margin="16dp"
-                android:layout_gravity="center"
-                android:layout_centerHorizontal="true"
-                android:visibility="invisible" />
-
-            <!-- LinearLayout for caption input and upload button -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="20dp"
-                android:orientation="horizontal">
-
-                <!-- EditText for adding a caption -->
-                <EditText
-                    android:id="@+id/uploadcaption3"
-                    android:layout_width="0dp"
-                    android:layout_height="60dp"
-                    android:layout_weight="0.6"
-                    android:background="@color/white"
-                    android:hint="Add a caption......"
-                    android:padding="4dp" />
-
-                <!-- FloatingActionButton for uploading the image -->
-                <com.google.android.material.floatingactionbutton.FloatingActionButton
-                    android:id="@+id/uploadButton3"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:backgroundTint="@color/white"
-                    android:padding="20dp"
-                    android:src="@drawable/forwardarrow" />
-
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

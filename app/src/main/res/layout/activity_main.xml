@@ -4,65 +4,41 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/mainactivitybackground"
+    android:background="#F8FAFB"
     tools:context=".MainActivity">
 
-    <!-- Title TextView -->
-
-    <!-- Image View -->
-
-    <!-- Welcome TextView -->
-
-    <!-- Description TextView -->
+    <FrameLayout
+        android:id="@+id/frame_layout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/txtCreateAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentBottom="true"
-        android:layout_marginTop="389dp"
-        android:layout_marginEnd="1dp"
-        android:layout_marginBottom="272dp"
-        android:fontFamily="cursive"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="10dp"
         android:gravity="center_horizontal"
-        android:text="STADIUM TICKET BOOKING APPLICATION"
-        android:textColor="#03A9F4"
-        android:textSize="27dp"
-        android:textStyle="bold" />
-
-
-    <!-- Get Started -->
-    <TextView
-        android:id="@+id/txt1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/txtCreateAccount"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="-200dp"
-        android:fontFamily="cursive"
-        android:gravity="center"
-        android:text="Welcome to our Stadium Ticket Booking System!"
+        android:text="Stadium Ticket Booking"
         android:textColor="@color/black"
-        android:textSize="21dp"
-        android:textStyle="bold" />
+        android:textSize="30dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn"
-        android:layout_width="136dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/txt"
-        android:layout_alignEnd="@+id/txt"
-        android:layout_alignBottom="@+id/txt"
         android:layout_alignParentBottom="true"
-        android:layout_marginStart="120dp"
-        android:layout_marginEnd="115dp"
-        android:layout_marginBottom="40dp"
         android:backgroundTint="#277ee4"
-        android:gravity="center"
         android:text="Get Started"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="10dp"
+        />
+
 
 </RelativeLayout>

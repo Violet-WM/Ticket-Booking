@@ -43,7 +43,7 @@ public class Home extends AppCompatActivity {
                 } else if (item.getItemId() == R.id.admin) {
                     replaceFragment(new AdminFragment());
                 }
-                return false;
+                return true;
             }
         });
 

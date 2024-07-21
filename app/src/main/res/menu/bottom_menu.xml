@@ -5,33 +5,33 @@
         android:id="@+id/home"
         android:title="Home"
         android:enabled="true"
-        android:icon="@drawable/baseline_home_24" />
+        android:icon="@drawable/ic_home" />
 
     <!-- Tickets item -->
     <item
         android:id="@+id/tickets"
         android:title="Tickets"
         android:enabled="true"
-        android:icon="@drawable/baseline_ticket_24" />
+        android:icon="@drawable/ic_ticket" />
 
     <!-- Transactions item -->
     <item
         android:id="@+id/transactions"
         android:title="Transactions"
         android:enabled="true"
-        android:icon="@drawable/baseline_local_transactions_24" />
+        android:icon="@drawable/ic_transactions" />
 
     <!-- Settings item -->
     <item
         android:id="@+id/settings"
         android:title="Settings"
         android:enabled="true"
-        android:icon="@drawable/baseline_settings_24" />
+        android:icon="@drawable/ic_settings" />
 
     <!-- Admin item -->
     <item
         android:id="@+id/admin"
         android:title="Admin"
         android:enabled="true"
-        android:icon="@drawable/baseline_person_24" />
+        android:icon="@drawable/ic_admin" />
 </menu>
