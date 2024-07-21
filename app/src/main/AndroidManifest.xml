@@ -14,7 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TicketCard"
         tools:targetApi="31">
-
+        <activity
+            android:name=".Payment"
+            android:exported="false" />
         <activity
             android:name=".Buyticket"
             android:exported="false" />
