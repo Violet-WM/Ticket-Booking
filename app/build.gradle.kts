@@ -33,6 +33,11 @@ android {
         }
     }
 
+    buildFeatures {
+        // Enable custom BuildConfig fields
+        buildConfig = true
+    }
+
     defaultConfig {
         buildConfigField("String", "CONSUMER_KEY", "\"y1gBdlmMm1eMnY0xWcG0tvOAA1ADq0xAd4u9bx2mzP0GsYzg\"")
         buildConfigField ("String", "CONSUMER_SECRET", "\"7BReXdLAvzXlin221Ug9zZtSmyLpMXrtrNJtrorrPBy8SU5FbyGwWSmz4vNYCBaA\"")
