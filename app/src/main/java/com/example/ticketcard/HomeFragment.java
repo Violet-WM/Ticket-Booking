@@ -8,9 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.ButtonBarLayout;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,6 +34,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView eventsRecyclerView;
     EventsAdapter eventsAdapter;
     List<Event> eventsList;
+    private Button cardButton;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -39,6 +42,14 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+
+        cardButton = view.findViewById(R.id.cardButton);
+
+        // Set an OnClickListener to the button to handle click events
+        cardButton.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), Payment.class);
+            startActivity(intent);
+        });
 
         // Retrieve the user name from SharedPreferences
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
