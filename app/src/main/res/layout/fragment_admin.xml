@@ -158,7 +158,7 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/statisticsTextView"
+        app:layout_constraintStart_toStartOf="@+id/addTeamsTextView"
         app:layout_constraintTop_toBottomOf="@+id/addStatisticsTextView" />
 
     <com.google.android.material.divider.MaterialDivider
@@ -210,7 +210,7 @@
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/statisticsTextView"
+        app:layout_constraintStart_toEndOf="@+id/teamsTextView"
         app:layout_constraintTop_toBottomOf="@+id/statisticsTextView" />
 
     <Button
