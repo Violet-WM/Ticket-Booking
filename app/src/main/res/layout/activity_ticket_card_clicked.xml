@@ -384,5 +384,4 @@
         app:layout_constraintTop_toBottomOf="@+id/textViewTeamOne"
         tools:layout_editor_absoluteX="16dp" />
 
-
 </androidx.constraintlayout.widget.ConstraintLayout>
