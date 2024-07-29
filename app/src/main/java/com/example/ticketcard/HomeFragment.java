@@ -12,7 +12,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.ButtonBarLayout;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -54,6 +53,10 @@ public class HomeFragment extends Fragment {
         // Retrieve the user name from SharedPreferences
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         String userName = sharedPreferences.getString("userName", "user"); // "User" is the default value if "userName" is not found
+        String userEmail = sharedPreferences.getString("userEmail", "email");
+
+        Log.d("HomeFragment", "Username is  " + userName);
+        Log.d("HomeFragment", "User email is " + userEmail);
 
         // Initialize the RecyclerView
         eventsRecyclerView = view.findViewById(R.id.popular_events_recycler_view);
@@ -77,6 +80,8 @@ public class HomeFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), TicketCardClicked.class);
                 intent.putExtra("imageURL", imageUrl);
                 intent.putExtra("imageDescription", imageDescription);
+                intent.putExtra("userName", userName);
+                intent.putExtra("userEmail", userEmail);
                 startActivity(intent);
             }
         });
