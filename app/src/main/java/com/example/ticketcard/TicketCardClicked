@@ -1,0 +1,106 @@
+ private void fetchTeamData(String teamOne, String teamTwo) {
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("teams");
+        db.orderByChild("teamName").equalTo(teamOne).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                playersList.clear();
+
+                for (DataSnapshot teamSnapshot : dataSnapshot.getChildren()) {
+                    for (DataSnapshot playerSnapshot : teamSnapshot.child("players").getChildren()) {
+                        Players player = playerSnapshot.getValue(Players.class);
+                        if (player != null) {
+                            playersList.add(player);
+                        }
+                    }
+
+                    // If teamOne exists in db get details and load the image and team name
+                    if (teamSnapshot.exists()) {
+                        teamOneButton.setText(teamSnapshot.child("teamName").getValue(String.class));
+                        String imageUrl = teamSnapshot.child("teamLogoUrl").getValue(String.class);
+                        Glide.with(getApplicationContext()).load(imageUrl).into(roundedImageViewTeamOne);
+                    }
+
+                    // Fetch statistics
+                    DataSnapshot statsSnapshot = teamSnapshot.child("stats");
+                    if (statsSnapshot.exists()) {
+                        String wins = statsSnapshot.child("wins").getValue(String.class);
+                        String loss = statsSnapshot.child("loss").getValue(String.class);
+                        String draws = statsSnapshot.child("draws").getValue(String.class);
+                        String matches = statsSnapshot.child("matches").getValue(String.class);
+
+                        winsTextView.setText(wins != null ? wins : "0");
+                        lossTextView.setText(loss != null ? loss : "0");
+                        drawsTextView.setText(draws != null ? draws : "0");
+                        matchesTextView.setText(matches != null ? matches : "0");
+                    }
+                }
+                playersAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.e("Firebase Database Error", "Error getting data: ", databaseError.toException());
+            }
+        });
+    }
+
+    private List<StadiumViews> fetchStadiumViews() {
+        DatabaseReference db = FirebaseDatabase.getInstance().getReference("venues");
+        db.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                stadiumViewsList = new ArrayList<>();
+                for (DataSnapshot venueSnapshot : dataSnapshot.getChildren()) {
+                    DataSnapshot stadiumViewsSnapshot = venueSnapshot.child("stadiumViews");
+                    for (DataSnapshot snapshot : stadiumViewsSnapshot.getChildren()) {
+                        StadiumViews stadiumViews = snapshot.getValue(StadiumViews.class);
+                        if (stadiumViews != null) {
+                            stadiumViewsList.add(stadiumViews);
+                        }
+                    }
+                }
+
+                // Initialize the adapter with an empty list if no data
+                if (stadiumViewsList != null) {
+                    // Update the adapter with the fetched events
+                    stadiumViewsAdapter.setEvents(stadiumViewsList);
+                    stadiumViewsAdapter.notifyDataSetChanged();
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Log.d("Firebase Database Error", "Error getting data: ", databaseError.toException());
+            }
+        });
+        return stadiumViewsList;
+    }
+
+    private List<String> fetchSeats() {
+        DatabaseReference databaseReference;
+        databaseReference = FirebaseDatabase.getInstance().getReference("venues");
+
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                stadiumViewsList.clear();
+                for (DataSnapshot venueSnapshot : dataSnapshot.getChildren()) {
+                    DataSnapshot seatNamesSnapShot = venueSnapshot.child("seatNames");
+                    for(DataSnapshot snapshot : seatNamesSnapShot.getChildren()) {
+                        String seat = snapshot.getValue(String.class);
+                        seatsList.add(seat);
+                    }
+                }
+                seatsAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Handle possible errors.
+            }
+        });
+
+        return seatsList;
+    }

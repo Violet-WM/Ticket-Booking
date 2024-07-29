@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageView;
@@ -20,6 +19,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -95,13 +96,13 @@ public class StadiumSeats extends AppCompatActivity {
         });
 
         // Handle buy ticket button click
-        buyticket.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), Payment.class));
-            }
-        });
-        //buyticket.setOnClickListener(v -> reserveSelectedSeats());
+//        buyticket.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                startActivity(new Intent(getApplicationContext(), Payment.class));
+//            }
+//        });
+        buyticket.setOnClickListener(v -> reserveSelectedSeats());
     }
 
     // Setup seat selection grid
@@ -237,15 +238,15 @@ public class StadiumSeats extends AppCompatActivity {
         }
 
         // Update remaining seats in a transaction to ensure consistency
-        metadataRef.child("seating").runTransaction(new DatabaseReference.Transaction.Handler() {
+        metadataRef.child("seating").runTransaction(new Transaction.Handler() {
             @Override
-            public DatabaseReference.Transaction.Result doTransaction(MutableData mutableData) {
+            public Transaction.Result doTransaction(MutableData mutableData) {
                 Integer remainingSeats = mutableData.child("remainingSeats").getValue(Integer.class);
                 if (remainingSeats == null) {
-                    return DatabaseReference.Transaction.success(mutableData);
+                    return Transaction.success(mutableData);
                 }
                 mutableData.child("remainingSeats").setValue(remainingSeats - selectedSeats.size());
-                return DatabaseReference.Transaction.success(mutableData);
+                return Transaction.success(mutableData);
             }
 
             @Override

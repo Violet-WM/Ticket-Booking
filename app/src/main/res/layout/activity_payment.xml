@@ -28,7 +28,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        app:cardBackgroundColor="#0E8901"
         app:cardCornerRadius="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,41 +40,55 @@
             android:padding="16dp">
 
             <!-- Phone number input field -->
-            <EditText
-                android:id="@+id/etPhone"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/outlinedTextField"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="0701234568"
-                android:layout_marginEnd="30dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginStart="30dp"
-                android:background="@color/white"
-                android:inputType="phone" />
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:hint="Phone no."
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/infoText">
+
+                <!-- This is the actual edit text which takes the input -->
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="phone"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Amount input field -->
-            <EditText
-                android:id="@+id/etAmount"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/outlinedTextField2"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:hint="Amount to pay"
-                android:layout_marginEnd="30dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginStart="30dp"
-                android:background="@color/white"
-                android:inputType="number" />
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:hint="Price"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/infoText">
+
+                <!-- This is the actual edit text which takes the input -->
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etAmount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:editable="false"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
             <!-- Pay Now button -->
             <Button
                 android:id="@+id/btnPay"
-                android:backgroundTint="@color/white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Pay Now"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="30dp"
-                android:textColor="@color/black"
                 android:layout_gravity="center_horizontal" />
 
         </LinearLayout>
