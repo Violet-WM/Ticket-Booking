@@ -45,7 +45,7 @@ public class TicketCardClicked extends AppCompatActivity {
     private PlayersAdapter playersAdapter;
     private List<Players> playersList;
     private List<String> seatsList;
-    private ImageView roundedImageViewTeamOne, roundedImageViewTeamTwo;
+    private ImageView roundedImageViewTeamOne, roundedImageViewTeamTwo, backarrowtofkf;
     private TextView winsTextView, lossTextView, drawsTextView, matchesTextView;
     private TextView textViewTeamOne, textViewTeamTwo;
     private Button teamOneButton, teamTwoButton, bookYourSeat;
@@ -83,6 +83,8 @@ public class TicketCardClicked extends AppCompatActivity {
 
         textViewTeamOne = findViewById(R.id.textViewTeamOne);
         textViewTeamTwo = findViewById(R.id.textViewTeamTwo);
+        backarrowtofkf = findViewById(R.id.backarrowtcc);
+
 
         teamOneButton = findViewById(R.id.addTeamsButton);
         teamTwoButton = findViewById(R.id.addVenuesButton);
@@ -103,6 +105,16 @@ public class TicketCardClicked extends AppCompatActivity {
         matchesTextView = findViewById(R.id.matchesText);
 
         bookYourSeat = findViewById(R.id.bookYourSeat);
+
+        backarrowtofkf.setOnClickListener(view ->{
+            Intent intent = new Intent(TicketCardClicked.this, FkfPremierLeague.class);
+            startActivity(intent);
+        });
+
+      /*  bookYourSeat.setOnClickListener(view -> {
+            Intent intent = new Intent(TicketCardClicked.this, BottomSheetDialog.class);
+            startActivity(intent);
+        });*/
 
         bookYourSeat.setOnClickListener(view -> {
             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(TicketCardClicked.this);
@@ -175,10 +187,7 @@ public class TicketCardClicked extends AppCompatActivity {
 
                 startActivity(intent);
                 bottomSheetDialog.dismiss();
-            });
-
-
-        });
+            });});
 
         fetchTeamData(textViewTeamOne.getText().toString(), textViewTeamTwo.getText().toString());
     }

@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
             // User is logged in, redirect to Home activity
             Intent intent = new Intent(getApplicationContext(), Home.class);
             startActivity(intent);
+            finish();
         }
         else
         {
