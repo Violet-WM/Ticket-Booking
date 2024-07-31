@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/matchup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Team A vs Team B"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/matchDetails"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="17:00 HRS . 23 August 2024 . Friday, Round 1"
+        android:textSize="14sp" />
+</LinearLayout>

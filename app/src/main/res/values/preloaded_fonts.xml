@@ -11,6 +11,7 @@
         <item>@font/poppins_extrabold</item>
         <item>@font/poppins_extrabold_italic</item>
         <item>@font/poppins_italic</item>
+        <item>@font/poppins_light</item>
         <item>@font/poppins_medium</item>
         <item>@font/poppins_semibold</item>
     </array>

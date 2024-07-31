@@ -309,7 +309,7 @@ public class TicketCardClicked extends AppCompatActivity {
                     }
                 }
             }
-
+            
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 

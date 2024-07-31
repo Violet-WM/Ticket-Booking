@@ -16,6 +16,12 @@
         tools:replace="android:icon"
         tools:targetApi="31">
         <activity
+            android:name=".AdminDashboard"
+            android:exported="false" />
+        <activity
+            android:name=".AddVenuesActivity"
+            android:exported="false" />
+        <activity
             android:name=".TicketGeneration"
             android:exported="false" />
         <activity

@@ -13,12 +13,13 @@
         android:id="@+id/adminTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:fontFamily="@font/inter_extrabold"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/poppins_light"
         android:text="Admin"
         android:textColor="@color/black"
-        android:textSize="18dp"
+        android:textSize="24dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.045"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

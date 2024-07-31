@@ -68,6 +68,7 @@ public class AddTeamsFragment extends Fragment {
     private Uri selectedImageUri;
     private String imageUrlToSaveInDatabase;
     private String teamKey;
+    private TextInputEditText homeStadium;
 
     // HashMap to store player details
     private Map<String, Players> playerDetailsMap = new HashMap<>();
@@ -83,8 +84,7 @@ public class AddTeamsFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_add_teams, container, false);
 
-        String[] leagues = {"N/A", "League not shown!", "FKF Premier League", "FKF Women Premier League",
-                "National Super League"};
+        String[] leagues = {"Kenya Premier League", "National Super League", "Women's Premier League"};
 
         dynamicChipEditText = view.findViewById(R.id.dynamicChipEditText);
         chipGroup = view.findViewById(R.id.chipGroup);
@@ -155,6 +155,7 @@ public class AddTeamsFragment extends Fragment {
         imageView = view.findViewById(R.id.imageView);
         uploadButton = view.findViewById(R.id.uploadButton);
         progressBar = view.findViewById(R.id.progressBar);
+        homeStadium = view.findViewById(R.id.homeStadium);
 
         // Set onClick listener for choosing an image
         imageView.setOnClickListener(onClick -> {
@@ -168,9 +169,14 @@ public class AddTeamsFragment extends Fragment {
                 // Check if all required fields are filled
                 String teamName = uploadTeamName.getText().toString().trim();
                 String selectedLeague = leaguesSpinner.getSelectedItem().toString();
+                String homeName = homeStadium.getText().toString().trim();
 
                 if (teamName.isEmpty()) {
                     Toast.makeText(getActivity(), "Please enter a team name", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(homeName.isEmpty()) {
+                    Toast.makeText(getActivity(), "Please enter home stadium", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 // Validate number of chips
@@ -244,10 +250,11 @@ public class AddTeamsFragment extends Fragment {
     private void uploadTeamDetails() {
         String teamName = uploadTeamName.getText().toString();
         String teamLeague = leaguesSpinner.getSelectedItem().toString();
+        String home = homeStadium.getText().toString();
         List<String> playerNames = getChipNames();
 
         // Create a Teams object
-        Teams teams = new Teams(imageUrlToSaveInDatabase, teamName, teamLeague, playerNames);
+        Teams teams = new Teams(imageUrlToSaveInDatabase, teamName, teamLeague, home, playerNames);
 
         // Get a reference to the "teams" node in Firebase Realtime Database
         DatabaseReference teamsRef = firebaseDatabase.getReference("teams");
@@ -270,6 +277,8 @@ public class AddTeamsFragment extends Fragment {
                                             // Successfully uploaded player details
                                             progressBar.setVisibility(View.INVISIBLE); // Hide progress bar
                                             Toast.makeText(getActivity(), "Team uploaded successfully", Toast.LENGTH_SHORT).show();
+                                            Intent intent = new Intent(getActivity(), AddVenuesActivity.class);
+                                            startActivity(intent);
                                             // Clear the fields after successful upload
                                             clearFields();
                                         }
@@ -385,6 +394,7 @@ public class AddTeamsFragment extends Fragment {
     // Method to clear fields after successful upload
     private void clearFields() {
         uploadTeamName.setText("");
+        homeStadium.setText("");
         imageView.setImageURI(null);
         selectedImageUri = null;
         chipGroup.removeAllViews();

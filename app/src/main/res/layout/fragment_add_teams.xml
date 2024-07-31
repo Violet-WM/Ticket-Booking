@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    tools:context=".AddTeamsFragment">
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+<androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:background="@color/white"
+        tools:context=".AddTeamsActivity">
 
         <!-- ImageView for displaying the selected image -->
 
@@ -102,6 +99,26 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/teamEditText" />
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField1"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:hint="Enter Home Stadium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/leaguesSpinner">
+
+            <!-- This is the actual edit text which takes the input -->
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/homeStadium"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
         <TextView
             android:id="@+id/infoText"
             android:layout_width="match_parent"
@@ -111,7 +128,7 @@
             android:fontFamily="@font/inter_light"
             android:text="Enter player names below and separate with , (comma)"
             android:textColor="#B5B5B5"
-            app:layout_constraintTop_toBottomOf="@+id/leaguesSpinner"
+            app:layout_constraintTop_toBottomOf="@+id/outlinedTextField1"
             tools:layout_editor_absoluteX="16dp" />
 
         <com.google.android.material.textfield.TextInputLayout
@@ -155,5 +172,3 @@
             app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-</FrameLayout>
