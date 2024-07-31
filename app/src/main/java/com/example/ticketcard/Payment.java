@@ -18,8 +18,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.Base64;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -144,7 +147,7 @@ public class Payment extends AppCompatActivity implements View.OnClickListener {
         mProgressDialog.show();
 
         // Generate encoded password for authentication
-        String timestamp = com.example.ticketcard.Utils.getTimestamp();
+        String timestamp = getTimestamps();
         String toEncode = "174379" + "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919" + timestamp;
 
         // Encode password using Base64
@@ -156,6 +159,7 @@ public class Payment extends AppCompatActivity implements View.OnClickListener {
             encodedPassword = android.util.Base64.encodeToString(byteArray, android.util.Base64.NO_WRAP);
         }
 
+
         // Create STKPush object with required parameters
         STKPush stkPush = new STKPush(
                 "174379",  // BusinessShortCode
@@ -165,7 +169,7 @@ public class Payment extends AppCompatActivity implements View.OnClickListener {
                 Integer.parseInt(amount),  // Amount
                 "254715798225",  // PartyA
                 "174379",  // PartyB
-                com.example.ticketcard.Utils.sanitizePhoneNumber(phone_number),  // PhoneNumber
+                sanitizePhoneNumber(phone_number),  // PhoneNumber
                 "https://mydomain.com/path",  // CallBackURL
                 "CompanyXLTD",  // AccountReference
                 "Payment of X"  // TransactionDesc
@@ -282,5 +286,22 @@ public class Payment extends AppCompatActivity implements View.OnClickListener {
     }
 
 
+    // Method to get the current timestamp
+    private String getTimestamps() {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss", Locale.getDefault());
+        return sdf.format(new Date()).toString();
+    }
+
+    // Method to sanitize the phone number
+    public static String sanitizePhoneNumber(String phoneNumber) {
+        if (phoneNumber.startsWith("0")) {
+            return phoneNumber.replaceFirst("0", "254");
+        } else if (phoneNumber.startsWith("+")) {
+            return phoneNumber.replace("+", "");
+        } else if (phoneNumber.startsWith("7")) {
+            return "254" + phoneNumber;
+        }
+        return phoneNumber;
+    }
 
 }
