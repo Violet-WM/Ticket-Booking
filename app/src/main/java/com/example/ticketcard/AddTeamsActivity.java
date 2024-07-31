@@ -342,7 +342,7 @@ public class AddTeamsActivity extends AppCompatActivity {
         builder.setView(viewInflated);
 
         final TextView inputName = viewInflated.findViewById(R.id.playerNameTextView);
-        final EditText inputAge = viewInflated.findViewById(R.id.playerAgeChipEditText);
+        final EditText inputNo = viewInflated.findViewById(R.id.playerNoChipEditText);
         final Spinner roleSpinner = viewInflated.findViewById(R.id.teamRolesSpinner);
 
         // Initialize spinner with roles
@@ -354,7 +354,7 @@ public class AddTeamsActivity extends AppCompatActivity {
         Players existingPlayer = playerDetailsMap.get(playerName);
         if (existingPlayer != null) {
             inputName.setText(existingPlayer.getName());
-            inputAge.setText(existingPlayer.getAge());
+            inputNo.setText(existingPlayer.getNo());
             int spinnerPosition = spinnerAdapter.getPosition(existingPlayer.getRole());
             roleSpinner.setSelection(spinnerPosition);
         } else {
@@ -364,11 +364,11 @@ public class AddTeamsActivity extends AppCompatActivity {
         builder.setPositiveButton("Save", (dialog, which) -> {
             dialog.dismiss();
             String name = inputName.getText().toString().trim();
-            String age = inputAge.getText().toString().trim();
+            String no = inputNo.getText().toString().trim();
             String role = roleSpinner.getSelectedItem().toString();
 
-            if (!name.isEmpty() && !age.isEmpty() && !role.isEmpty()) {
-                Players player = new Players(name, age, role);
+            if (!name.isEmpty() && !no.isEmpty() && !role.isEmpty()) {
+                Players player = new Players(name, no, role);
                 playerDetailsMap.put(name, player);
                 Toast.makeText(AddTeamsActivity.this, "Player details saved in chip!", Toast.LENGTH_SHORT).show();
             } else {

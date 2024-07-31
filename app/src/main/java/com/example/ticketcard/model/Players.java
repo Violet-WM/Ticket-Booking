@@ -3,16 +3,16 @@ package com.example.ticketcard.model;
 public class Players {
     private String name;
     private String role;
-    private String age;
+    private String no;
 
     // No argument constructor needed for Firebase
     public Players() {
     }
 
-    public Players(String name, String role, String age) {
+    public Players(String name, String role, String no) {
         this.name = name;
         this.role = role;
-        this.age = age;
+        this.no = no;
     }
 
 
@@ -32,11 +32,11 @@ public class Players {
         this.role = role;
     }
 
-    public String getAge() {
-        return age;
+    public String getNo() {
+        return no;
     }
 
-    public void setAge(String age) {
-        this.age = age;
+    public void setNo(String age) {
+        this.no = no;
     }
 }

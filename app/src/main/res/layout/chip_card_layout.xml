@@ -21,7 +21,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Enter Age"
+        android:hint="Enter player No."
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -30,7 +30,7 @@
 
         <!-- This is the actual edit text which takes the input -->
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/playerAgeChipEditText"
+            android:id="@+id/playerNoChipEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
