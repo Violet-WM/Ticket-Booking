@@ -151,7 +151,7 @@ public class AddVenuesActivity extends AppCompatActivity {
         DatabaseReference newVenueRef = venuesRef.push(); // Create a new child under "venues"
 
         // Create a venue object to store in Firebase
-        AddVenuesFragment.Venue venue = new AddVenuesFragment.Venue(venueName, seatCapacity, seatNames);
+        Venue venue = new Venue(venueName, seatCapacity, seatNames);
 
         newVenueRef.setValue(venue).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {

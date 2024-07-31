@@ -36,7 +36,7 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
 
         holder.nameTextView.setText(player.getName());
         holder.roleTextView.setText(player.getRole());
-        holder.ageTextView.setText(player.getAge());
+        holder.ageTextView.setText(player.getNo());
     }
 
     @Override
