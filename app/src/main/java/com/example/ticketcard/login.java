@@ -97,6 +97,17 @@ public class login extends AppCompatActivity {
                         if (passwordFromDB != null && passwordFromDB.equals(userPassword)) {
                             passwordEditText.setError(null);
 
+                            //Get the username from DB and store it in a string variable
+                            String nameFromDB = userSnapshot.child("name").getValue(String.class);
+
+                            // Save login status and user data in SharedPreferences
+                            SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putBoolean("isLoggedIn", true);
+                            editor.putString("userName", nameFromDB);
+                            editor.putString("userEmail", userEmail);
+                            editor.apply();
+
                             // Pass user data to Home activity if needed
                             Intent intent = new Intent(getApplicationContext(), Home.class);
                             startActivity(intent);
@@ -116,6 +127,7 @@ public class login extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 // Handle possible errors.
+                Toast.makeText(login.this, error.toString(), Toast.LENGTH_SHORT).show();
             }
         });
     }
