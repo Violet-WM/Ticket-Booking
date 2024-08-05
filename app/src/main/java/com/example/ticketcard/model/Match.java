@@ -13,6 +13,8 @@ public class Match {
     private int regularPrice;
     private int vipPrice;
 
+    public Match(){}
+
     public Match(String teamA, String teamALogoUrl, String teamB, String teamBLogoUrl, String venue, String dayOfWeek, int day, String month, String time, int regularPrice, int vipPrice) {
         this.teamA = teamA;
         this.teamALogoUrl = teamALogoUrl;

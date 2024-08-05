@@ -10,4 +10,7 @@
     <style name="CardGradient." parent="CardView">
         <item name="android:background">@drawable/card_gradient</item>
     </style>
+    <style name="overlay." parent="CardView">
+        <item name="android:background">@drawable/gradient_overlay_ticket_card</item>
+    </style>
 </resources>

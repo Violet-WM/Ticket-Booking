@@ -101,6 +101,11 @@ public class login extends AppCompatActivity {
 
                             //Get the username from DB and store it in a string variable
                             String nameFromDB = userSnapshot.child("name").getValue(String.class);
+                            String adminStatus = "";
+
+                            if(userSnapshot.child("admin").exists()){
+                                adminStatus = userSnapshot.child("admin").getValue(String.class);
+                            }
 
                             // Save login status and user data in SharedPreferences
                             SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
@@ -110,10 +115,17 @@ public class login extends AppCompatActivity {
                             editor.putString("userEmail", userEmail);
                             editor.apply();
 
-                            // Pass user data to Home activity if needed
-                            Intent intent = new Intent(getApplicationContext(), Home.class);
-                            startActivity(intent);
-                            finish();
+                            if(adminStatus.equals("true")){
+                                // go to admin section
+                                Intent intent = new Intent(getApplicationContext(), AdminDashboard.class);
+                                startActivity(intent);
+                                finish();
+                            } else {
+                                // Pass user data to Home activity if needed
+                                Intent intent = new Intent(getApplicationContext(), Home.class);
+                                startActivity(intent);
+                                finish();
+                            }
                             return;
                         } else {
                             passwordEditText.setError("Invalid password");

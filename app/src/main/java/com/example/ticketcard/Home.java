@@ -40,8 +40,6 @@ public class Home extends AppCompatActivity {
                     replaceFragment(new TransactionsFragment());
                 } else if (item.getItemId() == R.id.settings) {
                     replaceFragment(new SettingsFragment());
-                } else if (item.getItemId() == R.id.admin) {
-                    replaceFragment(new AdminFragment());
                 }
                 return true;
             }

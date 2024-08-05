@@ -27,11 +27,4 @@
         android:title="Settings"
         android:enabled="true"
         android:icon="@drawable/ic_settings" />
-
-    <!-- Admin item -->
-    <item
-        android:id="@+id/admin"
-        android:title="Admin"
-        android:enabled="true"
-        android:icon="@drawable/ic_admin" />
 </menu>

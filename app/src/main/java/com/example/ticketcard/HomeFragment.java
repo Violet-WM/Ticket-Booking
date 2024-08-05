@@ -9,7 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -17,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.ticketcard.model.Event;
+import com.example.ticketcard.model.Fixtures;
 import com.google.android.material.carousel.CarouselLayoutManager;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,6 +28,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class HomeFragment extends Fragment {
 
@@ -34,6 +37,8 @@ public class HomeFragment extends Fragment {
     EventsAdapter eventsAdapter;
     List<Event> eventsList;
     private Button cardButton;
+    private TextView welcomeText;
+    private String matchDetails, imageUrl, match, round, matchTime, matchDate, matchMonth, matchVenue, matchVIP, matchRegular, teamA, teamB, teamALogo, teamBLogo;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -58,6 +63,9 @@ public class HomeFragment extends Fragment {
         Log.d("HomeFragment", "Username is  " + userName);
         Log.d("HomeFragment", "User email is " + userEmail);
 
+        welcomeText = view.findViewById(R.id.welcomeText);
+        welcomeText.setText("Welcome " + userName + "\uD83D\uDC4B");
+
         // Initialize the RecyclerView
         eventsRecyclerView = view.findViewById(R.id.popular_events_recycler_view);
 
@@ -69,19 +77,27 @@ public class HomeFragment extends Fragment {
         //snapHelper.attachToRecyclerView(eventsRecyclerView);
 
         // Fetch data for the events
-        List<Event> events = fetchEvents();
+        //List<Event> events =
+        fetchEvents();
 
         // Initialize the adapter with the fetched events
-        eventsAdapter = new EventsAdapter(getActivity(), events);
+        eventsAdapter = new EventsAdapter(getActivity(), eventsList);
 
         eventsAdapter.setOnItemClickListener(new EventsAdapter.OnItemClickListener() {
             @Override
-            public void onClick(ImageView imageView, String imageUrl, String imageDescription) {
+            public void onClick(String imageUrl, String matchDetails, String round, String teamA, String teamB, String teamALogo, String teamBLogo, String matchTime, String matchDate, String matchMonth, String matchVenue, String matchRegular, String matchVIP) {
                 Intent intent = new Intent(getActivity(), TicketCardClicked.class);
                 intent.putExtra("imageURL", imageUrl);
-                intent.putExtra("imageDescription", imageDescription);
-                intent.putExtra("userName", userName);
-                intent.putExtra("userEmail", userEmail);
+                intent.putExtra("matchDetails", matchDetails);
+                intent.putExtra("teamALogoUrl", teamALogo);
+                intent.putExtra("teamBLogoUrl", teamBLogo);
+                intent.putExtra("teamA", teamA);
+                intent.putExtra("teamB", teamB);
+                intent.putExtra("round", round);
+                intent.putExtra("matchVenue", matchVenue);
+                intent.putExtra("matchTime", matchTime);
+                intent.putExtra("matchDate", matchDate);
+                intent.putExtra("matchMonth", matchMonth);
                 startActivity(intent);
             }
         });
@@ -97,21 +113,25 @@ public class HomeFragment extends Fragment {
         return view;
     }
 
-    private List<Event> fetchEvents() {
+    private void fetchEvents() {
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("events");
+        //eventsList = new ArrayList<>();
+
         db.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                eventsList = new ArrayList<>();
+                List<Event> eventsToMethod = new ArrayList<>();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Event event = snapshot.getValue(Event.class);
                     if (event != null) {
-                        eventsList.add(event);
+                        String eventImageUrl = event.getImageUrl();
+                        String eventMatch = event.getMatch();
+                        String eventRound = event.getRound();
+                        eventsToMethod.add(event);
                     }
                 }
-                // Update the adapter with the fetched events
-                eventsAdapter.setEvents(eventsList);
-                eventsAdapter.notifyDataSetChanged();
+                Log.d("taggggg", "The size of eventsToMethod is" + eventsToMethod.size());
+                fetchRounds(eventsToMethod);
             }
 
             @Override
@@ -119,8 +139,78 @@ public class HomeFragment extends Fragment {
                 Log.d("Firebase Database Error", "Error getting data: ", databaseError.toException());
             }
         });
+    }
 
-        return eventsList;
+    private void fetchRounds(List<Event> eventMethod) {
+        //Log.d("Round is", "Here's your round " + event.getRound());
+        DatabaseReference roundsRef = FirebaseDatabase.getInstance().getReference("fixtures").child("Kenya Premier League");
+
+        roundsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d("Getting rounds", "In tickets getting details");
+                List<Fixtures> roundsList = new ArrayList<>();
+                for (Event event : eventMethod) {
+                    for (DataSnapshot matchSnapshot : snapshot.getChildren()) {
+                        String roundsKey = matchSnapshot.getKey();
+                        Log.d("RoundsKey", "The value of RoundsKey is " + roundsKey);
+                        if (roundsKey.equals(event.getRound())) {
+                            for (DataSnapshot detailsSnapshot : matchSnapshot.getChildren()) {
+                                if (roundsList != null) {
+                                    String matchKey = detailsSnapshot.getKey();
+                                    if (matchKey.equals(event.getMatch())) {
+                                        Map<String, Object> matchDetails = (Map<String, Object>) detailsSnapshot.getValue();
+                                        String day = matchDetails.get("Day").toString();
+                                        String date = matchDetails.get("Date").toString();
+                                        String month = matchDetails.get("Month").toString();
+                                        String time = matchDetails.get("time").toString();
+                                        String venue = matchDetails.get("venue").toString();
+                                        String vipPrice = matchDetails.get("VIP").toString();
+                                        String regularPrice = matchDetails.get("Regular").toString();
+                                        Map<String, String> teamA = (Map<String, String>) matchDetails.get("Team A");
+                                        Map<String, String> teamB = (Map<String, String>) matchDetails.get("Team B");
+                                        Log.d("venue tag", "The value of venue is " + venue);
+                                        roundsList.add(new Fixtures(event.getImageUrl(), event.getMatch(), event.getRound(), matchKey, date, day, month, time, venue, vipPrice, regularPrice, teamA, teamB));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                eventsList = new ArrayList<>();
+                for (Fixtures fixture : roundsList) {
+                    match = fixture.getMatch();
+                    round = fixture.getRound();
+                    matchDetails = fixture.getMatchup();
+                    matchTime = fixture.getTime();
+                    matchDate = fixture.getDate();
+                    matchMonth = fixture.getMonth();
+                    matchVenue = fixture.getVenue();
+                    matchVIP = fixture.getVipPrice();
+                    matchRegular = fixture.getRegularPrice();
+                    teamA = fixture.getTeamA().get("teamName");
+                    teamB = fixture.getTeamB().get("teamName");
+                    Log.d("tag", "Recycler venue is " + matchVenue);
+                    //String description = fixture.getMatchup() + "\nDate: " + fixture.getDate() + "\nTime: " + fixture.getTime() + "\nVenue: " + fixture.getVenue();
+                    imageUrl = fixture.getImageUrl(); // Example: using Team A's logo
+                    teamALogo = fixture.getTeamA().get("teamLogoUrl");
+                    teamBLogo = fixture.getTeamB().get("teamLogoUrl");
+                    eventsList.add(new Event(imageUrl, match, round, teamA, teamB, teamALogo, teamBLogo, matchTime, matchDate, matchMonth, matchVenue, matchRegular, matchVIP));
+                }
+
+                // Update the adapter with the fetched events and ticketEventList
+                eventsAdapter.setEvents(eventsList);
+                Log.d("Events List", "In home fragment size of events list is " + eventsList.size());
+                eventsAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.d("Failed rounds", "Failed to load matches for round");
+                Toast.makeText(getContext(), "Failed to load matches for round", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 }

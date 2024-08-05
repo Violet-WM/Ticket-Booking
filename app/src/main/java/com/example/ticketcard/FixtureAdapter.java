@@ -1,5 +1,6 @@
 package com.example.ticketcard;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +31,8 @@ public class FixtureAdapter extends RecyclerView.Adapter<FixtureAdapter.FixtureV
     public void onBindViewHolder(@NonNull FixtureViewHolder holder, int position) {
         Fixture fixture = fixtureList.get(position);
         holder.matchup.setText(fixture.getMatchup());
-        holder.matchDetails.setText(fixture.getMatchDetails());
+        holder.matchDetails.setText(fixture.getTime() + " . " + fixture.getDate() + " . " + fixture.getRound() + " . " + fixture.getVenue());
+        Log.d("tag", "In FixtureAdapter: adding views");
     }
 
     @Override

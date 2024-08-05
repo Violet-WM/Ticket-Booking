@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 public class MainActivity extends AppCompatActivity {
     // Declare a Button variable
     private Button button;
+    private String userName, userEmail;
 
     // onCreate method is the entry point for the activity lifecycle
     @Override
@@ -25,12 +26,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        userName = sharedPreferences.getString("userName", "user"); // "user" is the default value if "userName" is not found
+        userEmail = sharedPreferences.getString("userEmail", "email"); // "email" is the default value if "userEmail" is not found
         boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
 
         if (isLoggedIn) {
-            // User is logged in, redirect to Home activity
-            Intent intent = new Intent(getApplicationContext(), Home.class);
-            startActivity(intent);
+            if(userName.equals("admin")){
+                //redirect to adminDashboard
+                startActivity(new Intent(getApplicationContext(), AdminDashboard.class));
+            } else {
+                // User is logged in, redirect to Home activity
+                Intent intent = new Intent(getApplicationContext(), Home.class);
+                startActivity(intent);
+            }
         }
         else
         {
