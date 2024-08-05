@@ -62,12 +62,15 @@ public class AddVenuesActivity extends AppCompatActivity {
 
         // Initialize RecyclerView
         imageAdapter = new ImageAdapter(imageUriList);
-        imagesRecyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false));
+        imagesRecyclerView.setLayoutManager(new LinearLayoutManager(AddVenuesActivity.this, LinearLayoutManager.HORIZONTAL, false));
         imagesRecyclerView.setAdapter(imageAdapter);
 
         String venueRetrieved = getIntent().getStringExtra("stadium");
 
         venueEditText.setText(venueRetrieved);
+        venueEditText.setFocusable(false);
+        venueEditText.setFocusableInTouchMode(false); // user touches widget on phone with touch screen
+        venueEditText.setClickable(false);
 
         // Initialize Firebase Realtime Database and Storage
         firebaseDatabase = FirebaseDatabase.getInstance();
@@ -96,14 +99,14 @@ public class AddVenuesActivity extends AppCompatActivity {
 //                }
 
                 if (capacityStr.isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "You need to add the seat capacity!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddVenuesActivity.this, "You need to add the seat capacity!", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 int capacity = Integer.parseInt(capacityStr);
 
                 if (capacity > 45918) {
-                    Toast.makeText(getApplicationContext(), "Capacity too large, exceeds maximum unique seat names.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(AddVenuesActivity.this, "Capacity too large, exceeds maximum unique seat names.", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -155,17 +158,17 @@ public class AddVenuesActivity extends AppCompatActivity {
 
         newVenueRef.setValue(venue).addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
-                Toast.makeText(getApplicationContext(), "Venue added successfully!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddVenuesActivity.this, "Venue added successfully!", Toast.LENGTH_SHORT).show();
                 uploadImagesToDatabase(newVenueRef.getKey());
             } else {
-                Toast.makeText(getApplicationContext(), "Failed to add venue.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddVenuesActivity.this, "Failed to add venue.", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void uploadImagesToDatabase(String venueId) {
         if (imageUriList.isEmpty()) {
-            Toast.makeText(getApplicationContext(), "No images selected.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddVenuesActivity.this, "No images selected.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -183,10 +186,10 @@ public class AddVenuesActivity extends AppCompatActivity {
                     // Update the venue with stadium views
                     venuesRef.child(venueId).child("stadiumViews").setValue(stadiumViewsMap);
                 });
-                Intent intent = new Intent(getApplicationContext(), AddTeamsActivity.class);
+                Intent intent = new Intent(AddVenuesActivity.this, AddTeamsActivity.class);
                 startActivity(intent);
             }).addOnFailureListener(e -> {
-                Toast.makeText(getApplicationContext(), "Failed to upload image: " + imageName, Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddVenuesActivity.this, "Failed to upload image: " + imageName, Toast.LENGTH_SHORT).show();
             });
         }
     }

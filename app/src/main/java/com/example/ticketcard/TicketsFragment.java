@@ -8,13 +8,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.ticketcard.model.Fixtures;
 import com.example.ticketcard.model.TicketEvent;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -23,16 +27,23 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class TicketsFragment extends Fragment {
 
     private RecyclerView ticketsRecyclerView;
-    TicketEventAdapter ticketEventAdapter;
-    List<TicketEvent> eventsList;
+    private TicketEventAdapter ticketEventAdapter;
+    private List<TicketEvent> eventsList;
+    private Spinner roundsSpinner;
+    private DatabaseReference roundsRef;
+    private List<String> roundNames;
+    private Map<String, List<Fixtures>> roundsMap;
+    private String roundAdapter;
 
-    public TicketsFragment(){
-        // require a empty public constructor
+    public TicketsFragment() {
+        // require an empty public constructor
     }
 
     @Override
@@ -40,64 +51,144 @@ public class TicketsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_tickets, container, false);
-
+        Log.d("tag", "In fragment");
 
         // Retrieve the user name from SharedPreferences
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);
         String userName = sharedPreferences.getString("userName", "user"); // "User" is the default value if "userName" is not found
 
+        roundsMap = new HashMap<>();
         // Initialize the RecyclerView
         ticketsRecyclerView = view.findViewById(R.id.ticketsRecyclerView);
+        // Set vertical layout manager
+        //LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
+        ticketsRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
-        //Set vertical layout manager
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
-        ticketsRecyclerView.setLayoutManager(linearLayoutManager);
+        ticketEventAdapter = new TicketEventAdapter(getContext(), eventsList);
 
-        // Fetch data for the events
-        List<TicketEvent> events = fetchEvents();
+        // Initialize Firebase reference
+        roundsRef = FirebaseDatabase.getInstance().getReference("fixtures").child("Kenya Premier League");
 
-        // Initialize the adapter with the fetched events
-        ticketEventAdapter = new TicketEventAdapter(getActivity(), events);
+        // Initialize rounds spinner and fetch rounds
+        roundsSpinner = view.findViewById(R.id.roundsSpinner);
+        fetchRounds();
 
-        ticketEventAdapter.setOnItemClickListener(new TicketEventAdapter.OnItemClickListener() {
+        // Set spinner item selected listener
+        roundsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onClick(ImageView ticketImage, String imageUrl, String imgDescription) {
-                Intent intent = new Intent(getActivity(), TicketCardClicked.class);
-                intent.putExtra("imageURL", imageUrl);
-                intent.putExtra("imageDescription", imgDescription);
-                startActivity(intent);
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedRound = roundNames.get(position);
+                roundAdapter = selectedRound;
+                Log.d("round tagggggg", "The value of selected round is " + selectedRound);
+                fetchMatchesForRound(selectedRound);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Do nothing
             }
         });
 
+        ticketEventAdapter.setOnItemClickListener(new TicketEventAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(String imageUrl, String matchDetails, String teamA, String teamB, String teamALogo, String teamBLogo, String matchTime, String matchDate, String matchMonth, String matchVenue, String matchRegular, String matchVIP, String round) {
+                Intent intent = new Intent(getActivity(), TicketCardClicked.class);
+                intent.putExtra("imageURL", imageUrl);
+                intent.putExtra("matchDetails", matchDetails);
+                intent.putExtra("teamALogoUrl", teamALogo);
+                intent.putExtra("teamBLogoUrl", teamBLogo);
+                intent.putExtra("teamA", teamA);
+                intent.putExtra("teamB", teamB);
+                intent.putExtra("round", round);
+                intent.putExtra("matchVenue", matchVenue);
+                intent.putExtra("matchTime", matchTime);
+                intent.putExtra("matchDate", matchDate);
+                intent.putExtra("matchMonth", matchMonth);
+                startActivity(intent);
+        }
+    });
 
         ticketsRecyclerView.setAdapter(ticketEventAdapter);
 
         return view;
     }
 
-    private List<TicketEvent> fetchEvents() {
-        DatabaseReference db = FirebaseDatabase.getInstance().getReference("events");
-        db.addListenerForSingleValueEvent(new ValueEventListener() {
+    private void fetchRounds() {
+        roundsRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                eventsList = new ArrayList<>();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    TicketEvent event = snapshot.getValue(TicketEvent.class);
-                    if (event != null) {
-                        eventsList.add(event);
+                roundNames = new ArrayList<>();
+                for (DataSnapshot roundSnapshot : dataSnapshot.getChildren()) {
+                    String roundName = roundSnapshot.getKey();
+                    if (roundName != null) {
+                        roundNames.add(roundName);
                     }
                 }
-                // Update the adapter with the fetched events
+                // Update spinner adapter
+                ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, roundNames);
+                spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                roundsSpinner.setAdapter(spinnerAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getContext(), "Failed to load rounds", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void fetchMatchesForRound(String round) {
+
+        roundsRef.orderByKey().equalTo(round).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Fixtures> roundsList = new ArrayList<>();
+                for (DataSnapshot matchSnapshot : dataSnapshot.getChildren()) {
+                    for(DataSnapshot detailsSnapshot: matchSnapshot.getChildren()) {
+                        String matchKey = detailsSnapshot.getKey();
+                        Map<String, Object> matchDetails = (Map<String, Object>) detailsSnapshot.getValue();
+                        String day = matchDetails.get("Day").toString();
+                        String date = matchDetails.get("Date").toString();
+                        String month = matchDetails.get("Month").toString();
+                        String time = matchDetails.get("time").toString();
+                        String venue = matchDetails.get("venue").toString();
+                        String vipPrice = matchDetails.get("VIP").toString();
+                        String regularPrice = matchDetails.get("Regular").toString();
+                        Map<String, String> teamA = (Map<String, String>) matchDetails.get("Team A");
+                        Map<String, String> teamB = (Map<String, String>) matchDetails.get("Team B");
+                        Log.d("venue tag", "The value of venue is " + venue);
+                        roundsList.add(new Fixtures(matchKey, date, day, month, time, venue, vipPrice, regularPrice, teamA, teamB));
+                    }
+                }
+                // Store rounds for later access
+                roundsMap.put(round, roundsList);
+
+                eventsList = new ArrayList<>();
+                for (Fixtures fixture : roundsList) {
+                    String matchDetails = fixture.getMatchup();
+                    String matchTime = fixture.getTime();
+                    String matchDate = fixture.getDate();
+                    String matchMonth = fixture.getMonth();
+                    String matchVenue = fixture.getVenue();
+                    String matchVIP = fixture.getVipPrice();
+                    String matchRegular = fixture.getRegularPrice();
+                    String teamA = fixture.getTeamA().get("teamName");
+                    String teamB = fixture.getTeamB().get("teamName");
+                    Log.d("tag", "Recycler venue is " + matchVenue);
+                    //String description = fixture.getMatchup() + "\nDate: " + fixture.getDate() + "\nTime: " + fixture.getTime() + "\nVenue: " + fixture.getVenue();
+                    String imageUrl = fixture.getTeamA().get("teamLogoUrl"); // Example: using Team A's logo
+                    String teamALogo = fixture.getTeamA().get("teamLogoUrl");
+                    String teamBLogo = fixture.getTeamB().get("teamLogoUrl");
+                    eventsList.add(new TicketEvent(imageUrl, matchDetails, teamA, teamB, teamALogo, teamBLogo, matchTime, matchDate, matchMonth, matchVenue, matchRegular, matchVIP, roundAdapter));
+                }
                 ticketEventAdapter.setEvents(eventsList);
                 ticketEventAdapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d("Firebase Database Error", "Error getting data: ", databaseError.toException());
+                Toast.makeText(getContext(), "Failed to load matches for round", Toast.LENGTH_SHORT).show();
             }
         });
-
-        return eventsList;
     }
 }

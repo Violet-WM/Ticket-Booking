@@ -2,6 +2,7 @@ package com.example.ticketcard;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -39,6 +40,9 @@ public class Payment extends AppCompatActivity implements View.OnClickListener {
     private String price;
     private String userEmail;
     private String userName;
+    private String stadiumName;
+    private String matchName, matchMonth, matchDate, matchTime;
+    private String round;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,10 +52,21 @@ public class Payment extends AppCompatActivity implements View.OnClickListener {
         binding = ActivityPaymentBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        // When reserving seats we should store stadium name, match name, and user
+
+        // Retrieve the user name and email from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        userName = sharedPreferences.getString("userName", "user"); // "user" is the default value if "userName" is not found
+        userEmail = sharedPreferences.getString("userEmail", "email"); // "email" is the default value if "userEmail" is not found
+
         price = getIntent().getStringExtra("Price");
-        userEmail = getIntent().getStringExtra("UserEmail");
-        userName = getIntent().getStringExtra("UserName");
         String seatDetailsString = getIntent().getStringExtra("SeatDetails");
+        stadiumName = getIntent().getStringExtra("stadiumName");
+        matchName = getIntent().getStringExtra("matchName");
+        matchDate = getIntent().getStringExtra("matchDate");
+        matchMonth = getIntent().getStringExtra("matchMonth");
+        matchTime = getIntent().getStringExtra("matchTime");
+        round = getIntent().getStringExtra("round");
         Log.d("Payment", "payment Username is  " + userName);
         Log.d("Payment", "payment User email is " + userEmail);
 
@@ -257,6 +272,10 @@ public class Payment extends AppCompatActivity implements View.OnClickListener {
         Map<String, Object> reservedSeatsData = new HashMap<>();
         reservedSeatsData.put("userEmail", userEmail);
         reservedSeatsData.put("userName", userName);
+        reservedSeatsData.put("matchMonth", matchMonth);
+        reservedSeatsData.put("matchDate",matchDate);
+        reservedSeatsData.put("matchTime", matchTime);
+        reservedSeatsData.put("round", round);
         reservedSeatsData.put("seats", seatDetailsMap);
 
         // Log the reserved seats data map
@@ -267,13 +286,19 @@ public class Payment extends AppCompatActivity implements View.OnClickListener {
             return;
         }
 
+        // When reserving seats we should store stadium name, match name, and user
+
         // Save the data under reservedSeats node in Firebase
-        databaseReference.child("reservedSeats").child(userName).setValue(reservedSeatsData)
+        databaseReference.child("reservedSeats").child(stadiumName).child(matchName).child(userName).setValue(reservedSeatsData)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         Log.d("PaymentActivity", "Seat details saved successfully");
                         Toast.makeText(Payment.this, "Seat details saved successfully", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(getApplicationContext(), TicketGeneration.class));
+                        Intent intent = new Intent(getApplicationContext(), TicketGeneration.class);
+                        intent.putExtra("matchName", matchName);
+                        intent.putExtra("stadiumName", stadiumName);
+
+                        startActivity(intent);
                     } else {
                         Log.e("PaymentActivity", "Failed to save seat details to Firebase");
                         Toast.makeText(Payment.this, "Failed to save seat details", Toast.LENGTH_SHORT).show();

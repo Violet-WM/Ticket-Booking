@@ -2,18 +2,36 @@ package com.example.ticketcard.model;
 
 public class Fixture {
     private String matchup;
-    private String matchDetails;
+    private String time;
+    private String date;
+    private String round;
+    private String venue;
 
-    public Fixture(String matchup, String matchDetails) {
+    public Fixture(String matchup, String time, String date, String round, String venue) {
         this.matchup = matchup;
-        this.matchDetails = matchDetails;
+        this.time = time;
+        this.date = date;
+        this.round = round;
+        this.venue = venue;
     }
 
     public String getMatchup() {
         return matchup;
     }
 
-    public String getMatchDetails() {
-        return matchDetails;
+    public String getTime() {
+        return time;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getRound() {
+        return round;
+    }
+
+    public String getVenue() {
+        return venue;
     }
 }

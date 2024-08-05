@@ -135,7 +135,7 @@
         app:layout_constraintTop_toBottomOf="@+id/materialDivider" />
 
     <com.google.android.material.button.MaterialButtonToggleGroup
-        android:id="@+id/toggleButton"
+        android:id="@+id/toggleButtonTeams"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:singleSelection="true"
@@ -145,15 +145,16 @@
         app:layout_constraintTop_toBottomOf="@+id/teamStatistics">
 
         <Button
-            android:id="@+id/addTeamsButton"
+            android:id="@+id/teamAButton"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Gor Mahia FC"
+            android:enabled="true"
             android:textColor="@color/black"/>
 
         <Button
-            android:id="@+id/addVenuesButton"
+            android:id="@+id/teamBButton"
             style="?attr/materialButtonOutlinedStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -169,19 +170,7 @@
         android:text="SuperGor"
         android:textSize="16sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toggleButton" />
-
-    <TextView
-        android:id="@+id/textViewTeamTwo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="384dp"
-        android:fontFamily="@font/poppins_bold"
-        android:text="Reverse"
-        android:textSize="16sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/teamStatistics" />
+        app:layout_constraintTop_toBottomOf="@+id/toggleButtonTeams" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/materialCardView"

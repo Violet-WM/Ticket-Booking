@@ -163,30 +163,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchEvents" />
 
-    <ImageView
-        android:id="@+id/languagesIcon"
+    <Button
+        android:id="@+id/logOutButton"
+        style="@style/Widget.Material3.Button.IconButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="204dp"
+        android:layout_marginTop="348dp"
+        app:icon="@drawable/baseline_logout_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.044"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/generalTextView"
-        app:srcCompat="@drawable/icons8_language_48" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/languagesTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="216dp"
-        android:fontFamily="@font/inter_bold"
-        android:text="Language"
-        android:textColor="@color/black"
-        android:textSize="14sp"
+        android:layout_marginTop="356dp"
+        android:text="Log out"
+        android:textSize="24dp"
+        android:textColor="@color/RED"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/generalTextView"
-        app:layout_constraintTop_toBottomOf="@+id/generalTextView" />
+        app:layout_constraintHorizontal_bias="0.257"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
 
     <com.google.android.material.divider.MaterialDivider
         android:layout_width="match_parent"

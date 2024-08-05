@@ -147,6 +147,92 @@ public class AddTeamsActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         homeStadium = findViewById(R.id.homeStadium);
 
+//        uploadTeamName.addTextChangedListener(new TextWatcher() {
+//            private Boolean isProcessing;
+//            @Override
+//            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//
+//            }
+//
+//            @Override
+//            public void afterTextChanged(Editable editable) {
+//                if (isProcessing) return;
+//                isProcessing = true;
+//                String input = editable.toString();
+//                String capitalizedInput = capitalizeWords(input);
+//                if (!input.equals(capitalizedInput)) {
+//                    uploadTeamName.setText(capitalizedInput);
+//                    uploadTeamName.setSelection(capitalizedInput.length());
+//                }
+//                isProcessing = false;
+//            }
+//
+//            private String capitalizeWords(String str) {
+//                StringBuilder capitalized = new StringBuilder();
+//                boolean capitalizeNext = true;
+//                for (char c : str.toCharArray()) {
+//                    if (Character.isWhitespace(c)) {
+//                        capitalizeNext = true;
+//                        capitalized.append(c);
+//                    } else if (capitalizeNext) {
+//                        capitalized.append(Character.toUpperCase(c));
+//                        capitalizeNext = false;
+//                    } else {
+//                        capitalized.append(Character.toLowerCase(c));
+//                    }
+//                }
+//                return capitalized.toString();
+//            }
+//        });
+
+        homeStadium.addTextChangedListener(new TextWatcher() {
+            private boolean isProcessing;
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (isProcessing) return;
+                isProcessing = true;
+                String input = editable.toString();
+                String capitalizedInput = capitalizeWords(input);
+                if (!input.equals(capitalizedInput)) {
+                    homeStadium.setText(capitalizedInput);
+                    homeStadium.setSelection(capitalizedInput.length());
+                }
+                isProcessing = false;
+            }
+
+            private String capitalizeWords(String str) {
+                StringBuilder capitalized = new StringBuilder();
+                boolean capitalizeNext = true;
+                for (char c : str.toCharArray()) {
+                    if (Character.isWhitespace(c)) {
+                        capitalizeNext = true;
+                        capitalized.append(c);
+                    } else if (capitalizeNext) {
+                        capitalized.append(Character.toUpperCase(c));
+                        capitalizeNext = false;
+                    } else {
+                        capitalized.append(Character.toLowerCase(c));
+                    }
+                }
+                return capitalized.toString();
+            }
+        });
+
         // Set onClick listener for choosing an image
         imageView.setOnClickListener(onClick -> {
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -265,12 +351,6 @@ public class AddTeamsActivity extends AppCompatActivity {
                                         public void onSuccess(Void aVoid) {
                                             // Successfully uploaded player details
                                             progressBar.setVisibility(View.INVISIBLE); // Hide progress bar
-                                            Toast.makeText(AddTeamsActivity.this, "Team uploaded successfully", Toast.LENGTH_SHORT).show();
-                                            Intent intent = new Intent(AddTeamsActivity.this, AddVenuesActivity.class);
-                                            intent.putExtra("stadium", homeStadium.getText().toString());
-                                            startActivity(intent);
-                                            // Clear the fields after successful upload
-                                            clearFields();
                                         }
                                     })
                                     .addOnFailureListener(new OnFailureListener() {
@@ -282,6 +362,12 @@ public class AddTeamsActivity extends AppCompatActivity {
                                         }
                                     });
                         }
+                        Toast.makeText(AddTeamsActivity.this, "Team uploaded successfully", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(AddTeamsActivity.this, AddVenuesActivity.class);
+                        intent.putExtra("stadium", home);
+                        startActivity(intent);
+                        // Clear the fields after successful upload
+                        clearFields();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
@@ -368,7 +454,7 @@ public class AddTeamsActivity extends AppCompatActivity {
             String role = roleSpinner.getSelectedItem().toString();
 
             if (!name.isEmpty() && !no.isEmpty() && !role.isEmpty()) {
-                Players player = new Players(name, no, role);
+                Players player = new Players(name, role, no);
                 playerDetailsMap.put(name, player);
                 Toast.makeText(AddTeamsActivity.this, "Player details saved in chip!", Toast.LENGTH_SHORT).show();
             } else {

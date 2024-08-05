@@ -3,4 +3,7 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="seat">Seat</string>
+    <string name="ticket_details_label">Ticket Details</string>
+    <string name="seats_details_label">Seats Details</string>
+    <string name="revenue_label">Revenue</string>
 </resources>

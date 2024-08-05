@@ -35,8 +35,7 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
         Players player = players.get(position);
 
         holder.nameTextView.setText(player.getName());
-        holder.roleTextView.setText(player.getRole());
-        holder.ageTextView.setText(player.getNo());
+        holder.roleTextView.setText("Player role: " + player.getRole() + ". Player No: " + player.getNo());
     }
 
     @Override
@@ -53,13 +52,12 @@ public class PlayersAdapter extends RecyclerView.Adapter<PlayersAdapter.ViewHold
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView nameTextView;
         TextView roleTextView;
-        TextView ageTextView;
+        TextView noTextView;
 
         ViewHolder(View itemView) {
             super(itemView);
             nameTextView = itemView.findViewById(R.id.nameTextView);
             roleTextView = itemView.findViewById(R.id.teamRoleTextView);
-            ageTextView = itemView.findViewById(R.id.ageTextView);
         }
     }
 }

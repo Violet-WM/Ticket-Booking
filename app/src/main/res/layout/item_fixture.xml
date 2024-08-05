@@ -8,16 +8,16 @@
 
     <TextView
         android:id="@+id/matchup"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Team A vs Team B"
-        android:textSize="16sp"
+        android:text="A.F.C Leopards vs Bandari"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/matchDetails"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="17:00 HRS . 23 August 2024 . Friday, Round 1"
-        android:textSize="14sp" />
+        android:text="17:00HRS . 01/08/2024 . Round 1 . Nyayo National Stadium"
+        android:textSize="16sp" />
 </LinearLayout>
