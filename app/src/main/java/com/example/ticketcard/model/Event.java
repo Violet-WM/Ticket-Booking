@@ -16,6 +16,16 @@ public class Event {
     public String matchVenue;
     public String matchRegular;
     public String matchVIP;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    private String id;
     public transient Uri imageUri; // Transient because we don't want to serialize this field in Firebase
 
     public Event() {

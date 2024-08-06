@@ -28,12 +28,15 @@ public class SeatsAdapter extends RecyclerView.Adapter<SeatsAdapter.ViewHolder> 
     private Set<String> selectedSeats = new HashSet<>();
     private PriceChangeListener priceChangeListener;
     private Map<String, Integer> seatPriceMap = new HashMap<>();
+    private String matchVIP, matchRegular;
 
-    public SeatsAdapter(Context context, List<String> seats, List<String> bookedSeats, PriceChangeListener priceChangeListener) {
+    public SeatsAdapter(Context context, List<String> seats, List<String> bookedSeats, String matchVIP, String matchRegular, PriceChangeListener priceChangeListener) {
         this.context = context;
         this.seats = seats;
         this.bookedSeats = bookedSeats;
         this.priceChangeListener = priceChangeListener;
+        this.matchVIP = matchVIP;
+        this.matchRegular = matchRegular;
     }
 
     @NonNull
@@ -68,7 +71,9 @@ public class SeatsAdapter extends RecyclerView.Adapter<SeatsAdapter.ViewHolder> 
             if (seat.startsWith("R")) {
                 holder.seatChip.setChipBackgroundColorResource(R.color.BLUE);
             } else if (seat.startsWith("V")) {
-                holder.seatChip.setChipBackgroundColorResource(R.color.GOLD);
+                holder.seatChip.setChipStrokeColorResource(R.color.GOLD);
+                holder.seatChip.setChipStrokeWidth(4);
+                holder.seatChip.setChipBackgroundColorResource(R.color.GOLD_dil);
             }
 
             // Set the checked state
@@ -76,7 +81,7 @@ public class SeatsAdapter extends RecyclerView.Adapter<SeatsAdapter.ViewHolder> 
 
             // Set up checked change listener for each seat
             holder.seatChip.setOnCheckedChangeListener((chip, isChecked) -> {
-                int seatPrice = seat.startsWith("R") ? 0 : 1; // Set the price based on seat type
+                int seatPrice = seat.startsWith("R") ? Integer.parseInt(matchRegular) : Integer.parseInt(matchVIP); // Set the price based on seat type
                 Log.d(TAG, "Seat Checked Change: Seat = " + seat + ", Checked = " + isChecked + ", Price = " + seatPrice);
 
                 if (isChecked) {

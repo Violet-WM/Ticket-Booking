@@ -169,7 +169,6 @@ public class TicketCardClicked extends AppCompatActivity {
 
             TextView bottomSheetTitle = bottomSheetView.findViewById(R.id.bottomSheetTitle);
             Button buttonBuyTicket = bottomSheetView.findViewById(R.id.buttonBuyTicket);
-            TextView priceCounter = bottomSheetView.findViewById(R.id.priceCounter);
 
             bottomSheetTitle.setText(matchDetails.replace("_","."));
 
@@ -195,7 +194,7 @@ public class TicketCardClicked extends AppCompatActivity {
             seatsList = new ArrayList<>();
             List<String> fetchedSeats = fetchSeats();
             List<String> bookedSeatsToAdapter = fetchBookedSeats();
-            seatsAdapter = new SeatsAdapter(TicketCardClicked.this, fetchedSeats, bookedSeatsToAdapter, new SeatsAdapter.PriceChangeListener() {
+            seatsAdapter = new SeatsAdapter(TicketCardClicked.this, fetchedSeats, bookedSeatsToAdapter, matchVIP, matchRegular, new SeatsAdapter.PriceChangeListener() {
                 @Override
                 public void onPriceChange(int amount, boolean isAdding) {
                     if (isAdding) {
@@ -203,10 +202,11 @@ public class TicketCardClicked extends AppCompatActivity {
                     } else {
                         totalPrice -= amount;
                     }
-                    priceCounter.setText("Total: " + totalPrice + " Shillings");
+                    buttonBuyTicket.setText("Pay " + totalPrice + " Shillings");
                 }
             });
             seatsGVRecycler.setAdapter(seatsAdapter);
+
 
             buttonBuyTicket.setOnClickListener(v -> {
                 Map<String, Object> selectedSeatDetails = seatsAdapter.getSelectedSeatsDetails();

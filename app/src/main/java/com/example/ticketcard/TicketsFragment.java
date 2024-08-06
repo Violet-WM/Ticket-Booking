@@ -104,6 +104,8 @@ public class TicketsFragment extends Fragment {
                 intent.putExtra("matchTime", matchTime);
                 intent.putExtra("matchDate", matchDate);
                 intent.putExtra("matchMonth", matchMonth);
+                intent.putExtra("matchVIP", matchVIP);
+                intent.putExtra("matchRegular", matchRegular);
                 startActivity(intent);
         }
     });

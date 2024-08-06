@@ -3,12 +3,15 @@ package com.example.ticketcard;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -18,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.ticketcard.model.Event;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,26 +38,26 @@ import java.util.List;
 public class PickEvents extends AppCompatActivity {
 
     private static final int PICK_IMAGE_REQUEST = 1;
+    // Inside your PickEvents class
+    private static final String TAG = "PickEvents";
 
     private Spinner roundsSpinner, matchesSpinner;
     private Button uploadImageButton, saveEventButton;
-    private RecyclerView selectedEventsRecyclerView;
+    private RecyclerView selectedEventsRecyclerView, loadedEventsRecyclerView;
     private ImageView selectedImageView;
 
     private String selectedRound;
-
     private Uri imageUri;
-
     private DatabaseReference fixturesRef, eventsRef;
     private StorageReference storageRef;
-
     private ArrayList<String> roundsList, matchesList;
     private ArrayAdapter<String> roundsAdapter, matchesAdapter;
-
     private HashMap<String, String> selectedEvents;
     private HashMap<String, Uri> eventImages;
     private List<Event> eventList;
     private EventAdapter eventAdapter;
+    private List<Event> loadedEventList;
+    private LoadedEventAdapter loadedEventAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +71,7 @@ public class PickEvents extends AppCompatActivity {
         saveEventButton = findViewById(R.id.btn_save_events);
         selectedEventsRecyclerView = findViewById(R.id.recycler_view_selected_events);
         selectedImageView = findViewById(R.id.image_view_selected);
+        loadedEventsRecyclerView = findViewById(R.id.recycler_view_loaded_events);
 
         fixturesRef = FirebaseDatabase.getInstance().getReference("fixtures");
         eventsRef = FirebaseDatabase.getInstance().getReference("events");
@@ -77,6 +82,7 @@ public class PickEvents extends AppCompatActivity {
         selectedEvents = new HashMap<>();
         eventImages = new HashMap<>();
         eventList = new ArrayList<>();
+        loadedEventList = new ArrayList<>();
 
         roundsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, roundsList);
         matchesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, matchesList);
@@ -85,6 +91,7 @@ public class PickEvents extends AppCompatActivity {
         matchesSpinner.setAdapter(matchesAdapter);
 
         loadRounds();
+        loadEvents();
 
         roundsSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -135,6 +142,10 @@ public class PickEvents extends AppCompatActivity {
         selectedEventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         eventAdapter = new EventAdapter(eventList);
         selectedEventsRecyclerView.setAdapter(eventAdapter);
+
+        loadedEventsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        loadedEventAdapter = new LoadedEventAdapter(loadedEventList);
+        loadedEventsRecyclerView.setAdapter(loadedEventAdapter);
     }
 
     private void loadRounds() {
@@ -171,6 +182,35 @@ public class PickEvents extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(PickEvents.this, "Failed to load matches", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void loadEvents() {
+        eventsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                loadedEventList.clear();
+                for (DataSnapshot eventSnapshot : snapshot.getChildren()) {
+                    Event event = eventSnapshot.getValue(Event.class);
+                    event.setId(eventSnapshot.getKey());
+                    loadedEventList.add(event);
+                }
+                loadedEventAdapter.notifyDataSetChanged();
+
+                if (loadedEventList.size() >= 7) {
+                    roundsSpinner.setEnabled(false);
+                    matchesSpinner.setEnabled(false);
+                    Toast.makeText(PickEvents.this, "Cannot upload more events, limit reached", Toast.LENGTH_SHORT).show();
+                } else {
+                    roundsSpinner.setEnabled(true);
+                    matchesSpinner.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(PickEvents.this, "Failed to load events", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -224,4 +264,98 @@ public class PickEvents extends AppCompatActivity {
                 .addOnFailureListener(e -> Toast.makeText(PickEvents.this, "Failed to save event", Toast.LENGTH_SHORT).show());
     }
 
+    private class LoadedEventAdapter extends RecyclerView.Adapter<LoadedEventAdapter.ViewHolder> {
+
+        private List<Event> loadedEvents;
+
+        public LoadedEventAdapter(List<Event> loadedEvents) {
+            this.loadedEvents = loadedEvents;
+        }
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = getLayoutInflater().inflate(R.layout.loaded_item_event, parent, false);
+            return new ViewHolder(view);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            Event event = loadedEvents.get(position);
+            holder.bind(event);
+        }
+
+        @Override
+        public int getItemCount() {
+            return loadedEvents.size();
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
+
+            private TextView matchTextView, roundTextView;
+            private ImageView eventImageView;
+            private Button deleteButton;
+
+            public ViewHolder(@NonNull View itemView) {
+                super(itemView);
+                matchTextView = itemView.findViewById(R.id.match_text_view);
+                roundTextView = itemView.findViewById(R.id.round_text_view);
+                eventImageView = itemView.findViewById(R.id.event_image_view);
+                deleteButton = itemView.findViewById(R.id.delete_button);
+
+                deleteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int position = getAdapterPosition();
+                        if (position != RecyclerView.NO_POSITION) {
+                            Event event = loadedEvents.get(position);
+                            deleteEvent(event.getId(), position);
+                        }
+                    }
+                });
+            }
+
+            public void bind(Event event) {
+                matchTextView.setText(event.getMatch());
+                roundTextView.setText(event.getRound());
+                Glide.with(eventImageView.getContext())
+                        .load(event.getImageUrl())
+                        .into(eventImageView);
+            }
+        }
+    }
+
+    private void deleteEvent(String eventId, final int position) {
+        Log.d(TAG, "deleteEvent called with position: " + position + ", eventId: " + eventId);
+        Log.d(TAG, "LoadedEventList size before deletion: " + loadedEventList.size());
+
+        eventsRef.child(eventId).removeValue()
+                .addOnSuccessListener(aVoid -> {
+                    try {
+                        if (position >= 0 && position < loadedEventList.size()) {
+                            loadedEventList.remove(position);
+                            loadedEventAdapter.notifyItemRemoved(position);
+                            loadedEventAdapter.notifyItemRangeChanged(position, loadedEventList.size());
+
+                            Log.d(TAG, "LoadedEventList size after deletion: " + loadedEventList.size());
+
+                            if (loadedEventList.size() < 7) {
+                                roundsSpinner.setEnabled(true);
+                                matchesSpinner.setEnabled(true);
+                            }
+
+                            Toast.makeText(PickEvents.this, "Event deleted successfully", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(PickEvents.this, "Invalid position: " + position, Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (IndexOutOfBoundsException e) {
+                        e.printStackTrace();
+                        Log.e(TAG, "Error deleting event: " + e.getMessage());
+                        Toast.makeText(PickEvents.this, "Error deleting event: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(e ->
+                        Toast.makeText(PickEvents.this, "Failed to delete event", Toast.LENGTH_SHORT).show()
+                );
+    }
 }
