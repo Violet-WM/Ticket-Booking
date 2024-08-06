@@ -6,30 +6,42 @@
     android:id="@+id/carousel_item_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginStart="4dp"
     android:layout_marginEnd="4dp"
     android:foreground="?attr/selectableItemBackground"
-    app:shapeAppearance="?attr/shapeAppearanceCornerExtraLarge">
+    app:shapeAppearance="?attr/shapeAppearanceCornerSmall">
 
-    <!-- Popular Event -->
-    <ImageView
-        android:id="@+id/image2"
-        android:layout_width="300dp"
-        android:layout_height="200dp"
-        android:src="@drawable/kakamegahomeboyzlogo"
-        android:scaleType="centerCrop"/>
-
-    <!--<TextView
-        android:id="@+id/text2"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#80000000"
-        android:padding="4dp"
-        android:text="Marie Curie vs Concert"
-        android:textColor="@android:color/white"
-        android:textStyle="bold"
-        android:textSize="14sp"
-        android:gravity="center" />-->
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/gradient_overlay_ticket_card"/>
+
+        <!-- Popular Event -->
+        <ImageView
+            android:id="@+id/image2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/kakamegahomeboyzlogo"
+            android:scaleType="centerCrop"/>
+
+        <TextView
+            android:id="@+id/text2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="@font/poppins"
+            android:maxLines="1"
+            android:layout_marginBottom="5dp"
+            android:text="Marie Curie vs Concert"
+            android:textColor="@android:color/white"
+            android:textSize="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </com.google.android.material.carousel.MaskableFrameLayout>
 

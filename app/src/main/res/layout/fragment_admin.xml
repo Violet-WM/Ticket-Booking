@@ -7,8 +7,6 @@
     android:background="@color/white"
     tools:context=".AdminFragment">
 
-
-
     <TextView
         android:id="@+id/adminTextView"
         android:layout_width="wrap_content"

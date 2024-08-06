@@ -11,9 +11,12 @@ import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.card.MaterialCardView;
+
 
 public class AdminHome extends Fragment {
 
+    private MaterialCardView eventsCard, priceCard, revenueCard;
     private Button revButton, eventsButton, priceButton;
 
     public AdminHome() {
@@ -32,11 +35,11 @@ public class AdminHome extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_admin_home, container, false);
 
-        eventsButton = view.findViewById(R.id.eventsButton);
-        priceButton = view.findViewById(R.id.priceButton);
-        revButton = view.findViewById(R.id.revButton);
+        eventsCard = view.findViewById(R.id.eventsCard);
+        priceCard = view.findViewById(R.id.priceCard);
+        revenueCard = view.findViewById(R.id.revenueCard);
 
-        eventsButton.setOnClickListener(new View.OnClickListener() {
+        eventsCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), PickEvents.class);
@@ -44,7 +47,7 @@ public class AdminHome extends Fragment {
             }
         });
 
-        priceButton.setOnClickListener(new View.OnClickListener() {
+        priceCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), Price.class);
@@ -52,7 +55,7 @@ public class AdminHome extends Fragment {
             }
         });
 
-        revButton.setOnClickListener(new View.OnClickListener() {
+        revenueCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getContext(), Revenue.class);

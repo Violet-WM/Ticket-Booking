@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".AdminHome">
 
@@ -56,6 +57,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="232dp"
+            android:backgroundTint="@color/white"
             app:cardCornerRadius="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -73,6 +75,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    android:layout_marginStart="4dp"
                     android:text="Pick hot events"
                     android:textColor="@color/black"
                     android:textSize="24dp"
@@ -82,37 +85,42 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <TextView
-                    android:layout_width="234dp"
-                    android:layout_height="33dp"
-                    android:layout_marginTop="40dp"
+                    android:layout_width="263dp"
+                    android:layout_height="23dp"
+                    android:layout_marginTop="48dp"
+                    android:layout_marginStart="9dp"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:scrollHorizontally="true"
                     android:text="Select the matches to be displayed on the home page"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.11"
+                    app:layout_constraintHorizontal_bias="0.098"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                    android:id="@+id/eventsButton"
-                    style="?attr/materialButtonOutlinedStyle"
+                    style="?attr/materialIconButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Go"
+                    android:layout_marginTop="20dp"
+                    app:icon="@drawable/ic_forward"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.941"
+                    app:layout_constraintHorizontal_bias="0.951"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/pricingCard"
+            android:id="@+id/priceCard"
             android:layout_width="match_parent"
             android:layout_height="90dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="336dp"
             android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/white"
             app:cardCornerRadius="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -129,6 +137,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    android:layout_marginStart="4dp"
                     android:text="Set ticket price"
                     android:textColor="@color/black"
                     android:textSize="24dp"
@@ -140,24 +149,25 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
                     android:layout_marginTop="48dp"
                     android:text="Set the price of match tickets"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.081"
+                    app:layout_constraintHorizontal_bias="0.058"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                    android:id="@+id/priceButton"
-                    style="?attr/materialButtonOutlinedStyle"
+                    style="?attr/materialIconButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Go"
+                    android:layout_marginTop="20dp"
+                    app:icon="@drawable/ic_forward"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.941"
+                    app:layout_constraintHorizontal_bias="0.951"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
+
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </com.google.android.material.card.MaterialCardView>
@@ -169,6 +179,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="436dp"
             android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/white"
             app:cardCornerRadius="12dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -185,6 +196,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
+                    android:layout_marginStart="4dp"
                     android:text="View revenue and stats"
                     android:textColor="@color/black"
                     android:textSize="24dp"
@@ -197,6 +209,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="48dp"
+                    android:layout_marginStart="7dp"
                     android:text="See the revenue collected and other stats"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.115"
@@ -204,14 +217,13 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                    android:id="@+id/revButton"
-                    style="?attr/materialButtonOutlinedStyle"
+                    style="?attr/materialIconButtonStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Go"
+                    android:layout_marginTop="20dp"
+                    app:icon="@drawable/ic_forward"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.941"
+                    app:layout_constraintHorizontal_bias="0.951"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 

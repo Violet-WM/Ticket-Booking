@@ -74,6 +74,9 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore:24.0.2")
     implementation("com.github.dhaval2404:imagepicker:2.1")
 
+
+
+
     //m-pesa integration
     implementation("com.jakewharton.timber:timber:4.7.1")
     implementation("cn.pedant.sweetalert:library:1.3") {

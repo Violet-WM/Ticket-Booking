@@ -63,7 +63,6 @@
         android:backgroundTint="#277ee4"
         android:gravity="center"
         android:text="Get Started"
-        android:textColor="@color/white"
-        tools:ignore="UnknownId" />
+        android:textColor="@color/white" />
 
 </RelativeLayout>

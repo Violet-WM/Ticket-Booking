@@ -3,6 +3,8 @@
     <style name="Base.Theme.TicketCard" parent="Theme.Material3.Light.NoActionBar">
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+            <!-- Defining that new color in ColorPrimaryDark -->
+            <item name="colorPrimaryDark">@color/white</item>
     </style>
 
     <style name="Theme.TicketCard" parent="Base.Theme.TicketCard" />

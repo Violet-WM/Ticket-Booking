@@ -1,7 +1,5 @@
 package com.example.ticketcard;
 
-import static android.preference.PreferenceManager.getDefaultSharedPreferences;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -22,8 +21,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.SnapHelper;
 
 import com.bumptech.glide.Glide;
+import com.example.ticketcard.model.Fixtures;
 import com.example.ticketcard.model.Players;
 import com.example.ticketcard.model.StadiumViews;
+import com.example.ticketcard.model.TicketEvent;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.carousel.CarouselLayoutManager;
@@ -45,12 +46,13 @@ public class TicketCardClicked extends AppCompatActivity {
     private PlayersAdapter playersAdapter;
     private List<Players> playersList;
     private List<String> seatsList;
-    private ImageView roundedImageViewTeamOne, roundedImageViewTeamTwo, backarrowtofkf;
     private TextView winsTextView, lossTextView, drawsTextView, matchesTextView;
-    private TextView textViewTeamOne, textViewTeamTwo;
-    private Button teamOneButton, teamTwoButton, bookYourSeat;
+    private TextView timeAndDateText, venueText, regularText, VIPText;
+    private TextView textViewTeam, textViewTeamB;
+    private Button teamAButton, teamBButton, bookYourSeat;
     private StadiumViewsAdapter stadiumViewsAdapter;
     private List<StadiumViews> stadiumViewsList;
+    private MaterialButtonToggleGroup toggleButtonTeams;
     private GridView gridView;
     private RecyclerView seatsGVRecycler;
     private SeatsAdapter seatsAdapter;
@@ -58,64 +60,106 @@ public class TicketCardClicked extends AppCompatActivity {
     private String userEmail;
     private String userName;
     private List<String> bookedSeatsList;
+    private String matchDetails;
+    private String round;
+    private List<TicketEvent> eventDetailsList;
+    private String matchName, matchTime, matchDate, matchMonth, matchVenue, matchVIP, matchRegular, teamA, teamB, teamALogoUrl, teamBLogoUrl;
+
+    DatabaseReference roundsRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_card_clicked);
-        
 
         String imageUrl = getIntent().getStringExtra("imageURL");
-        String imageDescription = getIntent().getStringExtra("imageDescription");
+        matchDetails = getIntent().getStringExtra("matchDetails");
+        teamA = getIntent().getStringExtra("teamA");
+        teamB = getIntent().getStringExtra("teamB");
+        teamALogoUrl = getIntent().getStringExtra("teamALogoUrl");
+        teamBLogoUrl = getIntent().getStringExtra("teamBLogoUrl");
+        round = getIntent().getStringExtra("round");
+        matchVenue = getIntent().getStringExtra("matchVenue");
+        matchDate = getIntent().getStringExtra("matchDate");
+        matchMonth = getIntent().getStringExtra("matchMonth");
+        matchTime = getIntent().getStringExtra("matchTime");
+        matchVIP = getIntent().getStringExtra("matchVIP");
+        matchRegular = getIntent().getStringExtra("matchRegular");
 
-        // Retrieve the user name from SharedPreferences
-        SharedPreferences sharedPreferences = getDefaultSharedPreferences(getBaseContext());
-        userName = sharedPreferences.getString("userName", "user"); // "User" is the default value if "userName" is not found
-        userEmail = sharedPreferences.getString("userEmail", "email");
+        // Initialize Firebase reference
+        roundsRef = FirebaseDatabase.getInstance().getReference("fixtures").child("Kenya Premier League");
 
-       // Log.d("TicketCardClicked", "Username is  " + userName);
-       // Log.d("TicketCardClicked", "User email is " + userEmail);
+        fetchMatchesRoundSpecific(round);
+
+        // get the price for VIp, reg, team A, Team B, Team A logo, Team B Logo, venue
+
+        // Retrieve the user name and email from SharedPreferences
+        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+        userName = sharedPreferences.getString("userName", "user"); // "user" is the default value if "userName" is not found
+        userEmail = sharedPreferences.getString("userEmail", "email"); // "email" is the default value if "userEmail" is not found
+
+        Log.d("TicketCardClicked", "Username is  " + userName);
+       Log.d("TicketCardClicked", "User email is " + userEmail);
 
         TextView matchTextView = findViewById(R.id.matchTextView);
-        matchTextView.setText(imageDescription);
+        matchTextView.setText(matchDetails.replace("_","."));
 
-        ImageView roundedImageview = findViewById(R.id.roundedImageView);
-        Glide.with(this).load(imageUrl).into(roundedImageview);
+        ImageView teamALogo = findViewById(R.id.roundedImageViewTeamOne);
+        ImageView teamBLogo = findViewById(R.id.roundedImageViewTeamTwo);
+        Glide.with(this).load(teamALogoUrl).into(teamALogo);
+        Glide.with(this).load(teamBLogoUrl).into(teamBLogo);
 
-        textViewTeamOne = findViewById(R.id.textViewTeamOne);
-        textViewTeamTwo = findViewById(R.id.textViewTeamTwo);
-        backarrowtofkf = findViewById(R.id.backarrowtcc);
+        textViewTeam = findViewById(R.id.textViewTeamOne);
+        venueText = findViewById(R.id.venueText);
+        VIPText = findViewById(R.id.vipText);
+        regularText = findViewById(R.id.regularText);
+        timeAndDateText = findViewById(R.id.timeAndDateText);
 
+        //set the text
+        textViewTeam.setText(teamA);
+        venueText.setText(matchVenue);
+        VIPText.setText("VIP Price: Ksh. " + matchVIP);
+        regularText.setText("Regular Price: Ksh. " + matchRegular);
+        timeAndDateText.setText(matchTime + ", " + matchDate + " " + matchMonth);
 
-        teamOneButton = findViewById(R.id.addTeamsButton);
-        teamTwoButton = findViewById(R.id.addVenuesButton);
+        teamAButton = findViewById(R.id.teamAButton);
+        teamBButton = findViewById(R.id.teamBButton);
 
-        roundedImageViewTeamOne = findViewById(R.id.roundedImageViewTeamOne);
-        roundedImageViewTeamTwo = findViewById(R.id.roundedImageViewTeamTwo);
+        teamAButton.setText(teamA);
+        teamBButton.setText(teamB);
+
+        playersList = new ArrayList<>();
 
         playersRecyclerView = findViewById(R.id.playersRecyclerView);
         playersRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        playersList = new ArrayList<>();
         playersAdapter = new PlayersAdapter(this, playersList);
         playersRecyclerView.setAdapter(playersAdapter);
 
-        winsTextView = findViewById(R.id.winsText);
-        lossTextView = findViewById(R.id.lostText);
-        drawsTextView = findViewById(R.id.drawsText);
-        matchesTextView = findViewById(R.id.matchesText);
+        winsTextView = findViewById(R.id.wonMatchesText);
+        lossTextView = findViewById(R.id.lostMatchesText);
+        drawsTextView = findViewById(R.id.drawMatchesText);
+        matchesTextView = findViewById(R.id.matchesPlayedText);
 
-        bookYourSeat = findViewById(R.id.bookYourSeat);
+        toggleButtonTeams = findViewById(R.id.toggleButtonTeams);
 
-        backarrowtofkf.setOnClickListener(view ->{
-            Intent intent = new Intent(TicketCardClicked.this, FkfPremierLeague.class);
-            startActivity(intent);
+        toggleButtonTeams.addOnButtonCheckedListener(new MaterialButtonToggleGroup.OnButtonCheckedListener() {
+            @Override
+            public void onButtonChecked(MaterialButtonToggleGroup group, int checkedId, boolean isChecked) {
+                    if (isChecked) {
+                        if (checkedId == R.id.teamAButton) {
+                            textViewTeam.setText(teamA);
+                            fetchTeamData(teamA.replace("_", "."));
+                        } else if (checkedId == R.id.teamBButton) {
+                            textViewTeam.setText(teamB);
+                            fetchTeamData(teamB.replace("_", "."));
+                        }
+                    }
+            }
         });
 
-      /*  bookYourSeat.setOnClickListener(view -> {
-            Intent intent = new Intent(TicketCardClicked.this, BottomSheetDialog.class);
-            startActivity(intent);
-        });*/
+        bookYourSeat = findViewById(R.id.bookYourSeat);
 
         bookYourSeat.setOnClickListener(view -> {
             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(TicketCardClicked.this);
@@ -123,8 +167,11 @@ public class TicketCardClicked extends AppCompatActivity {
             bottomSheetDialog.setContentView(bottomSheetView);
             bottomSheetDialog.show();
 
+            TextView bottomSheetTitle = bottomSheetView.findViewById(R.id.bottomSheetTitle);
             Button buttonBuyTicket = bottomSheetView.findViewById(R.id.buttonBuyTicket);
             TextView priceCounter = bottomSheetView.findViewById(R.id.priceCounter);
+
+            bottomSheetTitle.setText(matchDetails.replace("_","."));
 
             RecyclerView bottomSheetCarousel = bottomSheetView.findViewById(R.id.bottomSheetCarousel);
 
@@ -168,6 +215,12 @@ public class TicketCardClicked extends AppCompatActivity {
                 intent.putExtra("Price", String.valueOf(totalPrice));
                 intent.putExtra("UserEmail", userEmail);
                 intent.putExtra("UserName", userName);
+                intent.putExtra("matchName", matchDetails);
+                intent.putExtra("stadiumName", matchVenue);
+                intent.putExtra("round", round);
+                intent.putExtra("matchDate", matchDate);
+                intent.putExtra("matchTime", matchTime);
+                intent.putExtra("matchMonth", matchMonth);
 
                 Log.d("TicketCardClicked Intent call", "Intent Username is  " + userName);
                 Log.d("TicketCardClicked Intent call", "Intent User email is " + userEmail);
@@ -188,14 +241,67 @@ public class TicketCardClicked extends AppCompatActivity {
 
                 startActivity(intent);
                 bottomSheetDialog.dismiss();
-            });});
+            });
 
-        fetchTeamData(textViewTeamOne.getText().toString(), textViewTeamTwo.getText().toString());
+
+        });
+
+
     }
 
-    private void fetchTeamData(String teamOne, String teamTwo) {
+    private void fetchMatchesRoundSpecific(String roundSent) {
+        roundsRef.child(roundSent).orderByChild(matchDetails).equalTo(matchDetails).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                List<Fixtures> roundsList = new ArrayList<>();
+                for (DataSnapshot matchSnapshot : dataSnapshot.getChildren()) {
+                    String matchKey = matchSnapshot.getKey();
+                    Map<String, Object> matchDetails = (Map<String, Object>) matchSnapshot.getValue();
+                    String date = matchDetails.get("Date").toString();
+                    String day = matchDetails.get("Day").toString();
+                    String month = matchDetails.get("Month").toString();
+                    String time = matchDetails.get("time").toString();
+                    String venue = matchDetails.get("venue").toString();
+                    String vipPrice = matchDetails.get("VIP").toString();
+                    String regularPrice = matchDetails.get("Regular").toString();
+                    Map<String, String> teamA = (Map<String, String>) matchDetails.get("Team A");
+                    Map<String, String> teamB = (Map<String, String>) matchDetails.get("Team B");
+
+                    roundsList.add(new Fixtures(matchKey, date, day, month, time, venue, vipPrice, regularPrice, teamA, teamB));
+                }
+
+                extractRoundsForEase(roundsList);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(), "Failed to load matches for round", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void extractRoundsForEase(List<Fixtures> fixtures) {
+        eventDetailsList = new ArrayList<>();
+        for (Fixtures fixture : fixtures) {
+            matchName = fixture.getMatchup();
+            matchTime = fixture.getTime();
+            matchDate = fixture.getDate();
+            matchMonth = fixture.getMonth();
+            matchVenue = fixture.getVenue();
+            matchVIP = fixture.getVipPrice();
+            matchRegular = fixture.getRegularPrice();
+            teamA = fixture.getTeamA().get("teamName");
+            teamB = fixture.getTeamB().get("teamName");
+            //String description = fixture.getMatchup() + "\nDate: " + fixture.getDate() + "\nTime: " + fixture.getTime() + "\nVenue: " + fixture.getVenue();
+            teamALogoUrl = fixture.getTeamA().get("teamLogoUrl"); // Example: using Team A's logo
+            teamBLogoUrl = fixture.getTeamB().get("teamLogoUrl");
+        }
+
+    }
+
+    private void fetchTeamData(String team) {
         DatabaseReference db = FirebaseDatabase.getInstance().getReference("teams");
-        db.orderByChild("teamName").equalTo(teamOne).addListenerForSingleValueEvent(new ValueEventListener() {
+        db.orderByChild("teamName").equalTo(team).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 playersList.clear();
@@ -206,11 +312,6 @@ public class TicketCardClicked extends AppCompatActivity {
                             playersList.add(player);
                         }
                     }
-                    if (teamSnapshot.exists()) {
-                        teamOneButton.setText(teamSnapshot.child("teamName").getValue(String.class));
-                        String imageUrl = teamSnapshot.child("teamLogoUrl").getValue(String.class);
-                        Glide.with(getApplicationContext()).load(imageUrl).into(roundedImageViewTeamOne);
-                    }
                     DataSnapshot statsSnapshot = teamSnapshot.child("stats");
                     if (statsSnapshot.exists()) {
                         String wins = statsSnapshot.child("wins").getValue(String.class);
@@ -218,10 +319,10 @@ public class TicketCardClicked extends AppCompatActivity {
                         String draws = statsSnapshot.child("draws").getValue(String.class);
                         String matches = statsSnapshot.child("matches").getValue(String.class);
 
-                        winsTextView.setText(wins != null ? wins : "0");
-                        lossTextView.setText(loss != null ? loss : "0");
-                        drawsTextView.setText(draws != null ? draws : "0");
-                        matchesTextView.setText(matches != null ? matches : "0");
+                        winsTextView.setText(wins != null ? "Won: " + wins : "Won: 0");
+                        lossTextView.setText(loss != null ? "Lost: " + loss : "Lost: 0");
+                        drawsTextView.setText(draws != null ? "Draw: " + draws : "Draw: 0");
+                        matchesTextView.setText(matches != null ? "Matches played: " + matches : "Matches played: 0");
                     }
                 }
                 playersAdapter.notifyDataSetChanged();
@@ -241,11 +342,13 @@ public class TicketCardClicked extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 stadiumViewsList = new ArrayList<>();
                 for (DataSnapshot venueSnapshot : dataSnapshot.getChildren()) {
-                    DataSnapshot stadiumViewsSnapshot = venueSnapshot.child("stadiumViews");
-                    for (DataSnapshot snapshot : stadiumViewsSnapshot.getChildren()) {
-                        StadiumViews stadiumViews = snapshot.getValue(StadiumViews.class);
-                        if (stadiumViews != null) {
-                            stadiumViewsList.add(stadiumViews);
+                    if(venueSnapshot.child("venueName").getValue(String.class).equals(matchVenue)){
+                        DataSnapshot stadiumViewsSnapshot = venueSnapshot.child("stadiumViews");
+                        for (DataSnapshot snapshot : stadiumViewsSnapshot.getChildren()) {
+                            StadiumViews stadiumViews = snapshot.getValue(StadiumViews.class);
+                            if (stadiumViews != null) {
+                                stadiumViewsList.add(stadiumViews);
+                            }
                         }
                     }
                 }
@@ -271,11 +374,13 @@ public class TicketCardClicked extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 seatsList.clear();
                 for (DataSnapshot venueSnapshot : dataSnapshot.getChildren()) {
-                    DataSnapshot seatNamesSnapShot = venueSnapshot.child("seatNames");
-                    for (DataSnapshot snapshot : seatNamesSnapShot.getChildren()) {
-                        String seat = snapshot.getValue(String.class);
-                        if (seat != null) {
-                            seatsList.add(seat);
+                    if(venueSnapshot.child("venueName").getValue(String.class).equals(matchVenue)) {
+                        DataSnapshot seatNamesSnapShot = venueSnapshot.child("seatNames");
+                        for (DataSnapshot snapshot : seatNamesSnapShot.getChildren()) {
+                            String seat = snapshot.getValue(String.class);
+                            if (seat != null) {
+                                seatsList.add(seat);
+                            }
                         }
                     }
                 }
@@ -291,7 +396,7 @@ public class TicketCardClicked extends AppCompatActivity {
     }
 
     private List<String> fetchBookedSeats() {
-        DatabaseReference bookedReference = FirebaseDatabase.getInstance().getReference("reservedSeats");
+        DatabaseReference bookedReference = FirebaseDatabase.getInstance().getReference("reservedSeats").child(matchVenue).child(matchDetails);
         bookedSeatsList = new ArrayList<>();
         bookedReference.addValueEventListener(new ValueEventListener() {
 
@@ -303,7 +408,6 @@ public class TicketCardClicked extends AppCompatActivity {
                         for(DataSnapshot seatNameSnapshot : seatsSnapshot.getChildren()) {
                             String bookedSeat = seatNameSnapshot.getKey();
                             bookedSeatsList.add(bookedSeat);
-                            Toast.makeText(TicketCardClicked.this, "Booked Seat: " + bookedSeat, Toast.LENGTH_SHORT).show();
                             Log.d("TicketCardClicked", "Booked seats are: " + bookedSeat);
                         }
                     }

@@ -49,48 +49,6 @@
             android:name=".StadiumSeats"
             android:exported="false" />
         <activity
-            android:name=".TicketGeneration"
-            android:exported="false" />
-        <activity
-            android:name=".Utils"
-            android:exported="false" />
-        <activity
-            android:name=".Constants"
-            android:exported="false" />
-        <activity
-            android:name=".Payment"
-            android:exported="false" />
-        <activity
-            android:name=".StadiumSeats"
-            android:exported="false" />
-        <activity
-            android:name=".TicketGeneration"
-            android:exported="false" />
-        <activity
-            android:name=".Utils"
-            android:exported="false" />
-        <activity
-            android:name=".Constants"
-            android:exported="false" />
-        <activity
-            android:name=".Payment"
-            android:exported="false" />
-        <activity
-            android:name=".StadiumSeats"
-            android:exported="false" />
-        <activity
-            android:name=".Utils"
-            android:exported="false" />
-        <activity
-            android:name=".Constants"
-            android:exported="false" />
-        <activity
-            android:name=".Payment"
-            android:exported="false" />
-        <activity
-            android:name=".Buyticket"
-            android:exported="false" />
-        <activity
             android:name=".AddStatisticsActivity"
             android:exported="false" />
         <activity
