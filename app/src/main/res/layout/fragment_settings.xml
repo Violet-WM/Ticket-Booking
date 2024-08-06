@@ -11,7 +11,7 @@
         android:id="@+id/settingsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="24dp"
         android:fontFamily="@font/inter_extrabold"
         android:text="Settings"
         android:textColor="@color/black"

@@ -2,50 +2,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white"
     tools:context=".HomeFragment">
 
     <!-- Title TextView -->
+
     <TextView
         android:id="@+id/txtCreateAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="7dp"
-        android:layout_marginBottom="10dp"
-        android:fontFamily="@font/inter_bold"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/poppins_bold"
         android:gravity="center_horizontal"
         android:text="Ticket Booking"
         android:textColor="@android:color/black"
         android:textSize="14dp"
         android:textStyle="bold" />
 
-    <!-- Search Events EditText -->
-    <EditText
-        android:id="@+id/searchEvents"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/txtCreateAccount"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/edittext_radius"
-        android:drawableLeft="@drawable/baseline_search_24"
-        android:drawableRight="@drawable/menusrch"
-        android:fontFamily="@font/inter_extralight"
-        android:hint="Search events"
-        android:padding="10dp"
-        android:textColor="@color/black"
-        android:textSize="14dp" />
-
     <!-- Welcome Card RelativeLayout -->
     <RelativeLayout
         android:id="@+id/welcomeCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/searchEvents"
-        android:layout_marginTop="20dp"
+        android:layout_below="@+id/txtCreateAccount"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="10dp"
         android:layout_marginStart="10dp"
         android:layout_marginBottom="5dp"
@@ -53,6 +35,13 @@
         android:paddingBottom="50dp"
         style="@style/CardGradient.">
 
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="95dp"
+            android:id="@+id/shine"
+            android:src="@drawable/shine"
+            android:layout_marginStart="-50dp"/>
+        
         <!-- Welcome Text TextView -->
         <TextView
             android:id="@+id/welcomeText"
@@ -91,79 +80,57 @@
 
     </RelativeLayout>
 
-
-    <!-- Popular Events TextView -->
     <TextView
-    android:id="@+id/popularEvents"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_below="@+id/welcomeCard"
-    android:layout_marginTop="5dp"
-    android:layout_marginStart="10dp"
-    android:layout_marginBottom="1dp"
-    android:text="Popular events"
-    android:layout_centerHorizontal="true"
-    android:textColor="@android:color/black"
-    android:textSize="18sp"
-    android:textStyle="bold" />
+        android:id="@+id/popular"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/welcomeCard"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="10dp"
+        android:fontFamily="@font/poppins_bold"
+        android:textColor="@android:color/black"
+        android:text="Popular events"
+        android:textSize="14dp" />
 
     <!-- RecyclerView for Popular Events -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/popular_events_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:layout_marginTop="15dp"
         android:orientation="horizontal"
-        android:layout_below="@id/popularEvents"
-        android:layout_marginTop="10dp"
-        android:layout_marginHorizontal="16dp"/>
+        android:layout_below="@id/popular"
+        android:layout_marginHorizontal="10dp"/>
+
+    <com.google.android.material.divider.MaterialDivider
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/divider1"
+        android:layout_marginTop="15dp"
+        app:dividerInsetEnd="16dp"
+        app:dividerInsetStart="16dp"
+        android:layout_below="@+id/popular_events_recycler_view" />
 
     <!-- Categories TextView -->
     <TextView
-        android:id="@+id/categories"
+        android:id="@+id/round1Txt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/popular_events_recycler_view"
-        android:layout_marginTop="2dp"
-        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/divider1"
+        android:layout_marginTop="15dp"
         android:layout_marginStart="10dp"
+        android:fontFamily="@font/poppins_bold"
         android:textColor="@android:color/black"
-        android:text="Categories"
-        android:textSize="18dp"
-        android:textStyle="bold" />
+        android:text="Round 1"
+        android:textSize="14dp" />
 
-    <!-- Football cardView -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/ftcategiries"
-        android:layout_below="@+id/categories"
-        android:layout_width="390dp"
-        android:layout_marginEnd="15dp"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/round1Recycler"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="9dp">
-
-        <!--Ball Image-->
-        <ImageView
-            android:layout_width="90dp"
-            android:layout_height="60dp"
-            android:src="@drawable/basketball"
-            android:background="#00FFFF"
-            android:layout_marginEnd="350dp"/>
-
-        <!--Football TextView-->
-        <TextView
-            android:id="@+id/footbal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/categories"
-            android:layout_marginStart="110dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginEnd="150dp"
-            android:layout_marginBottom="9dp"
-            android:text="Football"
-            android:textColor="@android:color/black"
-            android:textSize="15dp"
-            android:textStyle="bold" />
-    </androidx.cardview.widget.CardView>
-
+        android:layout_marginTop="15dp"
+        android:orientation="horizontal"
+        android:layout_below="@id/round1Txt"
+        android:layout_marginStart="10dp"/>
 
 </RelativeLayout>

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -46,6 +47,7 @@ public class TicketCardClicked extends AppCompatActivity {
     private List<Players> playersList;
     private List<String> seatsList;
     private TextView winsTextView, lossTextView, drawsTextView, matchesTextView;
+    private TextView timeAndDateText, venueText, regularText, VIPText;
     private TextView textViewTeam, textViewTeamB;
     private Button teamAButton, teamBButton, bookYourSeat;
     private StadiumViewsAdapter stadiumViewsAdapter;
@@ -67,6 +69,7 @@ public class TicketCardClicked extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ticket_card_clicked);
 
@@ -81,6 +84,8 @@ public class TicketCardClicked extends AppCompatActivity {
         matchDate = getIntent().getStringExtra("matchDate");
         matchMonth = getIntent().getStringExtra("matchMonth");
         matchTime = getIntent().getStringExtra("matchTime");
+        matchVIP = getIntent().getStringExtra("matchVIP");
+        matchRegular = getIntent().getStringExtra("matchRegular");
 
         // Initialize Firebase reference
         roundsRef = FirebaseDatabase.getInstance().getReference("fixtures").child("Kenya Premier League");
@@ -100,14 +105,23 @@ public class TicketCardClicked extends AppCompatActivity {
         TextView matchTextView = findViewById(R.id.matchTextView);
         matchTextView.setText(matchDetails.replace("_","."));
 
-        ImageView roundedImageview = findViewById(R.id.roundedImageView);
         ImageView teamALogo = findViewById(R.id.roundedImageViewTeamOne);
         ImageView teamBLogo = findViewById(R.id.roundedImageViewTeamTwo);
-        Glide.with(this).load(imageUrl).into(roundedImageview);
         Glide.with(this).load(teamALogoUrl).into(teamALogo);
         Glide.with(this).load(teamBLogoUrl).into(teamBLogo);
 
         textViewTeam = findViewById(R.id.textViewTeamOne);
+        venueText = findViewById(R.id.venueText);
+        VIPText = findViewById(R.id.vipText);
+        regularText = findViewById(R.id.regularText);
+        timeAndDateText = findViewById(R.id.timeAndDateText);
+
+        //set the text
+        textViewTeam.setText(teamA);
+        venueText.setText(matchVenue);
+        VIPText.setText("VIP Price: Ksh. " + matchVIP);
+        regularText.setText("Regular Price: Ksh. " + matchRegular);
+        timeAndDateText.setText(matchTime + ", " + matchDate + " " + matchMonth);
 
         teamAButton = findViewById(R.id.teamAButton);
         teamBButton = findViewById(R.id.teamBButton);
@@ -123,10 +137,10 @@ public class TicketCardClicked extends AppCompatActivity {
         playersAdapter = new PlayersAdapter(this, playersList);
         playersRecyclerView.setAdapter(playersAdapter);
 
-        winsTextView = findViewById(R.id.winsText);
-        lossTextView = findViewById(R.id.lostText);
-        drawsTextView = findViewById(R.id.drawsText);
-        matchesTextView = findViewById(R.id.matchesText);
+        winsTextView = findViewById(R.id.wonMatchesText);
+        lossTextView = findViewById(R.id.lostMatchesText);
+        drawsTextView = findViewById(R.id.drawMatchesText);
+        matchesTextView = findViewById(R.id.matchesPlayedText);
 
         toggleButtonTeams = findViewById(R.id.toggleButtonTeams);
 
@@ -305,10 +319,10 @@ public class TicketCardClicked extends AppCompatActivity {
                         String draws = statsSnapshot.child("draws").getValue(String.class);
                         String matches = statsSnapshot.child("matches").getValue(String.class);
 
-                        winsTextView.setText(wins != null ? wins : "0");
-                        lossTextView.setText(loss != null ? loss : "0");
-                        drawsTextView.setText(draws != null ? draws : "0");
-                        matchesTextView.setText(matches != null ? matches : "0");
+                        winsTextView.setText(wins != null ? "Won: " + wins : "Won: 0");
+                        lossTextView.setText(loss != null ? "Lost: " + loss : "Lost: 0");
+                        drawsTextView.setText(draws != null ? "Draw: " + draws : "Draw: 0");
+                        matchesTextView.setText(matches != null ? "Matches played: " + matches : "Matches played: 0");
                     }
                 }
                 playersAdapter.notifyDataSetChanged();

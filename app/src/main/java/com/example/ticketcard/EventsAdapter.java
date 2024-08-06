@@ -1,7 +1,6 @@
 package com.example.ticketcard;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,20 +28,17 @@ class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        Log.d("EventsAdapter", "onCreateViewHolder is being called");
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.eventscardview, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Log.d("onBindViewHolder", "Entering onBindViewHolder");
             Event event = events.get(position);
 
-            Log.d("EventsAdapter", "Binding view holder at position: " + position);
+            holder.textView.setText(event.getMatch().replace("_", "."));
 
             Glide.with(context).load(event.getImageUrl()).into(holder.imageView);
-            // holder.textView.setText(event.getDescription());
 
             holder.itemView.setOnClickListener(view -> {
                 if (onItemClickListener != null) {
@@ -70,12 +66,8 @@ class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
 
     public void setEvents(List<Event> eventsList) {
         events.clear();
-
-            Log.d("In EventsAdapter", "Adding events to this list");
-            events.addAll(eventsList);
-
+        events.addAll(eventsList);
         notifyDataSetChanged();
-        Log.d("Size", "Size of events is " + events.size());
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -85,7 +77,7 @@ class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
         ViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.image2);
-            // textView = itemView.findViewById(R.id.text2);
+            textView = itemView.findViewById(R.id.text2);
         }
     }
 
