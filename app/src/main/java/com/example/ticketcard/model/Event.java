@@ -2,6 +2,8 @@ package com.example.ticketcard.model;
 
 import android.net.Uri;
 
+import java.util.Objects;
+
 public class Event {
     public String match;
     public String round;
@@ -169,6 +171,21 @@ public class Event {
 
     public void setImageUri(Uri imageUri) {
         this.imageUri = imageUri;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Event event = (Event) o;
+        return Objects.equals(match, event.match) &&
+                Objects.equals(round, event.round) &&
+                Objects.equals(imageUri, event.imageUri);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(match, round, imageUri);
     }
 
 }

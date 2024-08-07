@@ -4,20 +4,24 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.ticketcard.Services.DarajaApiClient;
 import com.example.ticketcard.databinding.ActivityPaymentBinding;
 import com.example.ticketcard.model.AccessToken;
+import com.example.ticketcard.model.MpesaRequest;
+import com.example.ticketcard.model.STKCallbackResponse;
 import com.example.ticketcard.model.STKPush;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.gson.Gson;
 
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -38,6 +42,7 @@ public class Payment extends AppCompatActivity implements View.OnClickListener {
     private DarajaApiClient mApiClient;
     private ProgressDialog mProgressDialog;
     private ActivityPaymentBinding binding;
+    private String token,encodedPassword,timestamp;
     private String price;
     private String userEmail;
     private String userName;
@@ -47,7 +52,6 @@ public class Payment extends AppCompatActivity implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        EdgeToEdge.enable(this);
         super.onCreate(savedInstanceState);
 
         // Inflate the layout using ViewBinding
@@ -122,10 +126,12 @@ public class Payment extends AppCompatActivity implements View.OnClickListener {
             @Override
             public void onResponse(@NonNull Call<AccessToken> call, @NonNull Response<AccessToken> response) {
                 if (response.isSuccessful() && response.body() != null) {
+
                     // Set auth token if request is successful
                     mApiClient.setAuthToken(response.body().accessToken);
-                } else {
-                    Log.e("PaymentActivity", "Access token response not successful");
+
+                    // Store token for later use
+                    token = response.body().accessToken;
                 }
             }
 
@@ -140,6 +146,7 @@ public class Payment extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View view) {
         if (view == binding.btnPay) {
+
             String phone_number = binding.etPhone.getText().toString().trim();
             String amount = String.valueOf(price);
 
@@ -169,14 +176,12 @@ public class Payment extends AppCompatActivity implements View.OnClickListener {
 
         // Encode password using Base64
         byte[] byteArray = toEncode.getBytes(StandardCharsets.UTF_8);
-        String encodedPassword;
+        //String encodedPassword;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             encodedPassword = Base64.getEncoder().encodeToString(byteArray);
         } else {
             encodedPassword = android.util.Base64.encodeToString(byteArray, android.util.Base64.NO_WRAP);
         }
-
-
         // Create STKPush object with required parameters
         STKPush stkPush = new STKPush(
                 "174379",  // BusinessShortCode
@@ -199,34 +204,97 @@ public class Payment extends AppCompatActivity implements View.OnClickListener {
         mApiClient.mpesaService().sendPush(stkPush).enqueue(new Callback<STKPush>() {
             @Override
             public void onResponse(@NonNull Call<STKPush> call, @NonNull Response<STKPush> response) {
+
                 // Dismiss progress dialog after API call completes
                 mProgressDialog.dismiss();
                 try {
                     if (response.isSuccessful()) {
+
                         // Log success message if request is successful
                         Timber.d("post submitted to API. %s", response.body());
-                        Log.d("PaymentActivity", "STK Push response successful");
 
-                        // Save seat details to Firebase
-                        saveReservedSeatsToFirebase();
+                        // Start checking transaction status
+                        checkTransactionStatus(response.body().getCheckoutRequestID());
+
+                        // Display success message
+                        Toast.makeText(Payment.this, "Request sent. Please complete payment on your phone.", Toast.LENGTH_SHORT).show();
                     } else {
                         if (response.errorBody() != null) {
-                            Timber.e("Response error: %s", response.errorBody().string());
+
+                            // Log error message if request fails
+                            Timber.e("Response %s", response.errorBody().string());
+
+                            // Display error message
+                            Toast.makeText(Payment.this, "Error", Toast.LENGTH_SHORT).show();
                         }
-                        Log.e("PaymentActivity", "STK Push response not successful");
                     }
                 } catch (Exception e) {
-                    Timber.e(e, "Error processing STK Push response");
+                    Timber.e(e, "Error processing response");
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<STKPush> call, @NonNull Throwable t) {
+
                 // Dismiss progress dialog if request fails
                 mProgressDialog.dismiss();
-                Timber.e(t, "STK Push request failed");
+                Timber.e(t, "Request failed");
             }
         });
+    }
+
+    public void checkTransactionStatus(String checkoutRequestID) {
+        // Simulate checking transaction status with a delayed task
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                // Call MpesaRequest to get transaction status
+                MpesaRequest mpesaRequest = new MpesaRequest();
+
+                //get access token from responce body
+
+                mpesaRequest.sendRequest("174379", encodedPassword, timestamp, checkoutRequestID, token, new MpesaRequest.MpesaRequestCallback() {
+                    @Override
+                    public void onSuccess(String response) {
+                        // Handle the response
+                        Log.d("Transaction status response: %s", response);
+                        // Parse the response and handle transaction status
+                        //convert response data to dictionary
+                        Gson gson = new Gson();
+                        STKCallbackResponse stkCallbackResponse = gson.fromJson(response, STKCallbackResponse.class);
+
+                        //if result code is 0, transaction is successful
+                        if (stkCallbackResponse.getResultCode().equals("0")) {
+                            // Handle successful transaction
+                            System.out.println("Transaction successful");
+                            // Save seat details to Firebase
+                            saveReservedSeatsToFirebase();
+
+                            Looper.prepare();
+                            Toast.makeText(Payment.this, "Transaction Successful",Toast.LENGTH_SHORT).show();
+                            Looper.loop();
+
+
+                        } else {
+                            // Handle failed transaction
+                            System.out.println("Transaction failed");
+
+                            Looper.prepare();
+                            Toast.makeText(Payment.this, stkCallbackResponse.getResultDesc(),Toast.LENGTH_SHORT).show();
+                            Looper.loop();
+
+                        }
+
+
+                    }
+
+                    @Override
+                    public void onFailure(String error) {
+                        Timber.e("Failed to get transaction status: %s", error);
+                    }
+                });
+            }
+        }, 10000); // Check after 10 seconds
     }
 
     private void saveReservedSeatsToFirebase() {

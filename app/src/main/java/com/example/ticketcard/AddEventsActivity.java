@@ -48,6 +48,8 @@ public class AddEventsActivity extends AppCompatActivity {
     private List<Fixture> fixturesList;
     private FixtureAdapter fixtureAdapter;
 
+    private Calendar currentDate;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         EdgeToEdge.enable(this);
@@ -90,6 +92,12 @@ public class AddEventsActivity extends AppCompatActivity {
                 submitFixturesToFirebase();
             }
         });
+
+        // Initialize currentDate
+        currentDate = Calendar.getInstance();
+        currentDate.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR));
+        currentDate.set(Calendar.MONTH, Calendar.AUGUST);
+        currentDate.set(Calendar.DAY_OF_MONTH, 1);
     }
 
     private void fetchTeams(String selectedLeague) {
@@ -121,11 +129,6 @@ public class AddEventsActivity extends AppCompatActivity {
         fixturesList.clear();
         List<List<Match>> allFixtures = Utils.generateDoubleRoundRobinFixtures(teamsList);
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, Calendar.getInstance().get(Calendar.YEAR));
-        calendar.set(Calendar.MONTH, Calendar.AUGUST);
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
-
         int totalRounds = allFixtures.size();
         int roundsPerMonth = totalRounds / 10;
         int extraRounds = totalRounds % 10;
@@ -137,11 +140,11 @@ public class AddEventsActivity extends AppCompatActivity {
             List<Match> roundMatches = allFixtures.get(round);
 
             for (Match match : roundMatches) {
-                String matchDate = Utils.getNextValidDate(calendar);
+                String matchDate = Utils.getNextValidDate(currentDate);
                 String time = new Random().nextBoolean() ? "17:00HRS" : "14:00HRS";
                 fixturesList.add(new Fixture(match.getTeamA() + " vs " + match.getTeamB(),
                         time, matchDate, "Round " + (round + 1), match.getVenue()));
-                calendar.add(Calendar.DAY_OF_MONTH, 1);
+                currentDate.add(Calendar.DAY_OF_MONTH, 1);
             }
 
             int roundsInCurrentMonth = (round < extraRounds) ? roundsPerMonth + 1 : roundsPerMonth;
@@ -151,9 +154,9 @@ public class AddEventsActivity extends AppCompatActivity {
                     currentMonth = Calendar.AUGUST;
                     currentYear++;
                 }
-                calendar.set(Calendar.MONTH, currentMonth);
-                calendar.set(Calendar.YEAR, currentYear);
-                calendar.set(Calendar.DAY_OF_MONTH, 1);
+                currentDate.set(Calendar.MONTH, currentMonth);
+                currentDate.set(Calendar.YEAR, currentYear);
+                currentDate.set(Calendar.DAY_OF_MONTH, 1);
             }
         }
 
@@ -221,10 +224,11 @@ public class AddEventsActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference("fixtures").child(selectedLeague).updateChildren(leagueMap).addOnSuccessListener(unused -> {
             Toast.makeText(AddEventsActivity.this, "Fixtures submitted to the database", Toast.LENGTH_SHORT).show();
             progressBar.setVisibility(View.INVISIBLE);
-//            Intent intent = new Intent(AddEventsActivity.this, AdminFragment.class);
+//            Intent intent = new Intent(AddEventsActivity.this, AdminFragment.class); // Change as necessary
 //            startActivity(intent);
+        }).addOnFailureListener(e -> {
+            Toast.makeText(AddEventsActivity.this, "Failed to submit fixtures", Toast.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.INVISIBLE);
         });
     }
-
-
 }
