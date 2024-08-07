@@ -72,11 +72,16 @@ public class Password extends AppCompatActivity {
                 String newPass = newPassword.getText().toString().trim();
                 String confirmPass = confirmPassword.getText().toString().trim();
 
-                if (!newPass.equals(confirmPass)) {
-                    Toast.makeText(Password.this, "New password and confirm password don't match", Toast.LENGTH_SHORT).show();
+                if(!newPass.isEmpty() && !confirmPass.isEmpty()) {
+                    if (!newPass.equals(confirmPass)) {
+                        Toast.makeText(Password.this, "New password and confirm password don't match", Toast.LENGTH_SHORT).show();
+                    } else {
+                        updatePassword(newPass);
+                    }
                 } else {
-                    updatePassword(newPass);
+                    Toast.makeText(Password.this, "New password and/or confirm password can't be empty", Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
     }

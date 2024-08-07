@@ -119,16 +119,40 @@ public class AccountInfo extends AppCompatActivity {
                         if (!newEmail.equals(currentEmail)) {
                             usersRef.child(currentUsername).child("email").setValue(newEmail);
                         }
-                        if (!newName.equals(currentName)) {
-                            usersRef.child(currentUsername).child("name").setValue(newName);
-                        }
                         if (!newNumber.equals(currentNumber)) {
                             usersRef.child(currentUsername).child("number").setValue(newNumber);
                         }
-                        usersRef.getParent().child(currentUsername).setValue(newName);
-                        updateReservedSeats(newEmail, newName);
-                        updateTickets(newName);
-                        updateSharedPreferences(newEmail, newName, newNumber);
+                        if (!newName.equals(currentName)) {
+                            // Update Users_info with the new username
+                            usersRef.child(currentUsername).child("name").setValue(newName);
+                            DatabaseReference oldUserRef = usersRef.child(currentUsername);
+                            DatabaseReference newUserRef = usersRef.child(newName);
+
+                            oldUserRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()) {
+                                        // Copy data from old username to new username
+                                        newUserRef.setValue(dataSnapshot.getValue());
+                                        oldUserRef.removeValue(); // Remove the old username node
+
+                                        // Update references in other nodes
+                                        updateReservedSeats(newEmail, newName);
+                                        updateTickets(newName);
+                                        updateSharedPreferences(newEmail, newName, newNumber);
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    Toast.makeText(AccountInfo.this, "Failed to update user info", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else {
+                            updateReservedSeats(newEmail, newName);
+                            updateTickets(newName);
+                            updateSharedPreferences(newEmail, newName, newNumber);
+                        }
                         Toast.makeText(AccountInfo.this, "Information updated successfully", Toast.LENGTH_SHORT).show();
                     }
                 }
@@ -140,6 +164,7 @@ public class AccountInfo extends AppCompatActivity {
             }
         });
     }
+
 
     private void updateReservedSeats(String newEmail, String newName) {
         reservedSeatsRef.addListenerForSingleValueEvent(new ValueEventListener() {

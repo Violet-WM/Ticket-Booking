@@ -171,7 +171,7 @@ public class Payment extends AppCompatActivity implements View.OnClickListener {
         mProgressDialog.show();
 
         // Generate encoded password for authentication
-        String timestamp = getTimestamps();
+        timestamp = getTimestamps();
         String toEncode = "174379" + "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919" + timestamp;
 
         // Encode password using Base64
@@ -294,7 +294,7 @@ public class Payment extends AppCompatActivity implements View.OnClickListener {
                     }
                 });
             }
-        }, 10000); // Check after 10 seconds
+        }, 10000); // Check after 5 seconds
     }
 
     private void saveReservedSeatsToFirebase() {
