@@ -28,8 +28,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
         android:fontFamily="@font/poppins_semibold"
-        android:text="This action will delete your account and log you out "
-        android:textColor="@color/REd"
+        android:text="This action will delete your account and log you out. We will keep other details such as the tickets you bought for data purposes. You can recover your account after deleting it by creating the account again with the same username."
+        android:textColor="@color/RED"
         android:gravity="center_horizontal"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,12 +37,15 @@
         app:layout_constraintTop_toBottomOf="@+id/textView1" />
 
     <Button
+        android:id="@+id/deleteAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
         android:backgroundTint="@color/RED"
         android:text="Delete Account"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="135dp" />
+        app:layout_constraintTop_toBottomOf="@+id/text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
