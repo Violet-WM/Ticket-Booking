@@ -49,10 +49,9 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn"
-        android:layout_width="136dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/txt1"
-        android:layout_alignParentEnd="true"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="40dp"
         android:backgroundTint="#277ee4"

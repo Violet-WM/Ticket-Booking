@@ -46,7 +46,6 @@ public class SignUpActivity extends AppCompatActivity {
         numberEditText = findViewById(R.id.numberEditText);
         signUpButton = findViewById(R.id.signUpButton);
         logInButton = findViewById(R.id.logInButton);
-        forgotPasswordButton = findViewById(R.id.forgotPasswordButton);
 
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +62,13 @@ public class SignUpActivity extends AppCompatActivity {
                     checkForExistingEmail();
 
                 }
+            }
+        });
+
+        logInButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(SignUpActivity.this, login.class));
             }
         });
 
