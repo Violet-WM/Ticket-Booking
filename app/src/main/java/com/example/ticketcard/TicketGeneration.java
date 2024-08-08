@@ -1,8 +1,10 @@
 package com.example.ticketcard;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,6 +30,7 @@ public class TicketGeneration extends AppCompatActivity {
     private String userName, userEmail;
     private List<TicketGen> ticketsList;
     private String matchName, stadiumName;
+    Button backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,7 @@ public class TicketGeneration extends AppCompatActivity {
                     String matchMonth = userSnapshot.child("matchMonth").getValue(String.class);
                     String matchTime = userSnapshot.child("matchTime").getValue(String.class);
                     String round = userSnapshot.child("round").getValue(String.class);
+                    String ticketId = userSnapshot.child("ticketID").getValue(String.class);
 
                     Map<String, Map<String, Object>> seatsMap = new HashMap<>();
                     for (DataSnapshot seatSnapshot : userSnapshot.child("seats").getChildren()) {
@@ -74,7 +78,7 @@ public class TicketGeneration extends AppCompatActivity {
                         seatsMap.put(seatName, seatDetails);
                     }
 
-                    TicketGen ticketGen = new TicketGen(seatsMap, matchDate, matchMonth, matchTime, round, stadiumName, matchName);
+                    TicketGen ticketGen = new TicketGen(seatsMap, matchDate, matchMonth, matchTime, round, stadiumName, matchName, ticketId);
                     ticketsList.add(ticketGen);
                 }
 
@@ -99,6 +103,9 @@ public class TicketGeneration extends AppCompatActivity {
             db.child(userPath).setValue(ticketGen).addOnCompleteListener(task -> {
                 if (task.isSuccessful()) {
                     Log.d("TicketGeneration", "Tickets successfully stored in DB");
+                    Intent intent = new Intent(TicketGeneration.this, Tickets.class);
+                    intent.putExtra("matchName", matchName);
+                    startActivity(intent);
                 } else {
                     Log.e("TicketGeneration", "Failed to store tickets in DB", task.getException());
                 }

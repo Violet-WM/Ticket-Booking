@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,6 +46,7 @@ public class PickEvents extends AppCompatActivity {
     private Button uploadImageButton, saveEventButton;
     private RecyclerView selectedEventsRecyclerView, loadedEventsRecyclerView;
     private ImageView selectedImageView;
+    private ProgressBar progressBar;
 
     private String selectedRound;
     private Uri imageUri;
@@ -71,6 +73,7 @@ public class PickEvents extends AppCompatActivity {
         saveEventButton = findViewById(R.id.btn_save_events);
         selectedEventsRecyclerView = findViewById(R.id.recycler_view_selected_events);
         loadedEventsRecyclerView = findViewById(R.id.recycler_view_loaded_events);
+        progressBar = findViewById(R.id.progressBar);
 
         fixturesRef = FirebaseDatabase.getInstance().getReference("fixtures");
         eventsRef = FirebaseDatabase.getInstance().getReference("events");
@@ -130,6 +133,7 @@ public class PickEvents extends AppCompatActivity {
             public void onClick(View v) {
                 int availableSpots = 7 - Integer.parseInt(String.valueOf(loadedEventList.size()));
                 if (selectedRounds.size() == availableSpots) {
+                    progressBar.setVisibility(View.VISIBLE); // Show progress bar
                     saveEventButton.setEnabled(false);
                     uploadImages();
                 } else {
@@ -186,7 +190,7 @@ public class PickEvents extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 matchesList.clear();
                 for (DataSnapshot matchSnapshot : snapshot.getChildren()) {
-                    matchesList.add(matchSnapshot.getKey());
+                    matchesList.add(matchSnapshot.getKey().replace("_", "."));
                 }
                 matchesAdapter.notifyDataSetChanged();
             }
@@ -254,6 +258,7 @@ public class PickEvents extends AppCompatActivity {
     }
 
     private void uploadImages() {
+        progressBar.setVisibility(View.VISIBLE); // Show progress bar
         for (final String match : eventImages.keySet()) {
             Uri uri = eventImages.get(match);
             if (uri != null) {
@@ -268,11 +273,13 @@ public class PickEvents extends AppCompatActivity {
     }
 
     private void saveEventToDatabase(String match, String imageUrl) {
+        progressBar.setVisibility(View.VISIBLE); // Show progress bar
         String round = selectedRounds.get(match);
         Event event = new Event(match, round, imageUrl);
         eventsRef.push().setValue(event)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        progressBar.setVisibility(View.INVISIBLE); // Show progress bar
                         Log.d(TAG, "Event saved successfully");
                     } else {
                         Log.d(TAG, "Event saving failed");

@@ -51,6 +51,7 @@ public class TicketGenAdapter extends RecyclerView.Adapter<TicketGenAdapter.View
             holder.vipSeatsTextView.setText(formatSeatDetails(vipSeatsMap));
             holder.vipMatchName.setText(ticketGen.getMatchName().replace("_", "."));
             holder.vipTimeAndDate.setText(ticketGen.getMatchTime() + " " + ticketGen.getMatchDate() + " " + ticketGen.getMatchMonth());
+            holder.ticketIDVip.setText("Ticket ID: " + ticketGen.getTicketID());
             holder.vipVenueText.setText(ticketGen.getMatchVenue());
             holder.vipCard.setCardBackgroundColor(context.getResources().getColor(android.R.color.black));
         } else {
@@ -64,6 +65,7 @@ public class TicketGenAdapter extends RecyclerView.Adapter<TicketGenAdapter.View
             holder.regMatchName.setText(ticketGen.getMatchName().replace("_", "."));
             holder.regTimeAndDate.setText(ticketGen.getMatchTime() + " " + ticketGen.getMatchDate() + " " + ticketGen.getMatchMonth());
             holder.regVenueText.setText(ticketGen.getMatchVenue());
+            holder.ticketIDReg.setText("Ticket ID: " + ticketGen.getTicketID());
             holder.regularCard.setCardBackgroundColor(context.getResources().getColor(android.R.color.holo_red_dark));
         } else {
             holder.regularCard.setVisibility(View.GONE);
@@ -98,6 +100,7 @@ public class TicketGenAdapter extends RecyclerView.Adapter<TicketGenAdapter.View
         TextView regularSeatsTextView;
         MaterialCardView vipCard;
         MaterialCardView regularCard;
+        TextView ticketIDReg, ticketIDVip;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -110,6 +113,8 @@ public class TicketGenAdapter extends RecyclerView.Adapter<TicketGenAdapter.View
             vipVenueText = itemView.findViewById(R.id.vipVenueText);
             vipSeatsTextView = itemView.findViewById(R.id.vipSeatsTextView);
             regularSeatsTextView = itemView.findViewById(R.id.regSeatsTextView);
+            ticketIDReg = itemView.findViewById(R.id.ticketIDReg);
+            ticketIDVip = itemView.findViewById(R.id.ticketIDVip);
             vipCard = itemView.findViewById(R.id.vipCard);
             regularCard = itemView.findViewById(R.id.regularCard);
         }

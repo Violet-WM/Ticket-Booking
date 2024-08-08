@@ -78,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/lgnBtn"
                 android:layout_marginLeft="65dp"
-                android:layout_marginBottom="6dp"
+                android:layout_marginBottom="20dp"
                 android:text="Don't have an account?"
                 android:textColor="#000000"
                 android:textStyle="bold" />
@@ -92,29 +92,6 @@
                 android:layout_toRightOf="@id/alreadyAccount"
                 android:clickable="true"
                 android:text="Create one"
-                android:textColor="#277ee4"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/forgotPass"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/alreadyAccount"
-                android:layout_marginLeft="80dp"
-                android:layout_marginBottom="20dp"
-                android:text="Forgot Password??"
-                android:textColor="#000000"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/forgotPasswordBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/alreadyAccount"
-                android:layout_marginLeft="6dp"
-                android:layout_toRightOf="@id/forgotPass"
-                android:clickable="true"
-                android:text="Click here"
                 android:textColor="#277ee4"
                 android:textStyle="bold" />
 

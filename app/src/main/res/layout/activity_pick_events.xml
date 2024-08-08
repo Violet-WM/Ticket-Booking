@@ -9,7 +9,7 @@
     <Spinner
         android:id="@+id/spinner_rounds"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_marginTop="24dp"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"/>
@@ -17,9 +17,22 @@
     <Spinner
         android:id="@+id/spinner_events"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_below="@id/spinner_rounds"
-        android:layout_margin="16dp" />
+        android:layout_margin="8dp" />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/recycler_view_loaded_events"
+        android:layout_alignStart="@+id/recycler_view_loaded_events"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="center"
+        android:layout_marginStart="166dp"
+        android:layout_marginTop="12dp"
+        android:layout_marginEnd="187dp"
+        android:visibility="invisible" />
 
     <Button
         android:id="@+id/btn_upload_image"
@@ -39,31 +52,37 @@
         android:layout_marginTop="16dp"
         android:text="Save Events" />
 
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btn_save_events"
+        android:fontFamily="@font/poppins_bold"
+        android:text="Picked events" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_selected_events"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="170dp"
         android:orientation="horizontal"
-        android:layout_below="@id/btn_save_events"
-        android:layout_margin="16dp"
-        android:padding="4dp" />
+        android:layout_below="@id/textView4"
+        android:layout_margin="8dp" />
 
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_below="@+id/recycler_view_selected_events"
-        android:text="Existing events" />
+        android:fontFamily="@font/poppins_bold"
+        android:text="Existing events in Database" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_loaded_events"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="170dp"
         android:layout_below="@+id/textView3"
         android:layout_margin="8dp"
         android:layout_marginTop="-478dp"
-        android:orientation="horizontal"
-        android:padding="4dp" />
+        android:orientation="horizontal" />
 
 </RelativeLayout>

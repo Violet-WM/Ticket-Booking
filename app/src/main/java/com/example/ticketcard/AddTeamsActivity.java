@@ -76,7 +76,7 @@ public class AddTeamsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_teams);
 
-        String[] leagues = {"Kenya Premier League", "National Super League", "Women's Premier League"};
+        String[] leagues = {"Kenya Premier League"};
 
         dynamicChipEditText = findViewById(R.id.dynamicChipEditText);
         chipGroup = findViewById(R.id.chipGroup);

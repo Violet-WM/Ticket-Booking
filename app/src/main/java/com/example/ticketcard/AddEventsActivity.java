@@ -56,7 +56,7 @@ public class AddEventsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_events);
 
-        String[] leagues = {"Kenya Premier League", "National Super League", "Women's Premier League"};
+        String[] leagues = {"Kenya Premier League"};
 
         generateFixturesButton = findViewById(R.id.generateFixturesButton);
         fixturesListRecycler = findViewById(R.id.fixturesListRecycler);

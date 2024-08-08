@@ -119,7 +119,13 @@ public class SeatsAdapter extends RecyclerView.Adapter<SeatsAdapter.ViewHolder> 
     public Map<String, Object> getSelectedSeatsDetails() {
         Map<String, Object> selectedSeatDetails = new HashMap<>();
         for (String seat : selectedSeats) {
-            int seatPrice = seat.startsWith("R") ? 0 : 1;
+            int seatPrice;
+            // here is where we add our code
+            if(seat.startsWith("R")) {
+                seatPrice = Integer.parseInt(matchRegular);
+            } else {
+                seatPrice = Integer.parseInt(matchVIP);
+            }
             String seatType = seat.startsWith("R") ? "Regular" : "VIP";
             selectedSeatDetails.put(seat, new SeatDetail(seat, seatType, seatPrice));
         }
@@ -132,9 +138,37 @@ public class SeatsAdapter extends RecyclerView.Adapter<SeatsAdapter.ViewHolder> 
         String seatType;
         int seatPrice;
 
+        // Default constructor required for calls to DataSnapshot.getValue(SeatDetail.class)
+        public SeatDetail() {
+        }
+
         public SeatDetail(String seatName, String seatType, int seatPrice) {
             this.seatName = seatName;
             this.seatType = seatType;
+            this.seatPrice = seatPrice;
+        }
+
+        public String getSeatName() {
+            return seatName;
+        }
+
+        public void setSeatName(String seatName) {
+            this.seatName = seatName;
+        }
+
+        public String getSeatType() {
+            return seatType;
+        }
+
+        public void setSeatType(String seatType) {
+            this.seatType = seatType;
+        }
+
+        public int getSeatPrice() {
+            return seatPrice;
+        }
+
+        public void setSeatPrice(int seatPrice) {
             this.seatPrice = seatPrice;
         }
     }

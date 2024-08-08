@@ -3,9 +3,46 @@ package com.example.ticketcard.model;
 import java.util.Map;
 
 public class TicketGen {
+    public TicketGen(Map<String, Map<String, Object>> seatsMap, String matchDate, String matchMonth, String matchTime, String round, String matchVenue, String matchName, String ticketID) {
+        this.seatsMap = seatsMap;
+        this.matchDate = matchDate;
+        this.matchMonth = matchMonth;
+        this.matchTime = matchTime;
+        this.round = round;
+        this.matchVenue = matchVenue;
+        this.matchName = matchName;
+        this.ticketID = ticketID;
+    }
+
     private Map<String, Map<String, Object>> seatsMap;
     private String matchDate;
     private String matchMonth;
+    private String matchTime;
+    private String round;
+    private String matchVenue;
+    private String matchName;
+    private String ticketID;
+
+
+    public TicketGen(Map<String, Map<String, Object>> seatsMap, String matchDate, String matchMonth, String matchTime, String round, String matchVenue, String matchName) {
+        this.seatsMap = seatsMap;
+        this.matchDate = matchDate;
+        this.matchMonth = matchMonth;
+        this.matchTime = matchTime;
+        this.round = round;
+        this.matchVenue = matchVenue;
+        this.matchName = matchName;
+    }
+
+    public String getTicketID() {
+        return ticketID;
+    }
+
+    public void setTicketID(String ticketID) {
+        this.ticketID = ticketID;
+    }
+
+
 
     public Map<String, Map<String, Object>> getSeatsMap() {
         return seatsMap;
@@ -63,22 +100,11 @@ public class TicketGen {
         this.matchName = matchName;
     }
 
-    private String matchTime;
-    private String round;
-    private String matchVenue;
-    private String matchName;
+
 
     public TicketGen() {
         // Default constructor required for calls to DataSnapshot.getValue(TicketGen.class)
     }
 
-    public TicketGen(Map<String, Map<String, Object>> seatsMap, String matchDate, String matchMonth, String matchTime, String round, String matchVenue, String matchName) {
-        this.seatsMap = seatsMap;
-        this.matchDate = matchDate;
-        this.matchMonth = matchMonth;
-        this.matchTime = matchTime;
-        this.round = round;
-        this.matchVenue = matchVenue;
-        this.matchName = matchName;
-    }
+
 }

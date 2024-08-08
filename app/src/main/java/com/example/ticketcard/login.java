@@ -36,7 +36,6 @@ public class login extends AppCompatActivity {
 
         signUpBtn = findViewById(R.id.signUpBtn);
         loginBtn = findViewById(R.id.lgnBtn);
-        forgotPassBtn = findViewById(R.id.forgotPasswordBtn);
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
 
@@ -54,14 +53,6 @@ public class login extends AppCompatActivity {
                 if (validateEmail() && validatePassword()) {
                     checkEmailExists();
                 }
-            }
-        });
-
-        forgotPassBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), ForgotPassword.class));
-                finish();
             }
         });
     }

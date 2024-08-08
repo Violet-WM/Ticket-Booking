@@ -169,6 +169,7 @@ public class TicketCardClicked extends AppCompatActivity {
 
             TextView bottomSheetTitle = bottomSheetView.findViewById(R.id.bottomSheetTitle);
             Button buttonBuyTicket = bottomSheetView.findViewById(R.id.buttonBuyTicket);
+            buttonBuyTicket.setEnabled(false);
 
             bottomSheetTitle.setText(matchDetails.replace("_","."));
 
@@ -182,9 +183,6 @@ public class TicketCardClicked extends AppCompatActivity {
             snapHelper.attachToRecyclerView(bottomSheetCarousel);
 
             List<StadiumViews> stadiumViews = fetchStadiumViews();
-
-            MaterialButtonToggleGroup toggleGroup = bottomSheetView.findViewById(R.id.toggleButton);
-            toggleGroup.setSelectionRequired(true);
 
             stadiumViewsAdapter = new StadiumViewsAdapter(TicketCardClicked.this, stadiumViews);
             bottomSheetCarousel.setAdapter(stadiumViewsAdapter);
@@ -202,33 +200,31 @@ public class TicketCardClicked extends AppCompatActivity {
                     } else {
                         totalPrice -= amount;
                     }
-                    buttonBuyTicket.setText("Pay " + totalPrice + " Shillings");
+
+                    if(totalPrice > 0){
+                        buttonBuyTicket.setEnabled(true);
+                        buttonBuyTicket.setText("Pay " + totalPrice + " Shillings");
+                    } else {
+                        buttonBuyTicket.setText("Buy Ticket");
+                        buttonBuyTicket.setEnabled(false);
+                    }
+
                 }
             });
             seatsGVRecycler.setAdapter(seatsAdapter);
 
 
             buttonBuyTicket.setOnClickListener(v -> {
+                Boolean bookedSeatExists = false;
                 Map<String, Object> selectedSeatDetails = seatsAdapter.getSelectedSeatsDetails();
-
-                Intent intent = new Intent(getApplicationContext(), Payment.class);
-                intent.putExtra("Price", String.valueOf(totalPrice));
-                intent.putExtra("UserEmail", userEmail);
-                intent.putExtra("UserName", userName);
-                intent.putExtra("matchName", matchDetails);
-                intent.putExtra("stadiumName", matchVenue);
-                intent.putExtra("round", round);
-                intent.putExtra("matchDate", matchDate);
-                intent.putExtra("matchTime", matchTime);
-                intent.putExtra("matchMonth", matchMonth);
-
-                Log.d("TicketCardClicked Intent call", "Intent Username is  " + userName);
-                Log.d("TicketCardClicked Intent call", "Intent User email is " + userEmail);
 
                 // Convert the seat details map to a string representation
                 StringBuilder seatDetailsBuilder = new StringBuilder();
                 for (Map.Entry<String, Object> entry : selectedSeatDetails.entrySet()) {
                     SeatsAdapter.SeatDetail seatDetail = (SeatsAdapter.SeatDetail) entry.getValue();
+                    if(bookedSeatsToAdapter.contains(seatDetail.seatName)){
+                        bookedSeatExists = true;
+                    }
                     seatDetailsBuilder.append(seatDetail.seatName)
                             .append(":")
                             .append(seatDetail.seatType)
@@ -237,16 +233,31 @@ public class TicketCardClicked extends AppCompatActivity {
                             .append(";");
                 }
                 String seatDetailsString = seatDetailsBuilder.toString();
-                intent.putExtra("SeatDetails", seatDetailsString);
 
-                startActivity(intent);
-                bottomSheetDialog.dismiss();
+                if(bookedSeatExists){
+                    //prevent user from moving to payment
+                    Toast.makeText(this, "A seat that you have selected has just been booked. Close and open this tab to" +
+                            " view unbooked seats.", Toast.LENGTH_LONG).show();
+                } else {
+                    Intent intent = new Intent(getApplicationContext(), Payment.class);
+                    intent.putExtra("Price", String.valueOf(totalPrice));
+                    intent.putExtra("UserEmail", userEmail);
+                    intent.putExtra("UserName", userName);
+                    intent.putExtra("matchName", matchDetails);
+                    intent.putExtra("stadiumName", matchVenue);
+                    intent.putExtra("round", round);
+                    intent.putExtra("matchDate", matchDate);
+                    intent.putExtra("matchTime", matchTime);
+                    intent.putExtra("matchMonth", matchMonth);
+                    Log.d("TicketCardClicked Intent call", "Intent Username is  " + userName);
+                    Log.d("TicketCardClicked Intent call", "Intent User email is " + userEmail);
+                    intent.putExtra("SeatDetails", seatDetailsString);
+                    startActivity(intent);
+                    totalPrice = 0;
+                    bottomSheetDialog.dismiss();
+                }
             });
-
-
         });
-
-
     }
 
     private void fetchMatchesRoundSpecific(String roundSent) {

@@ -3,6 +3,17 @@ package com.example.ticketcard.model;
 import java.util.Map;
 
 public class TransactionsFrag {
+    public TransactionsFrag(Map<String, Map<String, Object>> seatsMap, String matchDate, String matchMonth, String matchTime, String matchRound, String matchVenue, String matchName, String ticketID) {
+        this.seatsMap = seatsMap;
+        this.matchDate = matchDate;
+        this.matchMonth = matchMonth;
+        this.matchTime = matchTime;
+        this.matchRound = matchRound;
+        this.matchVenue = matchVenue;
+        this.matchName = matchName;
+        this.ticketID = ticketID;
+    }
+
     private Map<String, Map<String, Object>> seatsMap;
     private String matchDate;
     private String matchMonth;
@@ -10,6 +21,17 @@ public class TransactionsFrag {
     private String matchRound;
     private String matchVenue;
     private String matchName;
+    String ticketID;
+
+    public String getTicketID() {
+        return ticketID;
+    }
+
+    public void setTicketID(String ticketID) {
+        this.ticketID = ticketID;
+    }
+
+
 
     // Required empty constructor for Firebase
     public TransactionsFrag() {

@@ -32,66 +32,36 @@ public class MainActivity extends AppCompatActivity {
         userEmail = sharedPreferences.getString("userEmail", "email"); // "email" is the default value if "userEmail" is not found
         boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
 
-        if (isLoggedIn) {
-            if(userName.equals("admin")){
-                //redirect to adminDashboard
-                startActivity(new Intent(getApplicationContext(), AdminDashboard.class));
-            } else {
-                // User is logged in, redirect to Home activity
-                Intent intent = new Intent(getApplicationContext(), Home.class);
-                startActivity(intent);
-            }
-        }
-        else
-        {
-            // call Login Activity
-            // Create an Intent to navigate from MainActivity to login activity
-            Intent intent = new Intent(MainActivity.this, login.class);
-
-            // Start the login activity
-            startActivity(intent);
-
-            // Show a Toast message to the user
-            Toast.makeText(MainActivity.this, "Welcome, please Sign in.", Toast.LENGTH_SHORT).show();
-
-            // Finish the current activity to prevent the user from returning to it
-            finish();
-        }
-
         // Initialize the button by finding it from the layout
         button = findViewById(R.id.btn);
 
         // Set an OnClickListener to the button to handle click events
         button.setOnClickListener(v -> {
+            if (isLoggedIn) {
+                if(userName.equals("admin")){
+                    //redirect to adminDashboard
+                    startActivity(new Intent(getApplicationContext(), AdminDashboard.class));
+                } else {
+                    // User is logged in, redirect to Home activity
+                    Intent intent = new Intent(getApplicationContext(), Home.class);
+                    startActivity(intent);
+                }
+            }
+            else
+            {
+                // call Login Activity
+                // Create an Intent to navigate from MainActivity to login activity
+                Intent intent = new Intent(MainActivity.this, login.class);
 
-//            //SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
-//           // boolean isLoggedIn = sharedPreferences.getBoolean("isLoggedIn", false);
-//
-//            if (isLoggedIn) {
-//                // User is logged in, redirect to Home activity
-//                Intent intent = new Intent(getApplicationContext(), Home.class);
-//                startActivity(intent);
-//            }
-//            else
-//            {
-//                // call Login Activity
-//                // Create an Intent to navigate from MainActivity to login activity
-//                Intent intent = new Intent(MainActivity.this, login.class);
-//
-//                // Start the login activity
-//                startActivity(intent);
-//
-//                // Show a Toast message to the user
-//                Toast.makeText(MainActivity.this, "Welcome, please Sign in.", Toast.LENGTH_SHORT).show();
-//
-//                // Finish the current activity to prevent the user from returning to it
-//                finish();
-//            }
+                // Start the login activity
+                startActivity(intent);
 
+                // Show a Toast message to the user
+                Toast.makeText(MainActivity.this, "Welcome, please Sign in.", Toast.LENGTH_SHORT).show();
+
+                // Finish the current activity to prevent the user from returning to it
+                finish();
+            }
         });
     }
-
-    // Inner class stanleyClass (currently empty, you might want to add functionality or remove it)
-   /* class stanley {
-    }*/
 }

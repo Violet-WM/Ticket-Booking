@@ -19,11 +19,15 @@ import com.example.ticketcard.model.AccessToken;
 import com.example.ticketcard.model.MpesaRequest;
 import com.example.ticketcard.model.STKCallbackResponse;
 import com.example.ticketcard.model.STKPush;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 
 import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
 import java.util.Date;
@@ -49,6 +53,7 @@ public class Payment extends AppCompatActivity implements View.OnClickListener {
     private String stadiumName;
     private String matchName, matchMonth, matchDate, matchTime;
     private String round;
+    Map<String, SeatsAdapter.SeatDetail> seatDetailsMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,19 +82,23 @@ public class Payment extends AppCompatActivity implements View.OnClickListener {
         Log.d("Payment", "payment User email is " + userEmail);
 
         // Parse the seat details string
-        Map<String, SeatsAdapter.SeatDetail> seatDetailsMap = new HashMap<>();
-        if (seatDetailsString != null && !seatDetailsString.isEmpty()) {
-            String[] seatDetailsArray = seatDetailsString.split(";");
-            for (String seatDetailString : seatDetailsArray) {
-                String[] seatDetailParts = seatDetailString.split(":");
-                if (seatDetailParts.length == 3) {
-                    String seatName = seatDetailParts[0];
-                    String seatType = seatDetailParts[1];
-                    int seatPrice = Integer.parseInt(seatDetailParts[2]);
-                    seatDetailsMap.put(seatName, new SeatsAdapter.SeatDetail(seatName, seatType, seatPrice));
-                }
-            }
-        }
+        seatDetailsMap = parseSeatDetails(seatDetailsString);
+
+
+        // Parse the seat details string
+//        Map<String, SeatsAdapter.SeatDetail> seatDetailsMap = new HashMap<>();
+//        if (seatDetailsString != null && !seatDetailsString.isEmpty()) {
+//            String[] seatDetailsArray = seatDetailsString.split(";");
+//            for (String seatDetailString : seatDetailsArray) {
+//                String[] seatDetailParts = seatDetailString.split(":");
+//                if (seatDetailParts.length == 3) {
+//                    String seatName = seatDetailParts[0];
+//                    String seatType = seatDetailParts[1];
+//                    int seatPrice = Integer.parseInt(seatDetailParts[2]);
+//                    seatDetailsMap.put(seatName, new SeatsAdapter.SeatDetail(seatName, seatType, seatPrice));
+//                }
+//            }
+//        }
 
         // Use the received data as needed
         binding.etAmount.setText(price);
@@ -267,8 +276,8 @@ public class Payment extends AppCompatActivity implements View.OnClickListener {
                         if (stkCallbackResponse.getResultCode().equals("0")) {
                             // Handle successful transaction
                             System.out.println("Transaction successful");
-                            // Save seat details to Firebase
-                            saveReservedSeatsToFirebase();
+
+                            saveReservedSeatsToFirebase(seatDetailsMap);
 
                             Looper.prepare();
                             Toast.makeText(Payment.this, "Transaction Successful",Toast.LENGTH_SHORT).show();
@@ -297,8 +306,11 @@ public class Payment extends AppCompatActivity implements View.OnClickListener {
         }, 10000); // Check after 5 seconds
     }
 
-    private void saveReservedSeatsToFirebase() {
+    private void saveReservedSeatsToFirebase(Map<String, SeatsAdapter.SeatDetail> seatDetailsMap) {
         Log.d("PaymentActivity", "Saving reserved seats to Firebase");
+
+        String seatsKey = stadiumName + "/" + matchName + "/" + userName ;
+        DatabaseReference seatsRef = FirebaseDatabase.getInstance().getReference("reservedSeats").child(seatsKey);
 
         // Get Firebase database reference
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -313,8 +325,72 @@ public class Payment extends AppCompatActivity implements View.OnClickListener {
         Log.d("PaymentActivity", "UserName: " + userName);
         Log.d("PaymentActivity", "SeatDetailsString: " + seatDetailsString);
 
-        // Parse the seat details string
-        Map<String, Map<String, Object>> seatDetailsMap = new HashMap<>();
+        if (userName == null || userName.isEmpty()) {
+            Log.e("PaymentActivity", "UserName is null or empty, cannot save to Firebase");
+            return;
+        }
+
+        // When reserving seats we should store stadium name, match name, and user
+
+        seatsRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Map<String, SeatsAdapter.SeatDetail> existingSeatDetails = new HashMap<>();
+                if(snapshot.exists()){
+                    for(DataSnapshot seatSnap : snapshot.child("seats").getChildren()) {
+                        SeatsAdapter.SeatDetail seatDetail = seatSnap.getValue(SeatsAdapter.SeatDetail.class);
+                        if (seatDetail != null) {
+                            existingSeatDetails.put(seatSnap.getKey(), seatDetail);
+                        }
+                        //Map<String, Map<String, Object>> updatedMap = new HashMap<>();
+                    }
+
+                }
+                // Combine existing and new seat details
+                existingSeatDetails.putAll(seatDetailsMap);
+
+                // Create a map for reserved seats data
+                Map<String, Object> reservedSeatsDataCombined = new HashMap<>();
+                reservedSeatsDataCombined.put("userEmail", userEmail);
+                reservedSeatsDataCombined.put("userName", userName);
+                reservedSeatsDataCombined.put("matchMonth", matchMonth);
+                reservedSeatsDataCombined.put("matchDate",matchDate);
+                reservedSeatsDataCombined.put("matchTime", matchTime);
+                reservedSeatsDataCombined.put("round", round);
+                reservedSeatsDataCombined.put("ticketID", generateRandomString());
+                reservedSeatsDataCombined.put("seats", existingSeatDetails);
+
+                // Save combined seat details back to Firebase
+                seatsRef.setValue(reservedSeatsDataCombined, new DatabaseReference.CompletionListener() {
+                    @Override
+                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                        if (databaseError == null) {
+                            Toast.makeText(Payment.this, "Seat details saved to Firebase", Toast.LENGTH_SHORT).show();
+                            Log.d("PaymentActivity", "Seat details saved successfully");
+                            Intent intent = new Intent(getApplicationContext(), TicketGeneration.class);
+                            intent.putExtra("matchName", matchName);
+                            intent.putExtra("stadiumName", stadiumName);
+
+                            startActivity(intent);
+                        } else {
+                            Timber.e(databaseError.toException(), "Failed to save seat details to Firebase");
+                            Toast.makeText(Payment.this, "Failed to save seat details to Firebase", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    // Method to parse seat details string
+    private Map<String, SeatsAdapter.SeatDetail> parseSeatDetails(String seatDetailsString) {
+        Map<String, SeatsAdapter.SeatDetail> seatDetailsMap = new HashMap<>();
         if (seatDetailsString != null && !seatDetailsString.isEmpty()) {
             String[] seatDetailsArray = seatDetailsString.split(";");
             for (String seatDetailString : seatDetailsArray) {
@@ -323,61 +399,11 @@ public class Payment extends AppCompatActivity implements View.OnClickListener {
                     String seatName = seatDetailParts[0];
                     String seatType = seatDetailParts[1];
                     int seatPrice = Integer.parseInt(seatDetailParts[2]);
-                    Map<String, Object> seatDetailMap = new HashMap<>();
-                    seatDetailMap.put("seatName", seatName);
-                    seatDetailMap.put("seatType", seatType);
-                    seatDetailMap.put("seatPrice", seatPrice);
-                    seatDetailsMap.put(seatName, seatDetailMap);
-                    // Log each parsed seat detail
-                    Log.d("PaymentActivity", "Parsed seat detail - Name: " + seatName + ", Type: " + seatType + ", Price: " + seatPrice);
-                } else {
-                    Log.e("PaymentActivity", "Invalid seat detail format: " + seatDetailString);
+                    seatDetailsMap.put(seatName, new SeatsAdapter.SeatDetail(seatName, seatType, seatPrice));
                 }
             }
-        } else {
-            Log.e("PaymentActivity", "Seat details string is null or empty");
         }
-
-        // Create a map for reserved seats data
-        Map<String, Object> reservedSeatsData = new HashMap<>();
-        reservedSeatsData.put("userEmail", userEmail);
-        reservedSeatsData.put("userName", userName);
-        reservedSeatsData.put("matchMonth", matchMonth);
-        reservedSeatsData.put("matchDate",matchDate);
-        reservedSeatsData.put("matchTime", matchTime);
-        reservedSeatsData.put("round", round);
-        reservedSeatsData.put("seats", seatDetailsMap);
-
-        // Log the reserved seats data map
-        Log.d("PaymentActivity", "Reserved seats data: " + reservedSeatsData.toString());
-
-        if (userName == null || userName.isEmpty()) {
-            Log.e("PaymentActivity", "UserName is null or empty, cannot save to Firebase");
-            return;
-        }
-
-        // When reserving seats we should store stadium name, match name, and user
-
-        // Save the data under reservedSeats node in Firebase
-        databaseReference.child("reservedSeats").child(stadiumName).child(matchName).child(userName).setValue(reservedSeatsData)
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Log.d("PaymentActivity", "Seat details saved successfully");
-                        Toast.makeText(Payment.this, "Seat details saved successfully", Toast.LENGTH_SHORT).show();
-                        Intent intent = new Intent(getApplicationContext(), TicketGeneration.class);
-                        intent.putExtra("matchName", matchName);
-                        intent.putExtra("stadiumName", stadiumName);
-
-                        startActivity(intent);
-                    } else {
-                        Log.e("PaymentActivity", "Failed to save seat details to Firebase");
-                        Toast.makeText(Payment.this, "Failed to save seat details", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnFailureListener(e -> {
-                    Log.e("PaymentActivity", "Firebase saving failed", e);
-                    Toast.makeText(Payment.this, "Failed to save seat details", Toast.LENGTH_SHORT).show();
-                });
+        return seatDetailsMap;
     }
 
 
@@ -398,5 +424,19 @@ public class Payment extends AppCompatActivity implements View.OnClickListener {
         }
         return phoneNumber;
     }
+
+        private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        private static final SecureRandom RANDOM = new SecureRandom();
+
+        public static String generateRandomString() {
+            int length = 8 + RANDOM.nextInt(5); // Generate a random length between 8 and 12
+            StringBuilder stringBuilder = new StringBuilder(length);
+
+            for (int i = 0; i < length; i++) {
+                stringBuilder.append(CHARACTERS.charAt(RANDOM.nextInt(CHARACTERS.length())));
+            }
+
+            return stringBuilder.toString();
+        }
 
 }

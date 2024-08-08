@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Locale;
 
 public class Utils {
+
+    // Generates a double round-robin fixture schedule for the given teams
     public static List<List<Match>> generateDoubleRoundRobinFixtures(List<Team> teams) {
         List<List<Match>> fixtures = new ArrayList<>();
         int numTeams = teams.size();
@@ -19,9 +21,10 @@ public class Utils {
             numTeams++;
         }
 
-        int rounds = (numTeams - 1) * 2; // Double round robin
+        int rounds = (numTeams - 1) * 2; // Total rounds for double round robin
         int halfSize = numTeams / 2;
 
+        // Copy of the teams list, excluding the first team
         List<Team> teamsCopy = new ArrayList<>(teams);
         teamsCopy.remove(0);
 
@@ -65,6 +68,7 @@ public class Utils {
                 Team teamA = teams.stream().filter(t -> t.getTeamName().equals(match.getTeamA())).findFirst().orElse(null);
                 Team teamB = teams.stream().filter(t -> t.getTeamName().equals(match.getTeamB())).findFirst().orElse(null);
 
+                // Ensure the match is not involving a null team
                 if (teamA != null && teamB != null) {
                     reversedRound.add(new Match(
                             match.getTeamB(),
@@ -86,6 +90,7 @@ public class Utils {
         return fixtures;
     }
 
+    // Get the next valid date, skipping Sundays
     public static String getNextValidDate(Calendar calendar) {
         // Ensure that the matches are not scheduled on Sundays (can be customized)
         while (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
@@ -96,9 +101,11 @@ public class Utils {
         int month = calendar.get(Calendar.MONTH) + 1; // Calendar.MONTH is zero-based
         int year = calendar.get(Calendar.YEAR);
 
+        // Return the date in the format dd/mm/yyyy
         return String.format(Locale.getDefault(), "%02d/%02d/%04d", day, month, year);
     }
 
+    // Sanitize a string to be used as a key in Firebase by replacing certain characters
     public static String sanitizeKey(String key) {
         return key.replace(".", "_")
                 .replace("#", "_")

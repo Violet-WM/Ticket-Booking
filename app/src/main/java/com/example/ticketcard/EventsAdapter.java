@@ -40,6 +40,10 @@ class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
 
             Glide.with(context).load(event.getImageUrl()).into(holder.imageView);
 
+            holder.timeAndDate.setText(event.matchTime + ", " + event.getMatchDate() + " " + event.getMatchMonth());
+
+            holder.venue.setText(event.getMatchVenue());
+
             holder.itemView.setOnClickListener(view -> {
                 if (onItemClickListener != null) {
                     onItemClickListener.onClick(event.getImageUrl(),
@@ -72,12 +76,14 @@ class EventsAdapter extends RecyclerView.Adapter<EventsAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageView;
-        TextView textView;
+        TextView textView, timeAndDate, venue;
 
         ViewHolder(View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.image2);
             textView = itemView.findViewById(R.id.text2);
+            timeAndDate = itemView.findViewById(R.id.timeAndDate);
+            venue = itemView.findViewById(R.id.venue);
         }
     }
 
